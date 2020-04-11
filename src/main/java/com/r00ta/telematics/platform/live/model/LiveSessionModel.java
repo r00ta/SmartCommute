@@ -19,6 +19,9 @@ public class LiveSessionModel {
     @JsonProperty("isLive")
     public boolean isLive;
 
+    @JsonProperty("documentVersion")
+    public String documentVersion = "1.0";
+
     public LiveSessionModel(String userId, String sessionId, boolean isLive, List<LiveChunkModel> chunks) {
         this.userId = userId;
         this.sessionId = sessionId;

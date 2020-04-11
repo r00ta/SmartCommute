@@ -14,15 +14,13 @@ import com.r00ta.telematics.platform.live.model.LiveSessionSummary;
 
 // TODO: check application scoped? Request scoped?
 @ApplicationScoped
-public class LiveStorageExtension implements ILiveStorageExtension{
-
-    @Inject
-    IStorageManager storageManager;
+public class LiveStorageExtension implements ILiveStorageExtension {
 
     private static final String LIVESUMMARYINDEX = "livesummarysessions";
     private static final String LIVECHUNKSINDEX = "livechunks";
-
     private static ObjectMapper objectMapper;
+    @Inject
+    IStorageManager storageManager;
 
     @PostConstruct
     void setUp() {
@@ -51,7 +49,7 @@ public class LiveStorageExtension implements ILiveStorageExtension{
     }
 
     @Override
-    public List<LiveSessionSummary> getAvailableLiveSessionSummaries(String userId){
+    public List<LiveSessionSummary> getAvailableLiveSessionSummaries(String userId) {
         String request = "{ \n" +
                 "    \"query\": {\n" +
                 "        \"match\": { \"userId\" : \"" + userId + "\"}\n" +

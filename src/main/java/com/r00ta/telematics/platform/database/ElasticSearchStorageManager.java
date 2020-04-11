@@ -7,16 +7,12 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.r00ta.telematics.platform.database.model.ElasticSearchResponse;
 import com.r00ta.telematics.platform.database.model.Hit;
 import com.r00ta.telematics.platform.database.utils.HttpHelper;
-import com.r00ta.telematics.platform.live.model.LiveChunkModel;
-import com.r00ta.telematics.platform.live.model.LiveSessionModel;
-import com.r00ta.telematics.platform.live.model.LiveSessionSummary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,12 +37,12 @@ public class ElasticSearchStorageManager implements IStorageManager {
         objectMapper = new ObjectMapper();
     }
 
-    public String create(String key, String request, String index){
+    public String create(String key, String request, String index) {
         String response = httpHelper.doPost(index + "/_doc/" + key, request);
         return response;
     }
 
-    public <T> List<T> search(String request, String index, Class<T> type){
+    public <T> List<T> search(String request, String index, Class<T> type) {
         LOGGER.info("ES query " + request);
         String response = httpHelper.doPost(index + "/_search", request);
         JavaType javaType = TypeFactory.defaultInstance()

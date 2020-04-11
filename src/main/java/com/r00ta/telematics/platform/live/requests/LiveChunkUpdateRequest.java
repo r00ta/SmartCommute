@@ -35,7 +35,8 @@ public class LiveChunkUpdateRequest {
         this(userId, sessionId, chunkSeqNumber, isLastChunk, new ArrayList<>());
     }
 
-    public LiveChunkUpdateRequest(){}
+    public LiveChunkUpdateRequest() {
+    }
 
     public String getUserId() {
         return userId;

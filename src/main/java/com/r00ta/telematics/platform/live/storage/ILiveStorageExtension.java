@@ -6,6 +6,7 @@ import com.r00ta.telematics.platform.live.model.LiveChunkModel;
 import com.r00ta.telematics.platform.live.model.LiveSessionSummary;
 
 public interface ILiveStorageExtension {
+
     boolean createNewLiveSession(LiveSessionSummary sessionSummary);
 
     LiveSessionSummary getLiveSessionSummary(String sessionId);

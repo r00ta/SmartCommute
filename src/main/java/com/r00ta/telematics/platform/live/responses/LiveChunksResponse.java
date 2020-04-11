@@ -3,7 +3,6 @@ package com.r00ta.telematics.platform.live.responses;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.r00ta.telematics.platform.live.model.LiveChunkModel;
 
 public class LiveChunksResponse {
 

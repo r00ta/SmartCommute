@@ -9,9 +9,7 @@ import java.util.UUID;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.r00ta.telematics.platform.database.IStorageManager;
 import com.r00ta.telematics.platform.live.model.LiveChunkModel;
-import com.r00ta.telematics.platform.live.model.LiveSessionModel;
 import com.r00ta.telematics.platform.live.model.LiveSessionSummary;
 import com.r00ta.telematics.platform.live.storage.LiveStorageExtension;
 
@@ -36,7 +34,6 @@ public class LiveService implements ILiveService {
         boolean success = storageManager.updateLiveSession(sessionId, chunk);
         return success;
     }
-
 
     @Override
     public LiveSessionSummary getLiveSessionSummary(String sessionId) {
