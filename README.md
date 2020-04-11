@@ -1,4 +1,5 @@
 # Open Pooling platform 
+[![Build Status](https://dev.azure.com/jacoporota92/OpenPooling/_apis/build/status/r00ta.OpenPoolingPlatform?branchName=master)](https://dev.azure.com/jacoporota92/OpenPooling/_build/latest?definitionId=2&branchName=master)
 
 ## Features
 1. real time streaming of data of the driver. People who have to be picked up can have a look at the current position of the driver. 
