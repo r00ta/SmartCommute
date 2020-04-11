@@ -1,0 +1,24 @@
+package com.r00ta.telematics.platform.database.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.r00ta.telematics.platform.live.model.LiveSessionModel;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Hit<T> {
+
+    @JsonProperty("_index")
+    public String index;
+
+    @JsonProperty("_type")
+    public String type;
+
+    @JsonProperty("_id")
+    public String _id;
+
+    @JsonProperty("_score")
+    public double score;
+
+    @JsonProperty("_source")
+    public T source;
+}
