@@ -13,7 +13,7 @@ public class DriverScoring {
         Float score = 0.0f;
 
         for (EnrichedGpsLocation position : positions) {
-            double difference = position.metadata.fromSpeedLimit - position.speedMps;
+            double difference = position.metadata.speedLimit - position.speedMps;
             if (difference >= 0) {
                 score += 1;
                 position.pointScore = 1f;

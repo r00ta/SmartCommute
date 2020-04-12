@@ -7,14 +7,8 @@ public class EnrichedMetadata {
     /**
      * Speed limit in Mps
      */
-    @JsonProperty("FROM_REF_SPEED_LIMIT")
-    public Double fromSpeedLimit;
-
-    /**
-     * Speed limit in Mps
-     */
-    @JsonProperty("TO_REF_SPEED_LIMIT")
-    public Double toSpeedLimit;
+    @JsonProperty("speedLimit")
+    public Double speedLimit;
 
     public EnrichedMetadata() {
     }
@@ -22,8 +16,7 @@ public class EnrichedMetadata {
     /**
      * Speed limits from here comes as strings, in Km/h
      */
-    public EnrichedMetadata(String fromSpeedLimit, String toSpeedLimit) {
-        this.fromSpeedLimit = Float.valueOf(fromSpeedLimit) / 3.6;
-        this.toSpeedLimit = Float.valueOf(toSpeedLimit) / 3.6;
+    public EnrichedMetadata(String speedLimit) {
+        this.speedLimit = Float.valueOf(speedLimit) / 3.6;
     }
 }

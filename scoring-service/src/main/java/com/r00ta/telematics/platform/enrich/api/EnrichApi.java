@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.r00ta.telematics.platform.enrich.IEnrichService;
+import com.r00ta.telematics.platform.enrich.models.EnrichedTrip;
 import com.r00ta.telematics.platform.enrich.models.TripModel;
 import com.r00ta.telematics.platform.enrich.responses.EnrichedTripsByTimeRangeResponse;
 
@@ -41,7 +42,7 @@ public class EnrichApi {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/enrichTrip")
     public Response storeNewTrip(@PathParam("userId") String userId, TripModel trip) {
-        enrichService.storeTrip(userId, trip);
-        return Response.ok().build();
+        EnrichedTrip enrichedTrip = enrichService.storeTrip(userId, trip);
+        return Response.ok(enrichedTrip).build();
     }
 }

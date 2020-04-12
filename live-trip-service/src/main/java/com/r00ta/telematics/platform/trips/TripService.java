@@ -34,10 +34,10 @@ public class TripService implements ITripService {
 
     @Override
     public boolean storeTrip(String userId, TripModel trip) {
-        kafkaProducer.sendEventAsync(new TripModelDto(trip));
         GpsLocation lastLocation = trip.positions.get(trip.positions.size() - 1);
         TripSummaryModel summary = new TripSummaryModel(userId, trip.tripId, trip.positions.get(0), lastLocation, trip.startTimestamp, lastLocation.timestamp, lastLocation.timestamp - trip.positions.get(0).timestamp);
         storageManager.storeTripHeader(userId, summary);
+        kafkaProducer.sendEventAsync(new TripModelDto(trip));
         return storageManager.storeTrip(userId, trip);
     }
 

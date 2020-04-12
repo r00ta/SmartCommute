@@ -7,9 +7,9 @@ import com.r00ta.telematics.platform.enrich.models.TripModel;
 
 public interface IEnrichService {
 
-    void processTrip(TripModel trip);
+    EnrichedTrip processTrip(TripModel trip);
 
-    boolean storeTrip(String userId, TripModel trip);
+    EnrichedTrip storeTrip(String userId, TripModel trip);
 
     EnrichedTrip getTrip(String userId, String tripId);
 

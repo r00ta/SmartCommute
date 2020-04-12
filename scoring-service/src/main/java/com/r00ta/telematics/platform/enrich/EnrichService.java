@@ -25,12 +25,12 @@ public class EnrichService implements IEnrichService {
     IEnrichStorageExtension storageExtension;
 
     @Override
-    public void processTrip(TripModel trip) {
+    public EnrichedTrip processTrip(TripModel trip) {
         RouteMatchModel routeMatch = routeMatching.calculateRouteMatching(trip);
         LOGGER.info("Route match calculated");
         if (routeMatch.routeLinks.size() == 0){
             LOGGER.warn("Routematch without any match, the trip is discarded.");
-            return;
+            return null;
         }
 
         EnrichedTrip matchedTrip = EnrichedTrip.fromRouteMatch(trip.userId, trip.userId, routeMatch);
@@ -38,12 +38,13 @@ public class EnrichService implements IEnrichService {
         DriverScoring.setPointScores(matchedTrip);
         storageExtension.storeEnrichedTrip(matchedTrip);
         LOGGER.info("Enrichedtrip stored");
+        return matchedTrip;
     }
 
     @Override
-    public boolean storeTrip(String userId, TripModel trip) {
-        processTrip(trip);
-        return true;
+    public EnrichedTrip storeTrip(String userId, TripModel trip) {
+        EnrichedTrip enrichedTrip = processTrip(trip);
+        return enrichedTrip;
     }
 
     @Override

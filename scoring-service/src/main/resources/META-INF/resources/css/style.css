@@ -1,0 +1,27 @@
+/* Create two unequal columns that floats next to each other */
+html, body {margin: 0; height: 100%; overflow: hidden; position: relative}
+
+.column {
+  float: left;
+}
+
+.left {
+  width: 30%;
+}
+
+.right {
+  width: 70%;
+}
+
+.my-custom-icon{
+  width: 24px !important;
+  height: 24px !important;
+  margin-left: -12px;
+  margin-top: -12px;
+  border-radius: 18px;
+  border: 2px solid #3F51B5;
+  text-align: center;
+  color: #3F51B5;
+  background-color: #fff;
+  font-size: 16px;
+}

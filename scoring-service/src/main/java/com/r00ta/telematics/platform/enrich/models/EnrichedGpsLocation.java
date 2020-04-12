@@ -48,7 +48,8 @@ public class EnrichedGpsLocation {
         this.matchDistance = tracepoint.matchDistance;
         if (attributes.speedLimitAttribute1s != null && attributes.speedLimitAttribute1s.size() != 0) {
             SpeedLimitAttribute speedLimitAttribute = attributes.speedLimitAttribute1s.get(0);
-            this.metadata = new EnrichedMetadata(speedLimitAttribute.fromSpeedLimit, speedLimitAttribute.toSpeedLimit);
+            String speedLimit = this.linkId > 0 ? speedLimitAttribute.fromSpeedLimit : speedLimitAttribute.toSpeedLimit;
+            this.metadata = new EnrichedMetadata(speedLimit);
         }
     }
 
