@@ -24,10 +24,6 @@ public class ElasticSearchStorageManager implements IStorageManager {
     //    private static final String HOST = "http://elasticsearch:9200/";
     private static final String HOST = "http://localhost:9200/";
 
-    private static final String LIVESUMMARYINDEX = "livesummarysessions";
-    private static final String LIVECHUNKSINDEX = "livechunks";
-    private static final String MODELINDEX = "dmnmodeldata";
-
     private static ObjectMapper objectMapper;
     private HttpHelper httpHelper;
 
