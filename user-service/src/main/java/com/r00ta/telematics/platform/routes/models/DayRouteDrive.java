@@ -28,8 +28,13 @@ public class DayRouteDrive {
     @JsonProperty("passengerIds")
     public List<PassengerRideReference> passengerReferences;
 
-    public DayRouteDrive() {
-        this.isADriverRide = true;
-        this.passengerReferences = new ArrayList<>();
+    public DayRouteDrive(){}
+
+
+    public static DayRouteDrive createDefault(){
+        DayRouteDrive drd = new DayRouteDrive();
+        drd.isADriverRide = true;
+        drd.passengerReferences = new ArrayList<>();
+        return drd;
     }
 }

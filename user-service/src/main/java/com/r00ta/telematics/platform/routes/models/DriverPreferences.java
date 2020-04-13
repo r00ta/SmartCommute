@@ -24,4 +24,13 @@ public class DriverPreferences {
      */
     @JsonProperty("flexibility")
     public Long flexibility;
+
+    public DriverPreferences(){}
+
+    public DriverPreferences(boolean availableAsDriver, Float radiusStartPoint, boolean onTheRouteOption, Long flexibility){
+        this.availableAsDriver = availableAsDriver;
+        this.radiusStartPoint = radiusStartPoint;
+        this.onTheRouteOption = onTheRouteOption;
+        this.flexibility = flexibility;
+    }
 }

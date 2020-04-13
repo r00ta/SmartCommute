@@ -2,12 +2,14 @@ package com.r00ta.telematics.platform.users;
 
 import java.util.List;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import com.r00ta.telematics.platform.users.models.User;
 import com.r00ta.telematics.platform.users.models.UserStatistics;
 import com.r00ta.telematics.platform.users.storage.IUsersStorageExtension;
 
+@ApplicationScoped
 public class UserService implements IUserService {
 
     @Inject

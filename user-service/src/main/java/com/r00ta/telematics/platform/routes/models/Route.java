@@ -44,6 +44,7 @@ public class Route {
         this.availableAsPassenger = routeRequest.availableAsPassenger;
         this.driverPreferences = routeRequest.driverPreferences;
         this.dayRides = new HashMap<>();
+        this.days.stream().forEach(x -> this.dayRides.put(x, DayRouteDrive.createDefault()));
     }
 
     public String findPassengerRouteId(String passengerUserId) {

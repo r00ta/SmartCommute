@@ -25,10 +25,4 @@ public class NewRouteRequest {
 
     @JsonProperty("endPositionUserLabel")
     public String endPositionUserLabel;
-
-    /**
-     * Flexibility in time?
-     */
-    @JsonProperty("flexibility")
-    public Long flexibility;
 }

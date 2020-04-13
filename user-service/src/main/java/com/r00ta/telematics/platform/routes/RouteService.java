@@ -117,7 +117,7 @@ public class RouteService implements IRouteService {
             if (route.dayRides.containsKey(day)) {
                 DayRouteDrive dayRide = route.dayRides.get(day);
                 if (dayRide.driverReference.driverUserId.equals(driverUserId)) {
-                    route.dayRides.replace(day, new DayRouteDrive());
+                    route.dayRides.replace(day, DayRouteDrive.createDefault());
                 }
             }
         }
