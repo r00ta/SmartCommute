@@ -17,8 +17,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.r00ta.telematics.platform.live.ILiveService;
-import com.r00ta.telematics.platform.live.model.LiveChunkModel;
-import com.r00ta.telematics.platform.live.model.LiveSessionSummary;
+import com.r00ta.telematics.platform.live.models.LiveChunkModel;
+import com.r00ta.telematics.platform.live.models.LiveSessionSummary;
 import com.r00ta.telematics.platform.live.requests.LiveChunkUpdateRequest;
 import com.r00ta.telematics.platform.live.responses.AvailableLiveSessionsResponse;
 import com.r00ta.telematics.platform.live.responses.LiveChunkResponse;

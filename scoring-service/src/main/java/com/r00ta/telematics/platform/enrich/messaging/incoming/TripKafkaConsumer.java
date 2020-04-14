@@ -1,11 +1,10 @@
-package com.r00ta.telematics.platform.enrich.messaging;
+package com.r00ta.telematics.platform.enrich.messaging.incoming;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import com.r00ta.telematics.platform.enrich.IEnrichService;
-import com.r00ta.telematics.platform.enrich.messaging.dto.CouldEvent;
-import com.r00ta.telematics.platform.enrich.messaging.dto.TripCloudEvent;
+import com.r00ta.telematics.platform.enrich.messaging.incoming.dto.CouldEvent;
 import com.r00ta.telematics.platform.enrich.models.TripModel;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.slf4j.Logger;

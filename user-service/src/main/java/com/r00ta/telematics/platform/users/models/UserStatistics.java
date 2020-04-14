@@ -32,6 +32,9 @@ public class UserStatistics {
     @JsonProperty("numberOfReviews")
     public Long numberOfReviews;
 
+    @JsonProperty("co2Saved")
+    public Double co2Saved;
+
     public UserStatistics() {
     }
 
@@ -45,5 +48,13 @@ public class UserStatistics {
         this.passengerScore = 0.0d;
         this.communityScore = 0.0d;
         this.numberOfReviews = 0L;
+        this.co2Saved = 0.0d;
+    }
+
+    public void updateStatistics(EnrichedTripSummary tripSummary) {
+        this.co2Saved += tripSummary.co2Saved;
+        this.drivingScore = (this.drivingScore * this.totalDistanceDrivenInM + tripSummary.score * tripSummary.distanceInM) / (this.totalDistanceDrivenInM * 100 + tripSummary.distanceInM * 100) * 100;
+        this.totalDurationDriven += tripSummary.duration;
+        this.totalDistanceDrivenInM += tripSummary.distanceInM;
     }
 }

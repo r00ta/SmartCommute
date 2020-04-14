@@ -38,6 +38,5 @@ public class RouteMatching {
     }
 }
 
-
 // price
 // https://fleet.cit.api.here.com/2/calculateroute.json?jsonAttributes=41&waypoint0=38.72639,-9.14949&detail=1&waypoint1=47.54881,7.58782&routelegattributes=li&routeattributes=gr&maneuverattributes=none&linkattributes=none,rt,fl&legattributes=none,li,sm&currency=EUR&departure=&tollVehicleType=2&trailerType=0&trailersCount=0&vehicleNumberAxles=2&trailerNumberAxles=0&hybrid=0&emissionType=5&fuelType=petrol&height=1.67m&trailerHeight=0&vehicleWeight=1739&limitedWeight=1.739t&disabledEquipped=0&minimalPollution=0&hov=0&passengersCount=2&tiresCount=4&commercial=0&heightAbove1stAxle=1m&width=1.8&length=4.41&mode=fastest;car;traffic:disabled&rollups=none,country;tollsys&alternatives=1&app_id=inCUge3uprAQEtRaruyaZ8&app_code=9Vyk_MElhgPCytA7z3iuPA&jsoncallback=parseRoutingResponse

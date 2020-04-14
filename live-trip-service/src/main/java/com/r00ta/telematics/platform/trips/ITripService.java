@@ -1,6 +1,5 @@
 package com.r00ta.telematics.platform.trips;
 
-import java.util.Date;
 import java.util.List;
 
 import com.r00ta.telematics.platform.trips.models.TripModel;
@@ -17,6 +16,4 @@ public interface ITripService {
     TripModel getTrip(String userId, String tripId);
 
     List<TripModel> getTripsByTimeRange(String userId, Long from, Long to);
-
-
 }

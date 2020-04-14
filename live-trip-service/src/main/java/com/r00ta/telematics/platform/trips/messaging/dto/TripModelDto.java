@@ -21,6 +21,15 @@ public class TripModelDto implements CloudEventDto {
     @JsonProperty("documentVersion")
     public String documentVersion = "1.0";
 
+    public TripModelDto() {
+    }
+
+    public TripModelDto(TripModel model) {
+        this.userId = model.userId;
+        this.tripId = model.tripId;
+        this.positions = model.positions;
+    }
+
     @Override
     public String getEventId() {
         return tripId;
@@ -29,13 +38,5 @@ public class TripModelDto implements CloudEventDto {
     @Override
     public String getEventProducer() {
         return "TripService";
-    }
-
-    public TripModelDto(){}
-
-    public TripModelDto(TripModel model){
-        this.userId = model.userId;
-        this.tripId = model.tripId;
-        this.positions = model.positions;
     }
 }

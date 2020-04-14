@@ -53,6 +53,6 @@ public class EnrichedGpsLocation {
         }
     }
 
-    public EnrichedGpsLocation(){}
-
+    public EnrichedGpsLocation() {
+    }
 }

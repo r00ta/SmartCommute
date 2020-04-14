@@ -13,9 +13,10 @@ public class DriverRideReference {
     @JsonProperty("driverName")
     public String driverName;
 
-    public DriverRideReference(){}
+    public DriverRideReference() {
+    }
 
-    public DriverRideReference(String driverUserId, String driverRouteId, String driverName){
+    public DriverRideReference(String driverUserId, String driverRouteId, String driverName) {
         this.driverUserId = driverUserId;
         this.driverRouteId = driverRouteId;
         this.driverName = driverName;

@@ -77,27 +77,17 @@
       <artifactId>quarkus-smallrye-openapi</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.swagger.core.v3</groupId>
-      <artifactId>swagger-jaxrs2</artifactId>
-      <version>2.1.1</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>javax.ws.rs-api</artifactId>
-      <version>2.1.1</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>3.1.0</version>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-jackson</artifactId>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-json-binding-provider -->
+    <!-- https://mvnrepository.com/artifact/org.simplejavamail/simple-java-mail -->
     <dependency>
-      <groupId>org.jboss.resteasy</groupId>
-      <artifactId>resteasy-json-binding-provider</artifactId>
-      <version>4.5.3.Final</version>
+      <groupId>org.simplejavamail</groupId>
+      <artifactId>simple-java-mail</artifactId>
+      <version>6.0.3</version>
     </dependency>
+
 
     <!-- https://mvnrepository.com/artifact/io.jenetics/jpx -->
     <dependency>

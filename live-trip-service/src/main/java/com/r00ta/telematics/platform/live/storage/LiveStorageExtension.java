@@ -9,8 +9,8 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.database.IStorageManager;
-import com.r00ta.telematics.platform.live.model.LiveChunkModel;
-import com.r00ta.telematics.platform.live.model.LiveSessionSummary;
+import com.r00ta.telematics.platform.live.models.LiveChunkModel;
+import com.r00ta.telematics.platform.live.models.LiveSessionSummary;
 
 // TODO: check application scoped? Request scoped?
 @ApplicationScoped

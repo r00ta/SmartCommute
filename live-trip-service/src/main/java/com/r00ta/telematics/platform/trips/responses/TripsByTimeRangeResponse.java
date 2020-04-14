@@ -6,12 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.r00ta.telematics.platform.trips.models.TripModel;
 
 public class TripsByTimeRangeResponse {
+
     @JsonProperty("trips")
     public List<TripModel> trips;
 
-    public TripsByTimeRangeResponse(){}
+    public TripsByTimeRangeResponse() {
+    }
 
-    public TripsByTimeRangeResponse(List<TripModel> trips){
+    public TripsByTimeRangeResponse(List<TripModel> trips) {
         this.trips = trips;
     }
 }

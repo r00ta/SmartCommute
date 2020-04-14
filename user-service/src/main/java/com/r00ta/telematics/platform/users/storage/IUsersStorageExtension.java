@@ -11,7 +11,7 @@ public interface IUsersStorageExtension {
 
     User getUserById(String userId);
 
-    boolean createUserStatisticsDocument(String userId);
+    boolean storeUserStatisticsDocument(String userId, UserStatistics userStatistics);
 
     UserStatistics getUserOverview(String userId);
 

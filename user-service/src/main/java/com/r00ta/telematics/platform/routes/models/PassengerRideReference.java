@@ -13,9 +13,10 @@ public class PassengerRideReference {
     @JsonProperty("passengerName")
     public String passengerName;
 
-    public PassengerRideReference(){}
+    public PassengerRideReference() {
+    }
 
-    public PassengerRideReference(String passengerUserId, String passengerRouteId, String passengerName){
+    public PassengerRideReference(String passengerUserId, String passengerRouteId, String passengerName) {
         this.passengerRouteId = passengerRouteId;
         this.passengerUserId = passengerUserId;
         this.passengerName = passengerName;

@@ -1,5 +1,6 @@
-package com.r00ta.telematics.platform.live.model;
+package com.r00ta.telematics.platform.live.models;
 
+import java.time.DayOfWeek;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,6 +13,15 @@ public class LiveSessionSummary {
 
     @JsonProperty("sessionId")
     public String sessionId;
+
+    @JsonProperty("routeId")
+    public String routeId;
+
+    @JsonProperty("day")
+    public DayOfWeek day;
+
+    @JsonProperty("urlLiveTrip")
+    public String urlLiveTrip;
 
     @JsonProperty("isLive")
     public boolean isLive;

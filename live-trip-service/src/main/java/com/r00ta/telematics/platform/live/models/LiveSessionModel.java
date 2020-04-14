@@ -1,4 +1,4 @@
-package com.r00ta.telematics.platform.live.model;
+package com.r00ta.telematics.platform.live.models;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,7 +5,9 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.r00ta.telematics.platform.enrich.messaging.TripKafkaConsumer;
+import com.r00ta.telematics.platform.enrich.messaging.incoming.TripKafkaConsumer;
+import com.r00ta.telematics.platform.enrich.messaging.outgoing.TripKafkaProducer;
+import com.r00ta.telematics.platform.enrich.messaging.outgoing.dto.EnrichedTripSummaryDto;
 import com.r00ta.telematics.platform.enrich.models.EnrichedTrip;
 import com.r00ta.telematics.platform.enrich.models.TripModel;
 import com.r00ta.telematics.platform.enrich.scoring.DriverScoring;
@@ -24,11 +26,14 @@ public class EnrichService implements IEnrichService {
     @Inject
     IEnrichStorageExtension storageExtension;
 
+    @Inject
+    TripKafkaProducer kafkaScoringProducer;
+
     @Override
     public EnrichedTrip processTrip(TripModel trip) {
         RouteMatchModel routeMatch = routeMatching.calculateRouteMatching(trip);
         LOGGER.info("Route match calculated");
-        if (routeMatch.routeLinks.size() == 0){
+        if (routeMatch.routeLinks.size() == 0) {
             LOGGER.warn("Routematch without any match, the trip is discarded.");
             return null;
         }
@@ -38,6 +43,9 @@ public class EnrichService implements IEnrichService {
         DriverScoring.setPointScores(matchedTrip);
         storageExtension.storeEnrichedTrip(matchedTrip);
         LOGGER.info("Enrichedtrip stored");
+
+        kafkaScoringProducer.sendEventAsync(new EnrichedTripSummaryDto(matchedTrip));
+
         return matchedTrip;
     }
 

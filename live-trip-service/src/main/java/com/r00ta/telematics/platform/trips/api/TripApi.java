@@ -1,18 +1,10 @@
 package com.r00ta.telematics.platform.trips.api;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -20,17 +12,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.r00ta.telematics.platform.live.model.LiveChunkModel;
-import com.r00ta.telematics.platform.live.requests.LiveChunkUpdateRequest;
-import com.r00ta.telematics.platform.live.responses.AvailableLiveSessionsResponse;
-import com.r00ta.telematics.platform.live.responses.LiveChunkResponse;
-import com.r00ta.telematics.platform.live.responses.LiveChunksResponse;
 import com.r00ta.telematics.platform.trips.ITripService;
 import com.r00ta.telematics.platform.trips.models.TripModel;
 import com.r00ta.telematics.platform.trips.requests.NewTripRequest;
 import com.r00ta.telematics.platform.trips.responses.TripsByTimeRangeResponse;
 import com.r00ta.telematics.platform.trips.responses.TripsHeadersByTimeRangeResponse;
-import org.jboss.resteasy.annotations.Query;
 
 @Path("/users/{userId}")
 public class TripApi {

@@ -1,6 +1,5 @@
 package com.r00ta.telematics.platform.trips.storage;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -57,7 +56,8 @@ public class TripStorageExtension implements ITripStorageExtension {
                         "          \"must\": [{\"match\": { \"userId\" : \"" + userId + "\"} }," +
                         "{\"range\" : {\"startTimestamp\" : {\"gte\" : %s, \"lte\" : %s}}}" +
                         " ] } } }", from, to);
-        return storageManager.search(request, TRIPHEADERSINDEX, TripSummaryModel.class);    }
+        return storageManager.search(request, TRIPHEADERSINDEX, TripSummaryModel.class);
+    }
 
     @Override
     public boolean storeTrip(String userId, TripModel model) {

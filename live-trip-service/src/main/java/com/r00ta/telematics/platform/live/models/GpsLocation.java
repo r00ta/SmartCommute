@@ -1,4 +1,4 @@
-package com.r00ta.telematics.platform.live.model;
+package com.r00ta.telematics.platform.live.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

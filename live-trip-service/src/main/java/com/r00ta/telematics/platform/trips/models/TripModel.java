@@ -1,6 +1,5 @@
 package com.r00ta.telematics.platform.trips.models;
 
-import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,7 +24,7 @@ public class TripModel {
     public TripModel() {
     }
 
-    public TripModel(String userId, String tripId, Long startTimestamp,  List<GpsLocation> positions) {
+    public TripModel(String userId, String tripId, Long startTimestamp, List<GpsLocation> positions) {
         this.userId = userId;
         this.tripId = tripId;
         this.startTimestamp = startTimestamp;

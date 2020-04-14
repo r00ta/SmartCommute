@@ -1,4 +1,4 @@
-package com.r00ta.telematics.platform.enrich.messaging.dto;
+package com.r00ta.telematics.platform.enrich.messaging.incoming.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,7 +1,6 @@
-package com.r00ta.telematics.platform.enrich.messaging;
+package com.r00ta.telematics.platform.enrich.messaging.incoming;
 
-import com.r00ta.telematics.platform.enrich.messaging.dto.CouldEvent;
-import com.r00ta.telematics.platform.enrich.messaging.dto.TripCloudEvent;
+import com.r00ta.telematics.platform.enrich.messaging.incoming.dto.CouldEvent;
 import com.r00ta.telematics.platform.messaging.AbstractCloudEventDeserializer;
 
 public class TripCloudEventDeserializer extends AbstractCloudEventDeserializer<CouldEvent> {

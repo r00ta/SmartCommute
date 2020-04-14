@@ -1,7 +1,5 @@
 package com.r00ta.telematics.platform.trips.models;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TripSummaryModel {

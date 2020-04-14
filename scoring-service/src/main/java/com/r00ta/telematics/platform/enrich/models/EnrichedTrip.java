@@ -39,6 +39,9 @@ public class EnrichedTrip {
     @JsonProperty("documentVersion")
     public String documentVersion = "1.0";
 
+    public EnrichedTrip() {
+    }
+
     public static EnrichedTrip fromRouteMatch(String userId, String tripId, RouteMatchModel routeMatch) {
         Map<Long, Attributes> attributesMap = buildAttributesMap(routeMatch.routeLinks);
         EnrichedTrip matchedTrip = new EnrichedTrip();
@@ -50,8 +53,6 @@ public class EnrichedTrip {
         matchedTrip.durationInMilliseconds = matchedTrip.positions.get(matchedTrip.positions.size() - 1).timestamp - matchedTrip.positions.get(0).timestamp;
         return matchedTrip;
     }
-
-    public EnrichedTrip(){}
 
     private static Map<Long, Attributes> buildAttributesMap(List<RouteLink> routeLinks) {
         HashMap<Long, Attributes> map = new HashMap<>();

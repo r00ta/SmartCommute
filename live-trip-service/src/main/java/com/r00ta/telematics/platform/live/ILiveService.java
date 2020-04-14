@@ -2,8 +2,8 @@ package com.r00ta.telematics.platform.live;
 
 import java.util.List;
 
-import com.r00ta.telematics.platform.live.model.LiveChunkModel;
-import com.r00ta.telematics.platform.live.model.LiveSessionSummary;
+import com.r00ta.telematics.platform.live.models.LiveChunkModel;
+import com.r00ta.telematics.platform.live.models.LiveSessionSummary;
 
 public interface ILiveService {
 

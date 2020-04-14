@@ -1,6 +1,5 @@
 package com.r00ta.telematics.platform.trips;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;

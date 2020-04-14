@@ -1,6 +1,5 @@
 package com.r00ta.telematics.platform.trips.requests;
 
-import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

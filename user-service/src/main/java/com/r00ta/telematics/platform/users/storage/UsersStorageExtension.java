@@ -52,10 +52,9 @@ public class UsersStorageExtension implements IUsersStorageExtension {
     }
 
     @Override
-    public boolean createUserStatisticsDocument(String userId) {
+    public boolean storeUserStatisticsDocument(String userId, UserStatistics userStatistics) {
         try {
-            UserStatistics document = new UserStatistics(userId);
-            storageManager.create(userId, objectMapper.writeValueAsString(document), USER_STATISTICS_INDEX);
+            storageManager.create(userId, objectMapper.writeValueAsString(userStatistics), USER_STATISTICS_INDEX);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return false;

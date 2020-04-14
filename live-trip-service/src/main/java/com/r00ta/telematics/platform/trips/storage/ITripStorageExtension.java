@@ -1,6 +1,5 @@
 package com.r00ta.telematics.platform.trips.storage;
 
-import java.util.Date;
 import java.util.List;
 
 import com.r00ta.telematics.platform.trips.models.TripModel;
