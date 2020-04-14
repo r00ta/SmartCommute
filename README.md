@@ -1,6 +1,10 @@
 # Open Pooling platform 
 [![Build Status](https://dev.azure.com/jacoporota92/OpenPooling/_apis/build/status/r00ta.OpenPoolingPlatform?branchName=master)](https://dev.azure.com/jacoporota92/OpenPooling/_build/latest?definitionId=2&branchName=master)
 
+## Architecture
+
+![openpooling](https://user-images.githubusercontent.com/18282531/79280365-7a55ab00-7eb0-11ea-81da-200223b2e157.png)
+
 ## Features
 1. real time streaming of data of the driver. People who have to be picked up can have a look at the current position of the driver. 
 2. the app should record trips (manually) of the drivers. 
