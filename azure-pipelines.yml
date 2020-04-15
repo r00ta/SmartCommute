@@ -12,7 +12,7 @@ pool:
 steps:
 - task: Maven@3
   inputs:
-    workingDirectory: 'platform'
+    script: 'cd platform' 
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
