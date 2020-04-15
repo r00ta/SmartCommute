@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/live-trip-service/live-trip-service.iml" filepath="$PROJECT_DIR$/live-trip-service/live-trip-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/scoring-service/scoring-service.iml" filepath="$PROJECT_DIR$/scoring-service/scoring-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smart-commute-platform.iml" filepath="$PROJECT_DIR$/smart-commute-platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user-service/user-service.iml" filepath="$PROJECT_DIR$/user-service/user-service.iml" />
+    </modules>
+  </component>
+</project>

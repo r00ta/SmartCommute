@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="scoring-service" />
+        <module name="live-trip-service" />
+        <module name="user-service" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="live-trip-service" target="11" />
+      <module name="scoring-service" target="11" />
+      <module name="smart-commute-platform" target="11" />
+      <module name="user-service" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

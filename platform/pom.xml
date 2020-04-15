@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.r00ta.telematics</groupId>
+  <artifactId>smart-commute-platform</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>Smart Commute</name>
+  <description>Smart Commute</description>
+
+  <url>http://smart-commute.com</url>
+  <inceptionYear>2020</inceptionYear>
+  <organization>
+    <name>r00ta</name>
+    <url>http://github.com/r00ta</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <properties>
+    <maven.compiler.release>11</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <checkstyle.header.template>.*</checkstyle.header.template>
+    <checkstyle.header.extensions>java</checkstyle.header.extensions>
+  </properties>
+
+  <developers>
+    <developer>
+      <name>Jacopo Rota</name>
+      <url>http://github.com/r00ta</url>
+    </developer>
+  </developers>
+
+<modules>
+  <module>live-trip-service</module>
+  <module>scoring-service</module>
+  <module>user-service</module>
+</modules>
+
+</project>
