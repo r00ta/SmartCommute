@@ -10,10 +10,9 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: 'cd platform' 
 - task: Maven@3
   inputs:
-    mavenPomFile: 'pom.xml'
+    mavenPomFile: 'platform/pom.xml'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
