@@ -31,37 +31,40 @@ public class RouteServiceTest {
     @Test
     public void GivenANewRouteRequest_WhenARouteIsStored_ThenItIsAvailable() {
         NewRouteRequest routeRequest = createNewDriverRouteRequest();
-
-        Route route = new Route(routeRequest, "MyRouteId");
+        String userId = "pippo";
+        Route route = new Route(userId, routeRequest, "MyRouteId");
         Assertions.assertEquals(true, routeService.storeRoute(route));
 
         Route retrievedRoute = routeService.getRouteById(route.routeId);
         Assertions.assertEquals(route.routeId, retrievedRoute.routeId);
         Assertions.assertEquals(route.availableAsPassenger, retrievedRoute.availableAsPassenger);
 
-        List<Route> routes = routeService.getUserRoutes(routeRequest.userId);
+        List<Route> routes = routeService.getUserRoutes(userId);
         Assertions.assertEquals(1, routes.size());
     }
 
     @Test
     public void GivenTwoUsersPaired_WhenAPassengerIsRemovedFromARide_ThenTheRidesAreProperlyModified() {
         NewRouteRequest driverRouteRequest = createNewDriverRouteRequest();
+        String driverId = "driver";
 
-        Route driverRoute = new Route(driverRouteRequest, "driverRouteId");
+        Route driverRoute = new Route(driverId, driverRouteRequest, "driverRouteId");
         DayRouteDrive driverDay = driverRoute.dayRides.get(DayOfWeek.FRIDAY);
         driverDay.passengerReferences.add(new PassengerRideReference("passenger", "passengerRouteId", "renzo"));
         Assertions.assertEquals(true, routeService.storeRoute(driverRoute));
 
         NewRouteRequest passengerRequest = createNewPassengerRouteRequest();
-        Route passengerRoute = new Route(passengerRequest, "passengerRouteId");
+        String passengerId = "passenger";
+
+        Route passengerRoute = new Route(passengerId, passengerRequest, "passengerRouteId");
         DayRouteDrive passengerDay = passengerRoute.dayRides.get(DayOfWeek.FRIDAY);
         passengerDay.isADriverRide = false;
         passengerDay.isAPassengerRoute = true;
         passengerDay.passengerReferences = null;
-        passengerDay.driverReference = new DriverRideReference("driver", "driverRouteId", "lucia");
+        passengerDay.driverReference = new DriverRideReference(driverId, "driverRouteId", "lucia");
         Assertions.assertEquals(true, routeService.storeRoute(passengerRoute));
 
-        boolean success = routeService.deletePassenger(driverRoute.userId, driverRoute.routeId, "passenger", new DayOfWeek[]{DayOfWeek.FRIDAY});
+        boolean success = routeService.deletePassenger(driverRoute.userId, driverRoute.routeId, passengerId, new DayOfWeek[]{DayOfWeek.FRIDAY});
 
         Assertions.assertEquals(true, success);
 
@@ -76,14 +79,17 @@ public class RouteServiceTest {
     @Test
     public void GivenTwoUsersPaired_WhenADriverIsRemovedFromARide_ThenTheRidesAreProperlyModified() {
         NewRouteRequest driverRouteRequest = createNewDriverRouteRequest();
+        String driverId = "driver";
 
-        Route driverRoute = new Route(driverRouteRequest, "driverRouteId");
+        Route driverRoute = new Route(driverId, driverRouteRequest, "driverRouteId");
         DayRouteDrive driverDay = driverRoute.dayRides.get(DayOfWeek.FRIDAY);
         driverDay.passengerReferences.add(new PassengerRideReference("passenger", "passengerRouteId", "renzo"));
         Assertions.assertEquals(true, routeService.storeRoute(driverRoute));
 
         NewRouteRequest passengerRequest = createNewPassengerRouteRequest();
-        Route passengerRoute = new Route(passengerRequest, "passengerRouteId");
+        String passengerId = "passenger";
+
+        Route passengerRoute = new Route(passengerId, passengerRequest, "passengerRouteId");
         DayRouteDrive passengerDay = passengerRoute.dayRides.get(DayOfWeek.FRIDAY);
         passengerDay.isADriverRide = false;
         passengerDay.isAPassengerRoute = true;
@@ -106,7 +112,6 @@ public class RouteServiceTest {
 
     private NewRouteRequest createNewPassengerRouteRequest() {
         NewRouteRequest routeRequest = new NewRouteRequest();
-        routeRequest.userId = "passenger";
         routeRequest.availableAsPassenger = true;
         routeRequest.days = List.of(DayOfWeek.FRIDAY);
         routeRequest.driverPreferences = new DriverPreferences(true, 0.0f, true, 500L);
@@ -123,7 +128,6 @@ public class RouteServiceTest {
 
     private NewRouteRequest createNewDriverRouteRequest() {
         NewRouteRequest routeRequest = new NewRouteRequest();
-        routeRequest.userId = "driver";
         routeRequest.availableAsPassenger = true;
         routeRequest.days = List.of(DayOfWeek.FRIDAY);
         routeRequest.driverPreferences = new DriverPreferences(true, 0.0f, true, 500L);

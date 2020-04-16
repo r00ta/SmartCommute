@@ -37,9 +37,9 @@ public class Route {
     public Route() {
     }
 
-    public Route(NewRouteRequest routeRequest, String routeId) {
+    public Route(String userId, NewRouteRequest routeRequest, String routeId) {
         this.routeId = routeId;
-        this.userId = routeRequest.userId;
+        this.userId = userId;
         this.days = routeRequest.days;
         this.availableAsPassenger = routeRequest.availableAsPassenger;
         this.driverPreferences = routeRequest.driverPreferences;

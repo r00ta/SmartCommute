@@ -8,9 +8,6 @@ import com.r00ta.telematics.platform.routes.models.DriverPreferences;
 
 public class NewRouteRequest {
 
-    @JsonProperty("userId")
-    public String userId;
-
     @JsonProperty("days")
     public List<DayOfWeek> days;
 

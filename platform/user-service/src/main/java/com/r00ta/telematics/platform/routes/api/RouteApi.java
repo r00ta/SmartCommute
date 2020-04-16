@@ -22,6 +22,12 @@ import com.r00ta.telematics.platform.routes.models.RouteHeader;
 import com.r00ta.telematics.platform.routes.requests.NewRouteRequest;
 import com.r00ta.telematics.platform.routes.responses.DayRidePassengersResponse;
 import com.r00ta.telematics.platform.routes.responses.NewRouteResponse;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 @Path("/users/{userId}/routes")
 public class RouteApi {
@@ -32,6 +38,11 @@ public class RouteApi {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     // TODO REPLACE WITH PROPER RESPONSE
+    @APIResponses(value = {
+            @APIResponse(description = "Gets user's routes.", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = RouteHeader.class))),
+            @APIResponse(description = "Bad request.", responseCode = "500", content = @Content(mediaType = MediaType.TEXT_PLAIN))
+    })
+    @Operation(summary = "Gets user's routes.", description = "Gets user's routes.")
     public Response getUserRoutes(@PathParam("userId") String userId) {
         List<Route> userRoutes = routeService.getUserRoutes(userId);
         List<RouteHeader> userRoutesHeaders = userRoutes.stream().map(x -> new RouteHeader(x)).collect(Collectors.toList());
@@ -41,9 +52,14 @@ public class RouteApi {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createNewRoute(NewRouteRequest routeRequest) {
+    @APIResponses(value = {
+            @APIResponse(description = "Create a new route for a user.", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = NewRouteResponse.class))),
+            @APIResponse(description = "Bad request.", responseCode = "500", content = @Content(mediaType = MediaType.TEXT_PLAIN))
+    })
+    @Operation(summary = "Create a new route for a user.", description = "Create a new route for a user.")
+    public Response createNewRoute(@PathParam("userId") String userId, NewRouteRequest routeRequest) {
         String routeId = UUID.randomUUID().toString();
-        Route route = new Route(routeRequest, routeId);
+        Route route = new Route(userId, routeRequest, routeId);
         boolean success = routeService.storeRoute(route);
         if (success) {
             return Response.ok(new NewRouteResponse(routeId)).build();
@@ -52,16 +68,26 @@ public class RouteApi {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{routeId}")
+    @Produces(MediaType.APPLICATION_JSON)
     // TODO REPLACE WITH RESPONSE
+    @APIResponses(value = {
+            @APIResponse(description = "Gets route by id.", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = Route.class))),
+            @APIResponse(description = "Bad request.", responseCode = "500", content = @Content(mediaType = MediaType.TEXT_PLAIN))
+    })
+    @Operation(summary = "Gets route by id.", description = "Gets route by id.")
     public Response getRouteById(@PathParam("userId") String userId, @PathParam("routeId") String routeId) {
         return Response.ok(routeService.getRouteById(routeId)).build();
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{routeId}/days/{dayOfTheWeek}/passengers")
+    @Produces(MediaType.APPLICATION_JSON)
+    @APIResponses(value = {
+            @APIResponse(description = "Gets passenger's names for a driver's route", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = DayRidePassengersResponse.class))),
+            @APIResponse(description = "Bad request.", responseCode = "500", content = @Content(mediaType = MediaType.TEXT_PLAIN))
+    })
+    @Operation(summary = "Gets passenger's names for a driver's route", description = "Gets passenger's names for a driver's route")
     // TODO REPLACE WITH RESPONSE
     public Response getPassengers(@PathParam("userId") String userId, @PathParam("routeId") String routeId, @PathParam("dayOfTheWeek") String dayOfTheWeek) {
         List<String> passengers = routeService.getPassengers(userId, routeId, DayOfWeek.FRIDAY).stream().map(x -> x.passengerName).collect(Collectors.toList());
@@ -70,8 +96,13 @@ public class RouteApi {
     }
 
     @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{routeId}/days/{dayOfTheWeek}/passengers/{passengerId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @APIResponses(value = {
+            @APIResponse(description = "Deletes a passenger from a driver's route.", responseCode = "200"),
+            @APIResponse(description = "Bad request.", responseCode = "500", content = @Content(mediaType = MediaType.TEXT_PLAIN))
+    })
+    @Operation(summary = "Deletes a passenger from a driver's route.", description = "Deletes a passenger from a driver's route.")
     // TODO REPLACE WITH RESPONSE
     public Response deletePassenger(@PathParam("userId") String userId, @PathParam("routeId") String routeId, @PathParam("dayOfTheWeek") String dayOfTheWeek, @PathParam("passengerId") String passengerId) {
         boolean success = routeService.deletePassenger(userId, routeId, passengerId, new DayOfWeek[]{DayOfWeek.FRIDAY});
@@ -82,8 +113,13 @@ public class RouteApi {
     }
 
     @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{routeId}/days/{dayOfTheWeek}/driver/{driverId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @APIResponses(value = {
+            @APIResponse(description = "Deletes a driver from a passenger's route.", responseCode = "200"),
+            @APIResponse(description = "Bad request.", responseCode = "500", content = @Content(mediaType = MediaType.TEXT_PLAIN))
+    })
+    @Operation(summary = "Deletes a driver from a passenger's route.", description = "Deletes a driver from a passenger's route.")
     // TODO REPLACE WITH RESPONSE
     public Response deleteDriver(@PathParam("userId") String userId, @PathParam("routeId") String routeId, @PathParam("dayOfTheWeek") String dayOfTheWeek, @PathParam("driverId") String driverId) {
         boolean success = routeService.deletePassenger(userId, routeId, driverId, new DayOfWeek[]{DayOfWeek.FRIDAY});
