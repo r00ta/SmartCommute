@@ -33,9 +33,11 @@ public class LiveSessionSummary {
     @JsonProperty("documentVersion")
     public String documentVersion = "1.0";
 
-    public LiveSessionSummary(String userId, String sessionId, boolean isLive, Date lastUpdate) {
+    public LiveSessionSummary(String userId, String sessionId, String routeId, DayOfWeek day, boolean isLive, Date lastUpdate) {
         this.userId = userId;
+        this.day = day;
         this.sessionId = sessionId;
+        this.routeId = routeId;
         this.isLive = isLive;
         this.lastUpdate = lastUpdate;
     }

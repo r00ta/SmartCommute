@@ -1,0 +1,53 @@
+/* Create two unequal columns that floats next to each other */
+html, body {margin: 0; height: 100%; overflow: hidden; position: relative}
+
+
+.top,
+.bottom {
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 90%;
+}
+
+.top {
+    top: 0;
+    color: #fff;
+    font-family:arial;
+    background: #a0bf79;
+    overflow-x: hidden;
+}
+
+.bottom {
+    bottom: 0;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #f4f4f4;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #efefef;
+}
+
+h1{
+    font-size:180px;
+    margin: 16% 0 0 0;
+}
+
+a{
+    color: rgb(21, 55, 82);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.response{
+    margin: 0 auto;
+    text-align: center;
+}

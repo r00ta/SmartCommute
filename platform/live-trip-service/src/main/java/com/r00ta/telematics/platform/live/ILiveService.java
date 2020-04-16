@@ -1,5 +1,6 @@
 package com.r00ta.telematics.platform.live;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 import com.r00ta.telematics.platform.live.models.LiveChunkModel;
@@ -7,7 +8,7 @@ import com.r00ta.telematics.platform.live.models.LiveSessionSummary;
 
 public interface ILiveService {
 
-    LiveSessionSummary createNewLiveSession(String userId);
+    LiveSessionSummary createNewLiveSession(String userId, String routeId, DayOfWeek day);
 
     boolean updateLiveSession(String userId, String sessionId, LiveChunkModel chunk);
 

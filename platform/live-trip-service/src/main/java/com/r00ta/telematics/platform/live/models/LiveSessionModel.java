@@ -13,6 +13,9 @@ public class LiveSessionModel {
     @JsonProperty("sessionId")
     public String sessionId;
 
+    @JsonProperty("routeId")
+    public String routeId;
+
     @JsonProperty("chunks")
     public List<LiveChunkModel> chunks;
 
@@ -22,15 +25,16 @@ public class LiveSessionModel {
     @JsonProperty("documentVersion")
     public String documentVersion = "1.0";
 
-    public LiveSessionModel(String userId, String sessionId, boolean isLive, List<LiveChunkModel> chunks) {
+    public LiveSessionModel(String userId, String sessionId, String routeId, boolean isLive, List<LiveChunkModel> chunks) {
         this.userId = userId;
+        this.routeId = routeId;
         this.sessionId = sessionId;
         this.isLive = isLive;
         this.chunks = chunks;
     }
 
-    public LiveSessionModel(String userId, String sessionId, boolean isLive) {
-        this(userId, sessionId, isLive, new ArrayList<>());
+    public LiveSessionModel(String userId, String sessionId, String routeId, boolean isLive) {
+        this(userId, sessionId, routeId, isLive, new ArrayList<>());
     }
 
     public LiveSessionModel() {

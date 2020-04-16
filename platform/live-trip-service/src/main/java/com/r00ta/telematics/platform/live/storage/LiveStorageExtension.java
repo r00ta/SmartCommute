@@ -49,6 +49,20 @@ public class LiveStorageExtension implements ILiveStorageExtension {
     }
 
     @Override
+    public boolean updateLiveSessionSummary(String sessionId, boolean isLive) {
+        LiveSessionSummary summary = getLiveSessionSummary(sessionId);
+        summary.isLive = isLive;
+
+        try {
+            storageManager.create(sessionId, objectMapper.writeValueAsString(summary), LIVESUMMARYINDEX);
+            return true;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public List<LiveSessionSummary> getAvailableLiveSessionSummaries(String userId) {
         String request = "{ \n" +
                 "    \"query\": {\n" +

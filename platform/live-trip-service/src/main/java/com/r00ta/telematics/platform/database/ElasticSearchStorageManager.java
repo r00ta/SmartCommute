@@ -1,5 +1,6 @@
 package com.r00ta.telematics.platform.database;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +53,7 @@ public class ElasticSearchStorageManager implements IStorageManager {
             // TODO: check performance issue with generics
             List<Hit<T>> hits = ((ElasticSearchResponse) objectMapper.readValue(response, javaType)).hits.hits;
             if (hits.size() == 0) {
-                return null;
+                return new ArrayList<>();
             }
             return hits.stream().map(x -> x.source).collect(Collectors.toList());
         } catch (JsonProcessingException e) {

@@ -1,5 +1,6 @@
 package com.r00ta.telematics.platform.live;
 
+import java.time.DayOfWeek;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
@@ -26,9 +27,10 @@ public class LiveService implements ILiveService {
 
     @Override
     // TODO: sanity checks
-    public LiveSessionSummary createNewLiveSession(String userId) {
+    public LiveSessionSummary createNewLiveSession(String userId, String routeId, DayOfWeek day) {
         String sessionId = UUID.randomUUID().toString();
-        LiveSessionSummary model = new LiveSessionSummary(userId, sessionId, true, new Date(OffsetDateTime.now(ZoneOffset.UTC).toInstant().toEpochMilli()));
+        LiveSessionSummary model = new LiveSessionSummary(userId, sessionId, routeId, day, true, new Date(OffsetDateTime.now(ZoneOffset.UTC).toInstant().toEpochMilli()));
+        model.urlLiveTrip = "https://localhost:1337/index.html?userId=" + model.userId + "&sessionId=" + model.sessionId;
         storageManager.createNewLiveSession(model);
         liveTripKafkaProducer.sendEventAsync(new LiveModelDto(model));
         return model;
@@ -38,6 +40,9 @@ public class LiveService implements ILiveService {
     // TODO: sanity checks
     public boolean updateLiveSession(String userId, String sessionId, LiveChunkModel chunk) {
         boolean success = storageManager.updateLiveSession(sessionId, chunk);
+        if (chunk.isLastChunk){
+            storageManager.updateLiveSessionSummary(sessionId, false);
+        }
         return success;
     }
 

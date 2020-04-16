@@ -1,5 +1,7 @@
 package com.r00ta.telematics.platform.live.api;
 
+import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,8 +37,8 @@ public class LiveApi {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createNewSession(@PathParam("userId") String userId) {
-        LiveSessionSummary summary = liveService.createNewLiveSession(userId);
+    public Response createNewSession(@PathParam("userId") String userId, @QueryParam("routeId") String routeId, @QueryParam("day") DayOfWeek day) {
+        LiveSessionSummary summary = liveService.createNewLiveSession(userId, routeId, day);
         return Response.ok(summary).build();
     }
 
@@ -57,6 +59,7 @@ public class LiveApi {
     }
 
     @GET
+    //Everybody with the link can access
     @Path("/{sessionId}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -65,8 +68,14 @@ public class LiveApi {
         LiveChunksResponse response = new LiveChunksResponse();
         response.sessionId = sessionId;
         response.userId = userId;
-        response.isLive = liveSessionChunks.size() != 0 ? !liveSessionChunks.stream().anyMatch(x -> x.isLastChunk) : liveService.getLiveSessionSummary(sessionId).isLive;
-        response.chunks = liveSessionChunks.stream().map(x -> new LiveChunkResponse(x.chunkSeqNumber, x.positions)).collect(Collectors.toList());
+        if (liveSessionChunks != null && liveSessionChunks.size() != 0){
+            response.isLive = !liveSessionChunks.stream().anyMatch(x -> x.isLastChunk);
+            response.chunks = liveSessionChunks.stream().map(x -> new LiveChunkResponse(x.chunkSeqNumber, x.positions)).collect(Collectors.toList());
+        }
+        else{
+            response.isLive = liveService.getLiveSessionSummary(sessionId).isLive;
+            response.chunks = new ArrayList<>();
+        }
         return Response.ok(response).build();
     }
 }

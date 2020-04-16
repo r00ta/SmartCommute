@@ -43,6 +43,7 @@ public class RouteService implements IRouteService {
 
     public List<PassengerRideReference> getPassengers(String userId, String routeId, DayOfWeek day) {
         Route userRoute = getRouteById(routeId);
+        LOGGER.info(String.valueOf(userRoute.dayRides.get(day)));
         return userRoute.dayRides.get(day).passengerReferences;
     }
 

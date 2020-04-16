@@ -11,6 +11,8 @@ public interface ILiveStorageExtension {
 
     LiveSessionSummary getLiveSessionSummary(String sessionId);
 
+    boolean updateLiveSessionSummary(String sessionId, boolean isLive);
+
     List<LiveSessionSummary> getAvailableLiveSessionSummaries(String userId);
 
     List<LiveChunkModel> getLiveSessionChunks(String userId, String sessionId, Long lastChunk);
