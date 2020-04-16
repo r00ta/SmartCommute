@@ -8,10 +8,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="scoring-service" />
         <module name="live-trip-service" />
+        <module name="database" />
         <module name="user-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="database" target="11" />
       <module name="live-trip-service" target="11" />
       <module name="scoring-service" target="11" />
       <module name="smart-commute-platform" target="11" />

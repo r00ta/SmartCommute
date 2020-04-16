@@ -1,4 +1,4 @@
-package com.r00ta.telematics.platform.database;
+package com.r00ta.telematics.platform;
 
 import java.util.List;
 

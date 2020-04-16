@@ -45,6 +45,7 @@
   <module>live-trip-service</module>
   <module>scoring-service</module>
   <module>user-service</module>
+  <module>database</module>
 </modules>
 
 </project>

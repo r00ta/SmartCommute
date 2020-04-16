@@ -1,23 +1,18 @@
-package com.r00ta.telematics.platform.database;
+package com.r00ta.telematics.platform;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.r00ta.telematics.platform.database.model.ElasticSearchResponse;
-import com.r00ta.telematics.platform.database.model.Hit;
-import com.r00ta.telematics.platform.database.utils.HttpHelper;
+import com.r00ta.telematics.platform.model.ElasticSearchResponse;
+import com.r00ta.telematics.platform.model.Hit;
+import com.r00ta.telematics.platform.utils.HttpHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@ApplicationScoped
 public class ElasticSearchStorageManager implements IStorageManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchStorageManager.class);
@@ -25,18 +20,8 @@ public class ElasticSearchStorageManager implements IStorageManager {
     //    private static final String HOST = "http://elasticsearch:9200/";
     private static final String HOST = "http://localhost:9200/";
 
-    private static final String LIVESUMMARYINDEX = "livesummarysessions";
-    private static final String LIVECHUNKSINDEX = "livechunks";
-    private static final String MODELINDEX = "dmnmodeldata";
-
-    private static ObjectMapper objectMapper;
-    private HttpHelper httpHelper;
-
-    @PostConstruct
-    void setUp() {
-        httpHelper = new HttpHelper(HOST);
-        objectMapper = new ObjectMapper();
-    }
+    private static ObjectMapper objectMapper = new ObjectMapper();
+    private HttpHelper httpHelper = new HttpHelper(HOST);
 
     public String create(String key, String request, String index) {
         String response = httpHelper.doPost(index + "/_doc/" + key, request);

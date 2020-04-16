@@ -1,4 +1,4 @@
-package com.r00ta.telematics.platform.database.utils;
+package com.r00ta.telematics.platform.utils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

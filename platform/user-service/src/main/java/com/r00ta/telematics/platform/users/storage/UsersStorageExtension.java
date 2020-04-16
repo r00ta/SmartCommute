@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.r00ta.telematics.platform.database.IStorageManager;
+import com.r00ta.telematics.platform.IStorageManager;
 import com.r00ta.telematics.platform.users.models.User;
 import com.r00ta.telematics.platform.users.models.UserStatistics;
 

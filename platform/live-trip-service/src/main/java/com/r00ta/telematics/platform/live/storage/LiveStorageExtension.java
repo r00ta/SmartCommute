@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.r00ta.telematics.platform.database.IStorageManager;
+import com.r00ta.telematics.platform.IStorageManager;
 import com.r00ta.telematics.platform.live.models.LiveChunkModel;
 import com.r00ta.telematics.platform.live.models.LiveSessionSummary;
 
@@ -19,6 +19,7 @@ public class LiveStorageExtension implements ILiveStorageExtension {
     private static final String LIVESUMMARYINDEX = "livesummarysessions";
     private static final String LIVECHUNKSINDEX = "livechunks";
     private static ObjectMapper objectMapper;
+
     @Inject
     IStorageManager storageManager;
 
