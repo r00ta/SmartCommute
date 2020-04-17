@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SmartCommuteAndroid</string>
+    <string name="title_home">Home</string>
+    <string name="title_routes">Routes</string>
+    <string name="title_trips">Trips</string>
+    <string name="title_notifications">Notifications</string>
+</resources>
