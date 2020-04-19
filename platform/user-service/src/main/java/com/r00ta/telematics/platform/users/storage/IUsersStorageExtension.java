@@ -11,6 +11,8 @@ public interface IUsersStorageExtension {
 
     User getUserById(String userId);
 
+    User getUserByEmail(String email);
+
     boolean storeUserStatisticsDocument(String userId, UserStatistics userStatistics);
 
     UserStatistics getUserOverview(String userId);

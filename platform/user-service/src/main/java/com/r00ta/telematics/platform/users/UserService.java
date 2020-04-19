@@ -28,6 +28,11 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public User getUserByEmail(String email) {
+        return storageExtension.getUserByEmail(email);
+    }
+
+    @Override
     public boolean createUser(User user) {
         UserStatistics userStatisticsDocument = new UserStatistics(user.userId);
         boolean successOverview = storeUserStatisticsDocument(user.userId, userStatisticsDocument);

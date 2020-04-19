@@ -80,6 +80,11 @@
       <artifactId>quarkus-resteasy-jackson</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt</artifactId>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/io.jenetics/jpx -->
     <dependency>
       <groupId>io.jenetics</groupId>

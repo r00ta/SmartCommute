@@ -81,6 +81,16 @@
       <artifactId>quarkus-resteasy-jackson</artifactId>
     </dependency>
 
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-jwt</artifactId>
+    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>io.quarkus</groupId>-->
+<!--      <artifactId>quarkus-resteasy-jsonb</artifactId>-->
+<!--    </dependency>-->
+
     <!-- https://mvnrepository.com/artifact/org.simplejavamail/simple-java-mail -->
     <dependency>
       <groupId>org.simplejavamail</groupId>
@@ -95,6 +105,9 @@
       <artifactId>jpx</artifactId>
       <version>1.7.0</version>
     </dependency>
+
+
+
 
 
     <dependency>

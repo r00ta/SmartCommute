@@ -52,6 +52,16 @@ public class UsersStorageExtension implements IUsersStorageExtension {
     }
 
     @Override
+    public User getUserByEmail(String email) {
+        String request = "{ \n" +
+                "    \"query\": {\n" +
+                "        \"match\": { \"email\" : \"" + email + "\"}\n" +
+                "    }\n" +
+                "}\n";
+        return storageManager.search(request, USER_INDEX, User.class).get(0);
+    }
+
+    @Override
     public boolean storeUserStatisticsDocument(String userId, UserStatistics userStatistics) {
         try {
             storageManager.create(userId, objectMapper.writeValueAsString(userStatistics), USER_STATISTICS_INDEX);

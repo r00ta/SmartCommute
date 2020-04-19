@@ -38,17 +38,17 @@ public class MainActivity extends AppCompatActivity {
 
         checkPermissions();
 
-        // Get or generate DeviceID
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String userId = prefs.getString("userId","0");
-        Log.i("userId", userId);
-
-        if(userId.equals("0")) {
-            SharedPreferences.Editor editor = prefs.edit();
-            // Edit the saved preferences
-            editor.putString("userId", userId);
-            editor.commit();
-        }
+//        // Get or generate DeviceID
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//        String userId = prefs.getString("userId","0");
+//        Log.i("userId", userId);
+//
+//        if(userId.equals("0")) {
+//            SharedPreferences.Editor editor = prefs.edit();
+//            // Edit the saved preferences
+//            editor.putString("userId", userId);
+//            editor.commit();
+//        }
 
 
     }

@@ -2,6 +2,7 @@ package com.r00ta.telematics.platform.users.requests;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class NewUserRequest {
@@ -19,5 +20,6 @@ public class NewUserRequest {
     public String passwordHash;
 
     @JsonProperty("birthDay")
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public Date birthDay;
 }

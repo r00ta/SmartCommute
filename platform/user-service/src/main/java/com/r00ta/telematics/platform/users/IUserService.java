@@ -11,6 +11,8 @@ public interface IUserService {
 
     User getUserById(String user);
 
+    User getUserByEmail(String email);
+
     boolean createUser(User user);
 
     UserStatistics getUserOverview(String userId);
