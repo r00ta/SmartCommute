@@ -32,7 +32,11 @@ public class TripService implements ITripService {
     }
 
     @Override
-    public boolean storeTrip(String userId, TripModel trip) {
+    public boolean storeAndSendTripAsync(String userId, TripModel trip) {
+        if (trip.positions == null || trip.positions.size() == 0){ // not going to send an empty trip in the platform
+            return false;
+        }
+
         GpsLocation lastLocation = trip.positions.get(trip.positions.size() - 1);
         TripSummaryModel summary = new TripSummaryModel(userId, trip.tripId, trip.positions.get(0), lastLocation, trip.startTimestamp, lastLocation.timestamp, lastLocation.timestamp - trip.positions.get(0).timestamp);
         storageManager.storeTripHeader(userId, summary);

@@ -1,6 +1,7 @@
 package com.r00ta.telematics.android;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -37,6 +38,17 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         checkPermissions();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//        nameUser = prefs.getString("nameUser","0");
+//        passwd = prefs.getString("password","0");
+//        Log.d("chupa",nameUser);
+//        if(nameUser.equals("0")){
+//            Intent intent = new Intent(this, LoginActivity.class);
+//            startActivity(intent);
+//        }
 
 //        // Get or generate DeviceID
 //        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

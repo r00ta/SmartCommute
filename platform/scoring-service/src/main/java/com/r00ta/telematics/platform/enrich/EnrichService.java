@@ -38,9 +38,13 @@ public class EnrichService implements IEnrichService {
             return null;
         }
 
+        // obd info are not stored!
         EnrichedTrip matchedTrip = EnrichedTrip.fromRouteMatch(trip.userId, trip.userId, routeMatch);
         LOGGER.info("Enriched trip created");
         DriverScoring.setPointScores(matchedTrip);
+
+        // calculate eco score if obd info is available; EcoScoring.score()
+
         storageExtension.storeEnrichedTrip(matchedTrip);
         LOGGER.info("Enrichedtrip stored");
 

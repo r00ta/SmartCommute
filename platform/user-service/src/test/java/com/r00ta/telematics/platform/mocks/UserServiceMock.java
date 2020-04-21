@@ -24,6 +24,11 @@ public class UserServiceMock implements IUserService {
     }
 
     @Override
+    public User getUserByEmail(String email) {
+        return null;
+    }
+
+    @Override
     public boolean createUser(User user) {
         storage.put(user.userId, user);
         return true;

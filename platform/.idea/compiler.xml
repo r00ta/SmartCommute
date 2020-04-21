@@ -7,14 +7,18 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="scoring-service" />
-        <module name="live-trip-service" />
+        <module name="route-analytics" />
+        <module name="messaging" />
         <module name="database" />
         <module name="user-service" />
+        <module name="live-trip-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="database" target="11" />
       <module name="live-trip-service" target="11" />
+      <module name="messaging" target="11" />
+      <module name="route-analytics" target="11" />
       <module name="scoring-service" target="11" />
       <module name="smart-commute-platform" target="11" />
       <module name="user-service" target="11" />

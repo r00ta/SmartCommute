@@ -12,7 +12,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.r00ta.telematics.platform.live.responses.LiveChunksResponse;
 import com.r00ta.telematics.platform.trips.ITripService;
 import com.r00ta.telematics.platform.trips.models.TripModel;
 import com.r00ta.telematics.platform.trips.requests.NewTripRequest;
@@ -65,8 +64,8 @@ public class TripApi {
     })
     @Operation(summary = "Stores a new trip", description = "Stores a new trip")
     public Response storeNewTrip(@PathParam("userId") String userId, @PathParam("tripId") String tripId, NewTripRequest trip) {
-        TripModel model = new TripModel(userId, tripId, trip.startTimestamp, trip.positions);
-        tripService.storeTrip(userId, model);
+        TripModel model = new TripModel(userId, tripId, trip.startTimestamp, trip.positions, trip.engineRpmSamples);
+        tripService.storeAndSendTripAsync(userId, model);
         return Response.ok().build();
     }
 

@@ -16,6 +16,9 @@ public class TripModel {
     @JsonProperty("positions")
     public List<GpsLocation> positions;
 
+    @JsonProperty("engineRpmSamples")
+    public List<ObdEngineRpmSample> engineRpmSamples;
+
     @JsonProperty("startTimestamp")
     public Long startTimestamp;
 
@@ -26,6 +29,7 @@ public class TripModel {
         this.userId = dto.userId;
         this.tripId = dto.tripId;
         this.positions = dto.positions;
+        this.engineRpmSamples = dto.engineRpmSamples;
         this.startTimestamp = dto.positions.get(0).timestamp;
     }
 

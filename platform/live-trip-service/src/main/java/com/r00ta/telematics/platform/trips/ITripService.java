@@ -11,7 +11,7 @@ public interface ITripService {
 
     List<TripSummaryModel> getTripsHeadersByTimeRange(String userId, Long from, Long to);
 
-    boolean storeTrip(String userId, TripModel trip);
+    boolean storeAndSendTripAsync(String userId, TripModel trip);
 
     TripModel getTrip(String userId, String tripId);
 

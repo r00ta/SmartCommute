@@ -1,13 +1,13 @@
-package com.r00ta.telematics.platform.enrich.messaging.incoming.dto;
+package com.r00ta.telematics.platform.messaging.incoming.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CouldEvent {
+public class CloudEvent {
 
     @JsonProperty("data")
-    public TripCloudEvent data;
+    public RouteCloudEvent data;
 
     @JsonProperty("id")
     public String id;

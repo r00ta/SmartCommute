@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.r00ta.telematics.platform.messaging.model.CloudEventDto;
 import com.r00ta.telematics.platform.trips.models.GpsLocation;
+import com.r00ta.telematics.platform.trips.models.ObdEngineRpmSample;
 import com.r00ta.telematics.platform.trips.models.TripModel;
 
 public class TripModelDto implements CloudEventDto {
@@ -18,6 +19,9 @@ public class TripModelDto implements CloudEventDto {
     @JsonProperty("positions")
     public List<GpsLocation> positions;
 
+    @JsonProperty("engineRpmSamples")
+    public List<ObdEngineRpmSample> engineRpmSamples;
+
     @JsonProperty("documentVersion")
     public String documentVersion = "1.0";
 
@@ -28,6 +32,7 @@ public class TripModelDto implements CloudEventDto {
         this.userId = model.userId;
         this.tripId = model.tripId;
         this.positions = model.positions;
+        this.engineRpmSamples = model.engineRpmSamples;
     }
 
     @Override

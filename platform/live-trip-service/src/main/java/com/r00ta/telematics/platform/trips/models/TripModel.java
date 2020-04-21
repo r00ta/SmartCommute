@@ -18,16 +18,20 @@ public class TripModel {
     @JsonProperty("startTimestamp")
     public Long startTimestamp;
 
+    @JsonProperty("engineRpmSamples")
+    public List<ObdEngineRpmSample> engineRpmSamples;
+
     @JsonProperty("documentVersion")
     public String documentVersion = "1.0";
 
     public TripModel() {
     }
 
-    public TripModel(String userId, String tripId, Long startTimestamp, List<GpsLocation> positions) {
+    public TripModel(String userId, String tripId, Long startTimestamp, List<GpsLocation> positions, List<ObdEngineRpmSample> engineRpmSamples) {
         this.userId = userId;
         this.tripId = tripId;
         this.startTimestamp = startTimestamp;
         this.positions = positions;
+        this.engineRpmSamples = engineRpmSamples;
     }
 }

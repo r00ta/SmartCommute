@@ -46,6 +46,8 @@
   <module>scoring-service</module>
   <module>user-service</module>
   <module>database</module>
+  <module>route-analytics</module>
+  <module>messaging</module>
 </modules>
 
 </project>

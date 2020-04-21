@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.r00ta.telematics.platform.trips.models.GpsLocation;
+import com.r00ta.telematics.platform.trips.models.ObdEngineRpmSample;
 
 public class NewTripRequest {
 
@@ -18,4 +19,7 @@ public class NewTripRequest {
 
     @JsonProperty("positions")
     public List<GpsLocation> positions;
+
+    @JsonProperty("engineRpmSamples")
+    public List<ObdEngineRpmSample> engineRpmSamples;
 }
