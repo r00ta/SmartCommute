@@ -25,6 +25,6 @@ public class RouteKafkaConsumer {
 
     protected void processEvent(CloudEvent event) {
         LOGGER.info("Processing a new event");
-       analyticsService.processRoute(AnalyticsRoute.from(event.data.event));
+        analyticsService.processRoute(AnalyticsRoute.from(event.data.event));
     }
 }

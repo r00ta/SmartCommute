@@ -6,8 +6,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import com.r00ta.telematics.platform.enrich.messaging.incoming.TripKafkaConsumer;
+import com.r00ta.telematics.platform.enrich.messaging.outgoing.RouteAnalyticsKafkaProducer;
 import com.r00ta.telematics.platform.enrich.messaging.outgoing.TripKafkaProducer;
 import com.r00ta.telematics.platform.enrich.messaging.outgoing.dto.EnrichedTripSummaryDto;
+import com.r00ta.telematics.platform.enrich.messaging.outgoing.dto.RouteAnalyticsDto;
 import com.r00ta.telematics.platform.enrich.models.EnrichedTrip;
 import com.r00ta.telematics.platform.enrich.models.TripModel;
 import com.r00ta.telematics.platform.enrich.scoring.DriverScoring;
@@ -29,6 +31,9 @@ public class EnrichService implements IEnrichService {
     @Inject
     TripKafkaProducer kafkaScoringProducer;
 
+    @Inject
+    RouteAnalyticsKafkaProducer routeAnalyticsKafkaProducer;
+
     @Override
     public EnrichedTrip processTrip(TripModel trip) {
         RouteMatchModel routeMatch = routeMatching.calculateRouteMatching(trip);
@@ -49,6 +54,8 @@ public class EnrichService implements IEnrichService {
         LOGGER.info("Enrichedtrip stored");
 
         kafkaScoringProducer.sendEventAsync(new EnrichedTripSummaryDto(matchedTrip));
+
+        routeAnalyticsKafkaProducer.sendEventAsync(new RouteAnalyticsDto(matchedTrip));
 
         return matchedTrip;
     }

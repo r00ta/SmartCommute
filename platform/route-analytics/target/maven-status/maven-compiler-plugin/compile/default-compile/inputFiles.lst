@@ -1,0 +1,17 @@
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/models/AnalyticsRoute.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/messaging/incoming/dto/RouteModelDto.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/IAnalyticsService.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/IDataLakeUploader.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/models/EnrichedGpsLocation.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/messaging/incoming/RouteEventDeserializer.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/AnalyticsService.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/api/AnalyticsApi.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/models/UserMatching.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/IbmCloudUploader.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/messaging/incoming/dto/RouteCloudEvent.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/requests/LoadAnalysisRequest.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/messaging/incoming/RouteKafkaConsumer.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/messaging/outgoing/AnalyticsKafkaProducer.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/utils/DocumentKeyBuilder.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/messaging/incoming/dto/CloudEvent.java
+/home/jrota/vagrant/bionic64/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/models/EnrichedMetadata.java

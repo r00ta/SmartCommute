@@ -5,12 +5,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.cloud.objectstorage.ClientConfiguration;
 import com.ibm.cloud.objectstorage.SDKGlobalConfiguration;
 import com.ibm.cloud.objectstorage.SdkClientException;
@@ -29,9 +33,15 @@ import com.ibm.cloud.objectstorage.services.s3.model.S3ObjectSummary;
 import com.ibm.cloud.objectstorage.services.s3.transfer.TransferManager;
 import com.ibm.cloud.objectstorage.services.s3.transfer.TransferManagerBuilder;
 import com.ibm.cloud.objectstorage.services.s3.transfer.Upload;
+import com.r00ta.telematics.platform.models.AnalyticsRoute;
+import com.r00ta.telematics.platform.utils.DocumentKeyBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
-public class IbmCloudUploader {
+public class IbmCloudUploader implements IDataLakeUploader {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(IbmCloudUploader.class);
 
     private static AmazonS3 _cosClient;
     private static String api_key;
@@ -39,30 +49,33 @@ public class IbmCloudUploader {
     private static String endpoint_url;
     private static String location;
     private static String bucketName;
-
+    private final static ObjectMapper mapper = new ObjectMapper();
 
     @PostConstruct
-    void setup(){
+    void setup() {
         // Constants for IBM COS values
         SDKGlobalConfiguration.IAM_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token";
-        api_key = "<api-key>"; // example: xxxd12V2QHXbjaM99G9tWyYDgF_0gYdlQ8aWALIQxXx4
-        service_instance_id = "<resource-instance-id>"; // example: crn:v1:bluemix:public:cloud-object-storage:global:a/xx999cd94a0dda86fd8eff3191349999:9999b05b-x999-4917-xxxx-9d5b326a1111::
-        endpoint_url = "<endpoint>"; // example: https://s3.us-south.cloud-object-storage.appdomain.cloud
-        location = "<storage-class>"; // example: us-south-standard
+        api_key = "-PmwZ-01v_cGsKUWqCdm8ZGLMr1ntgX9yc3jKfI4Xfxt"; // example: xxxd12V2QHXbjaM99G9tWyYDgF_0gYdlQ8aWALIQxXx4
+        service_instance_id = "crn:v1:bluemix:public:cloud-object-storage:global:a/4e12949933064a189d5149a9687c3e0d:489a4b86-a9d8-43ab-ab18-5c65b5c21793::"; // example: crn:v1:bluemix:public:cloud-object-storage:global:a/xx999cd94a0dda86fd8eff3191349999:9999b05b-x999-4917-xxxx-9d5b326a1111::
+        endpoint_url = "https://s3.us-south.cloud-object-storage.appdomain.cloud"; // example: https://s3.us-south.cloud-object-storage.appdomain.cloud
+        location = "us-south-standard"; // example: us-south-standard
         // Create client connection details
         _cosClient = createClient(api_key, service_instance_id, endpoint_url, location);
+
         bucketName = "routes";
     }
 
-
-    public void suca()
-    {
+    @Override
+    public boolean uploadRoute(AnalyticsRoute route) throws JsonProcessingException {
         // Setting string values
-        String itemName = UUID.randomUUID().toString().replace("-","") + "_java_file.txt";
-        String fileText = "This is a test file from the Java code sample!!!";
+        // todo change tripid to routeid
+        LOGGER.info("going to push.");
+        String itemName = DocumentKeyBuilder.build(route.userId, route.tripId);
+        String fileText = mapper.writeValueAsString(route);
+        LOGGER.info(fileText);
 
         // create a new bucket
-        createBucket(bucketName, _cosClient);
+        // createBucket(bucketName, _cosClient);
 
         // get the list of buckets
         listBuckets(_cosClient);
@@ -74,24 +87,25 @@ public class IbmCloudUploader {
         listObjects(bucketName, _cosClient);
 
         // remove new file
-        deleteItem(bucketName, itemName);
+        //deleteItem(bucketName, itemName);
 
         // create & upload the large file using transfer manager & remove large file
-        try {
-            createLargeFile(bucketName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            createLargeFile(bucketName);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         // remove the new bucket
-        deleteBucket(bucketName);
+//        deleteBucket(bucketName);
+        return true;
     }
 
-    private static void createLargeFile(String bucketName)  throws IOException {
+    private static void createLargeFile(String bucketName) throws IOException {
         String fileName = "Sample"; //Setting the File Name
 
         try {
-            File uploadFile = File.createTempFile(fileName,".tmp");
+            File uploadFile = File.createTempFile(fileName, ".tmp");
             uploadFile.deleteOnExit();
             fileName = uploadFile.getName();
 
@@ -104,8 +118,7 @@ public class IbmCloudUploader {
     }
 
     // Create client connection
-    public static AmazonS3 createClient(String api_key, String service_instance_id, String endpoint_url, String location)
-    {
+    public static AmazonS3 createClient(String api_key, String service_instance_id, String endpoint_url, String location) {
         AWSCredentials credentials;
         credentials = new BasicIBMOAuthCredentials(api_key, service_instance_id);
 
@@ -119,15 +132,13 @@ public class IbmCloudUploader {
     }
 
     // Create a new bucket
-    public static void createBucket(String bucketName, AmazonS3 cosClient)
-    {
+    public static void createBucket(String bucketName, AmazonS3 cosClient) {
         cosClient.createBucket(bucketName);
         System.out.printf("Bucket: %s created!\n", bucketName);
     }
 
     // Retrieve the list of available buckets
-    public static void listBuckets(AmazonS3 cosClient)
-    {
+    public static void listBuckets(AmazonS3 cosClient) {
         System.out.println("Listing buckets:");
         final List<Bucket> bucketList = _cosClient.listBuckets();
         for (final Bucket bucket : bucketList) {
@@ -137,8 +148,7 @@ public class IbmCloudUploader {
     }
 
     // Retrieve the list of contents for a bucket
-    public static void listObjects(String bucketName, AmazonS3 cosClient)
-    {
+    public static void listObjects(String bucketName, AmazonS3 cosClient) {
         System.out.println("Listing objects in bucket " + bucketName);
         ObjectListing objectListing = cosClient.listObjects(new ListObjectsRequest().withBucketName(bucketName));
         for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
@@ -192,7 +202,7 @@ public class IbmCloudUploader {
         //set the threshold size to 5 MB
         long thresholdSize = 1024 * 1024 * 20;
 
-        AmazonS3 s3client = createClient( api_key, service_instance_id, endpoint_url, location);
+        AmazonS3 s3client = createClient(api_key, service_instance_id, endpoint_url, location);
 
         TransferManager transferManager = TransferManagerBuilder.standard()
                 .withS3Client(s3client)

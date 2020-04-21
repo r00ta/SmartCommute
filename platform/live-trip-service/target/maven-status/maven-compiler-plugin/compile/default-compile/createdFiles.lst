@@ -22,11 +22,10 @@ com/r00ta/telematics/platform/live/requests/LiveChunkUpdateRequest.class
 com/r00ta/telematics/platform/live/responses/AvailableLiveSessionsResponse.class
 com/r00ta/telematics/platform/live/responses/LiveChunksResponse.class
 com/r00ta/telematics/platform/trips/TripService.class
-com/r00ta/telematics/platform/messaging/model/CloudEventDto.class
 com/r00ta/telematics/platform/trips/models/TripSummaryModel.class
 com/r00ta/telematics/platform/live/api/LiveApi.class
 com/r00ta/telematics/platform/live/ILiveService.class
+com/r00ta/telematics/platform/trips/models/ObdEngineRpmSample.class
 com/r00ta/telematics/platform/live/storage/ILiveStorageExtension.class
-com/r00ta/telematics/platform/messaging/AbstractKafkaProducer.class
 com/r00ta/telematics/platform/live/messaging/LiveTripKafkaProducer.class
 com/r00ta/telematics/platform/live/models/LiveChunkModel.class

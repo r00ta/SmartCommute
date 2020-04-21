@@ -1,0 +1,4 @@
+com/r00ta/telematics/platform/messaging/AbstractCloudEventDeserializer.class
+com/r00ta/telematics/platform/messaging/model/CloudEventDto.class
+com/r00ta/telematics/platform/messaging/AbstractKafkaProducer.class
+com/r00ta/telematics/platform/messaging/utils/JsonUtils.class
