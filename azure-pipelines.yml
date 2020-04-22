@@ -10,6 +10,11 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: DockerCompose@0
+  inputs:
+    containerregistrytype: 'Azure Container Registry'
+    dockerComposeFile: '**/docker-compose.yml'
+    action: 'Run a Docker Compose command'
 - task: Maven@3
   inputs:
     mavenPomFile: 'platform/pom.xml'
