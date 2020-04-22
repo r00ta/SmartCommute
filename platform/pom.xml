@@ -44,6 +44,7 @@
 <modules>
   <module>live-trip-service</module>
   <module>scoring-service</module>
+  <module>integration-tests</module>
   <module>user-service</module>
   <module>database</module>
   <module>route-analytics</module>

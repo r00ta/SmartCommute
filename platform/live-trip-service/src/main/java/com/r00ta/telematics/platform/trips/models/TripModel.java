@@ -12,6 +12,9 @@ public class TripModel {
     @JsonProperty("tripId")
     public String tripId;
 
+    @JsonProperty("routeId")
+    public String routeId;
+
     @JsonProperty("positions")
     public List<GpsLocation> positions;
 
@@ -27,9 +30,10 @@ public class TripModel {
     public TripModel() {
     }
 
-    public TripModel(String userId, String tripId, Long startTimestamp, List<GpsLocation> positions, List<ObdEngineRpmSample> engineRpmSamples) {
+    public TripModel(String userId, String tripId, String routeId, Long startTimestamp, List<GpsLocation> positions, List<ObdEngineRpmSample> engineRpmSamples) {
         this.userId = userId;
         this.tripId = tripId;
+        this.routeId = routeId;
         this.startTimestamp = startTimestamp;
         this.positions = positions;
         this.engineRpmSamples = engineRpmSamples;

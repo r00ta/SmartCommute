@@ -21,6 +21,9 @@ public class EnrichedTrip {
     @JsonProperty("tripId")
     public String tripId;
 
+    @JsonProperty("routeId")
+    public String routeId;
+
     @JsonProperty("positions")
     public List<EnrichedGpsLocation> positions;
 
@@ -42,11 +45,12 @@ public class EnrichedTrip {
     public EnrichedTrip() {
     }
 
-    public static EnrichedTrip fromRouteMatch(String userId, String tripId, RouteMatchModel routeMatch) {
+    public static EnrichedTrip fromRouteMatch(String userId, String tripId, String routeId, RouteMatchModel routeMatch) {
         Map<Long, Attributes> attributesMap = buildAttributesMap(routeMatch.routeLinks);
         EnrichedTrip matchedTrip = new EnrichedTrip();
         matchedTrip.tripId = tripId;
         matchedTrip.userId = userId;
+        matchedTrip.routeId = routeId;
         matchedTrip.startTimestamp = routeMatch.tracePoints.get(0).timestamp;
         matchedTrip.positions = routeMatch.tracePoints.stream().map(x -> new EnrichedGpsLocation(x, attributesMap.get(x.linkIdMatched))).collect(Collectors.toList());
         matchedTrip.distanceInM = calculateDistanceInM(matchedTrip.positions);

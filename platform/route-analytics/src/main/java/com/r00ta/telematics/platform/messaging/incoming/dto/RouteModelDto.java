@@ -11,8 +11,8 @@ public class RouteModelDto {
     @JsonProperty("userId")
     public String userId;
 
-    @JsonProperty("tripId")
-    public String tripId;
+    @JsonProperty("routeId")
+    public String routeId;
 
     @JsonProperty("positions")
     public List<EnrichedGpsLocation> positions;

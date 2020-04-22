@@ -12,8 +12,8 @@ public class RouteAnalyticsDto implements CloudEventDto {
     @JsonProperty("userId")
     public String userId;
 
-    @JsonProperty("tripId")
-    public String tripId;
+    @JsonProperty("routeId")
+    public String routeId;
 
     @JsonProperty("positions")
     public List<EnrichedGpsLocation> positions;
@@ -36,7 +36,7 @@ public class RouteAnalyticsDto implements CloudEventDto {
 
     public RouteAnalyticsDto(EnrichedTrip enrichedTrip) {
         this.userId = enrichedTrip.userId;
-        this.tripId = enrichedTrip.tripId;
+        this.routeId = enrichedTrip.tripId;
         this.positions = enrichedTrip.positions;
         this.startTimestamp = enrichedTrip.startTimestamp;
     }

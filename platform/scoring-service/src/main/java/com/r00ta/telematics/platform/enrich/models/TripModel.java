@@ -13,6 +13,9 @@ public class TripModel {
     @JsonProperty("tripId")
     public String tripId;
 
+    @JsonProperty("routeId")
+    public String routeId;
+
     @JsonProperty("positions")
     public List<GpsLocation> positions;
 
@@ -28,6 +31,7 @@ public class TripModel {
     public TripModel(TripModelDto dto) {
         this.userId = dto.userId;
         this.tripId = dto.tripId;
+        this.routeId = dto.routeId;
         this.positions = dto.positions;
         this.engineRpmSamples = dto.engineRpmSamples;
         this.startTimestamp = dto.positions.get(0).timestamp;

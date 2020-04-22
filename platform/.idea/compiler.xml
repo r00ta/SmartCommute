@@ -12,10 +12,12 @@
         <module name="database" />
         <module name="user-service" />
         <module name="live-trip-service" />
+        <module name="integration-tests" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="database" target="11" />
+      <module name="integration-tests" target="11" />
       <module name="live-trip-service" target="11" />
       <module name="messaging" target="11" />
       <module name="route-analytics" target="11" />

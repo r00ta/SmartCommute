@@ -70,7 +70,7 @@ public class IbmCloudUploader implements IDataLakeUploader {
         // Setting string values
         // todo change tripid to routeid
         LOGGER.info("going to push.");
-        String itemName = DocumentKeyBuilder.build(route.userId, route.tripId);
+        String itemName = DocumentKeyBuilder.build(route.userId, route.routeId);
         String fileText = mapper.writeValueAsString(route);
         LOGGER.info(fileText);
 

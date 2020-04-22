@@ -64,7 +64,7 @@ public class TripApi {
     })
     @Operation(summary = "Stores a new trip", description = "Stores a new trip")
     public Response storeNewTrip(@PathParam("userId") String userId, @PathParam("tripId") String tripId, NewTripRequest trip) {
-        TripModel model = new TripModel(userId, tripId, trip.startTimestamp, trip.positions, trip.engineRpmSamples);
+        TripModel model = new TripModel(userId, tripId, trip.routeId, trip.startTimestamp, trip.positions, trip.engineRpmSamples);
         tripService.storeAndSendTripAsync(userId, model);
         return Response.ok().build();
     }

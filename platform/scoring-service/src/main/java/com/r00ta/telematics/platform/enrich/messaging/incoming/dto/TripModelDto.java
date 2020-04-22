@@ -16,6 +16,9 @@ public class TripModelDto {
     @JsonProperty("tripId")
     public String tripId;
 
+    @JsonProperty("routeId")
+    public String routeId;
+
     @JsonProperty("positions")
     public List<GpsLocation> positions;
 
