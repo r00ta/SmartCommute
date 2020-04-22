@@ -15,6 +15,7 @@ steps:
     containerregistrytype: 'Azure Container Registry'
     dockerComposeFile: '**/docker-compose.yml'
     action: 'Run a Docker Compose command'
+    dockerComposeCommand: 'up -d'
 - task: Maven@3
   inputs:
     mavenPomFile: 'platform/pom.xml'
