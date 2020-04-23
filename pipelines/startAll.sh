@@ -10,4 +10,3 @@ java -jar *runner.jar &
 
 cd ../../user-service/target
 java -jar *runner.jar &
-

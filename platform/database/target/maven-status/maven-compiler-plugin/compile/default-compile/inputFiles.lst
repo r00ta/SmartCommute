@@ -1,6 +1,0 @@
-/home/jrota/vagrant/bionic64/SmartCommute/platform/database/src/main/java/com/r00ta/telematics/platform/model/Hit.java
-/home/jrota/vagrant/bionic64/SmartCommute/platform/database/src/main/java/com/r00ta/telematics/platform/ElasticSearchStorageManager.java
-/home/jrota/vagrant/bionic64/SmartCommute/platform/database/src/main/java/com/r00ta/telematics/platform/model/ElasticSearchResponse.java
-/home/jrota/vagrant/bionic64/SmartCommute/platform/database/src/main/java/com/r00ta/telematics/platform/utils/HttpHelper.java
-/home/jrota/vagrant/bionic64/SmartCommute/platform/database/src/main/java/com/r00ta/telematics/platform/model/ElasticHits.java
-/home/jrota/vagrant/bionic64/SmartCommute/platform/database/src/main/java/com/r00ta/telematics/platform/IStorageManager.java
