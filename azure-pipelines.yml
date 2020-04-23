@@ -16,6 +16,19 @@ steps:
     dockerComposeFile: '**/docker-compose.yml'
     action: 'Run a Docker Compose command'
     dockerComposeCommand: 'up -d'
+
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'platform/pom.xml'
+    options: '-DskipTests'
+    publishJUnitResults: false
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    mavenVersionOption: 'Default'
+    mavenOptions: '-Xmx3072m'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
 - task: Bash@3
   inputs:
     filePath: 'pipelines/startAll.sh'
