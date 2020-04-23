@@ -43,6 +43,10 @@ public class IntegrationTest {
           .when().post("http://localhost:1339/users")
           .then()
              .statusCode(200);
+        System.out.println("TEST 1 end");
+
+        Response response = given().contentType(ContentType.JSON).body("{\"size\": 10000, \"query\" : { \"match_all\" : {} }}").when().post("http://localhost:9200/userindex/_search/").thenReturn();
+        response.prettyPrint();
     }
 
     @Test
