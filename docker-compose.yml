@@ -39,8 +39,6 @@ services:
   
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
-    volumes:
-      - ./esdata:/usr/share/elasticsearch/data
     environment:
       - discovery.type=single-node
     ports:
@@ -52,8 +50,6 @@ services:
     ports:
       - 5601:5601
 
-volumes:
-  esdata:
   # consumer:
   #   build: kogito-consumer/
   #   ports:
