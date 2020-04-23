@@ -52,12 +52,21 @@ public class IntegrationTest {
 
     @Test
     @Order(2)
-    public void authenticateUser() {
+    public void authenticateUser() throws InterruptedException {
         System.out.println("TEST 2");
         String body = new JsonObject().put("email", "pippo@gmail.com").put("password", "pass").toString();
 
-        AuthenticationResponse response = given().contentType(ContentType.JSON).body(body)
-                .when().post("http://localhost:1339/users/auth").then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", AuthenticationResponse.class);
+        AuthenticationResponse response = null;
+        for(int i = 0; i <= 15; i++){
+            Response post = given().contentType(ContentType.JSON).body(body)
+                    .when().post("http://localhost:1339/users/auth");
+
+            if (post.statusCode() == 200){
+                response =  post.then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", AuthenticationResponse.class);
+                break;
+            }
+            Thread.sleep(1000);
+        }
 
         userId = response.userId;
         jwtToken = response.jwtBearer;
