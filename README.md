@@ -1,5 +1,5 @@
 # Smart Commute
-[![Build Status](https://dev.azure.com/jacoporota92/OpenPooling/_apis/build/status/r00ta.OpenPoolingPlatform?branchName=master)](https://dev.azure.com/jacoporota92/OpenPooling/_build/latest?definitionId=2&branchName=master)
+![CI](https://github.com/r00ta/SmartCommute/workflows/CI/badge.svg?branch=master)
 
 ## Architecture
 

@@ -1,0 +1,46 @@
+{
+  "chunkSeqNumber": 1,
+  "isLastChunk": false,
+  "positions": [
+    {
+      "latitude": 45.22543539800398,
+      "longitude": 9.024758934974672,
+      "timestamp": 1587681994313,
+      "accuracy": 10,
+      "speed": 10,
+      "elevation": 0
+    },
+    {
+      "latitude": 45.22563186730366,
+      "longitude": 9.024866223335268,
+      "timestamp": 1587681995313,
+      "accuracy": 10,
+      "speed": 10,
+      "elevation": 0
+    },
+    {
+      "latitude": 45.22576410587303,
+      "longitude": 9.025011062622072,
+      "timestamp": 1587681996313,
+      "accuracy": 10,
+      "speed": 10,
+      "elevation": 0
+    },
+    {
+      "latitude": 45.22591901352021,
+      "longitude": 9.025193452835085,
+      "timestamp": 1587681997313,
+      "accuracy": 10,
+      "speed": 10,
+      "elevation": 0
+    },
+    {
+      "latitude": 45.22610414649604,
+      "longitude": 9.025365114212038,
+      "timestamp": 1587681998313,
+      "accuracy": 10,
+      "speed": 10,
+      "elevation": 0
+    }
+  ]
+}

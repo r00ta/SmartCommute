@@ -13,4 +13,6 @@ public class AuthenticationResponse {
         this.userId = userId;
         this.jwtBearer = jwtBearer;
     }
+
+    public AuthenticationResponse(){}
 }

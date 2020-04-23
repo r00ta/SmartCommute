@@ -8,6 +8,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -56,6 +57,25 @@ public class HttpHelper {
         try {
             post.setEntity(new StringEntity(params, ContentType.APPLICATION_JSON));
             CloseableHttpResponse response = httpclient.execute(post);
+            String result = EntityUtils.toString(response.getEntity());
+            LOGGER.debug("I've got " + result);
+            return result;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String doDelete(String path) {
+
+        HttpDelete delete = new HttpDelete(baseHost + path);
+        LOGGER.debug("Going to post to: " + path + "\n with: " + path);
+        try {
+            CloseableHttpResponse response = httpclient.execute(delete);
             String result = EntityUtils.toString(response.getEntity());
             LOGGER.debug("I've got " + result);
             return result;
