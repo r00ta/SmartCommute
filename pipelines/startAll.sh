@@ -1,6 +1,4 @@
 cd platform
-mvn clean package -DskipTests
-
 cd live-trip-service/target
 java -jar *runner.jar &
 
@@ -12,5 +10,4 @@ java -jar *runner.jar &
 
 cd ../../user-service/target
 java -jar *runner.jar &
-
 
