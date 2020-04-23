@@ -21,7 +21,7 @@ jobs:
       with:
         java-version: 1.11
     - name: Run docker compose
-      run: docker-compose up
+      run: docker-compose up -d
     - name: Build services
       run: mvn -f platform/pom.xml clean package -DskipTests
     - name: Run services
