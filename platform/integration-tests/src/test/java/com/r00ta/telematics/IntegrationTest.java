@@ -58,6 +58,7 @@ public class IntegrationTest {
         AuthenticationResponse response = executeUntilSuccess(() -> given().contentType(ContentType.JSON).body(body).when().post("http://localhost:1339/users/auth"))
                 .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", AuthenticationResponse.class);
 
+
         userId = response.userId;
         jwtToken = response.jwtBearer;
 
