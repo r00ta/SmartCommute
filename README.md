@@ -1,5 +1,6 @@
 # Smart Commute
 ![CI](https://github.com/r00ta/SmartCommute/workflows/CI/badge.svg?branch=master)
+[![codecov](https://codecov.io/gh/r00ta/SmartCommute/branch/master/graph/badge.svg?token=ELYMT6RP3L)](https://codecov.io/gh/r00ta/SmartCommute)
 
 ## Architecture
 
