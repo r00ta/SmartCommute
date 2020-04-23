@@ -12,6 +12,7 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -55,8 +56,8 @@ public class IntegrationTest {
         userId = response.userId;
         jwtToken = response.jwtBearer;
 
-        Assert.assertNotNull(response.userId);
-        Assert.assertNotNull(response.jwtBearer);
+        Assertions.assertNotNull(response.userId);
+        Assertions.assertNotNull(response.jwtBearer);
     }
 
     @Test
@@ -80,7 +81,7 @@ public class IntegrationTest {
         String routeId = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(body)
                 .when().post("http://localhost:1339/users/" + userId + "/routes").then().extract().jsonPath().getString("routeId");
 
-        Assert.assertNotNull(routeId);
+        Assertions.assertNotNull(routeId);
         this.routeId = routeId;
     }
 }
