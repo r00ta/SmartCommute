@@ -35,25 +35,17 @@ public class IntegrationTest {
     @Test
     @Order(1)
     public void createUser() {
-
-        System.out.println("TEST 1");
         String body = new JsonObject().put("birthDay", "2020-04-22").put("email", "pippo@gmail.com").put("name", "pippo").put("passwordHash", "pass").put("surename", "ciccio").toString();
 
-        Response response1 = given().contentType(ContentType.JSON).body(body)
-                .when().post("http://localhost:1339/users").thenReturn();
-        response1.prettyPrint();
-//          .then()
-//             .statusCode(200);
-        System.out.println("TEST 1 end");
-
-        Response response = given().contentType(ContentType.JSON).body("{\"size\": 10000, \"query\" : { \"match_all\" : {} }}").when().post("http://localhost:9200/userindex/_search/").thenReturn();
-        response.prettyPrint();
+        given().contentType(ContentType.JSON).body(body)
+          .when().post("http://localhost:1339/users")
+          .then()
+             .statusCode(200);
     }
 
     @Test
     @Order(2)
     public void authenticateUser() throws InterruptedException {
-        System.out.println("TEST 2");
         String body = new JsonObject().put("email", "pippo@gmail.com").put("password", "pass").toString();
 
         AuthenticationResponse response = null;
@@ -70,8 +62,6 @@ public class IntegrationTest {
 
         userId = response.userId;
         jwtToken = response.jwtBearer;
-        System.out.println(userId);
-        System.out.println(jwtToken);
 
         Assertions.assertNotNull(response.userId);
         Assertions.assertNotNull(response.jwtBearer);
@@ -80,8 +70,6 @@ public class IntegrationTest {
     @Test
     @Order(3)
     public void authenticationTest() {
-        System.out.println("TEST 3");
-
         given().header("Authorization", "Bearer " + jwtToken)
                 .when().get("http://localhost:1339/users/" + userId).then().statusCode(200);
     }
@@ -89,8 +77,6 @@ public class IntegrationTest {
     @Test
     @Order(4)
     public void createRoute() {
-        System.out.println("TEST 4");
-
         String body = new JsonObject()
                 .put("availableAsPassenger", true)
                 .put("days", new JsonArray().add("FRIDAY"))
