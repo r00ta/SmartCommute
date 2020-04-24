@@ -1,5 +1,6 @@
 # Smart Commute
-![CI](https://github.com/r00ta/SmartCommute/workflows/CI/badge.svg?branch=master)
+![Platform CI](https://github.com/r00ta/SmartCommute/workflows/CI/badge.svg?branch=master)
+![Android App CI](https://github.com/r00ta/SmartCommute/workflows/Android%20App%20CI/badge.svg)
 
 ## Architecture
 
