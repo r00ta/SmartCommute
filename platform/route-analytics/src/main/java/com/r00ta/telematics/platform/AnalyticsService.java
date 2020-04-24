@@ -5,13 +5,12 @@ import javax.inject.Inject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.r00ta.telematics.platform.models.AnalyticsRoute;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
 public class AnalyticsService implements IAnalyticsService {
 
     @Inject
-    IDataLakeUploader dataLakeUploader;
+    IDataLakeProvider dataLakeUploader;
 
     @Override
     public void processRoute(AnalyticsRoute route) {
@@ -24,7 +23,8 @@ public class AnalyticsService implements IAnalyticsService {
     }
 
     @Override
-    public void processAnalysisResults(String resultsURL) {
-        // load from ibm storage
+    public void processAnalysisResults(String itemName) {
+        dataLakeUploader.readAnalysisResults(itemName);
+        // do stuff, push to user service.
     }
 }

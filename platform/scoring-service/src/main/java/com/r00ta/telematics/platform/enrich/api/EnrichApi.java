@@ -12,6 +12,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.r00ta.telematics.platform.ElasticSearchStorageManager;
 import com.r00ta.telematics.platform.enrich.IEnrichService;
 import com.r00ta.telematics.platform.enrich.models.EnrichedTrip;
 import com.r00ta.telematics.platform.enrich.models.TripModel;
@@ -22,9 +23,13 @@ import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("/users/{userId}")
 public class EnrichApi {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EnrichApi.class);
 
     @Inject
     IEnrichService enrichService;
@@ -49,7 +54,7 @@ public class EnrichApi {
             @APIResponse(description = "Bad request.", responseCode = "500", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     })
     @Operation(summary = "Gets an enriched trip by id.", description = "Gets an enriched trip by id.")
-    public Response getEnrichedTripById(@PathParam("userId") String userId, @QueryParam("tripId") @NotNull String tripId) {
+    public Response getEnrichedTripById(@PathParam("userId") String userId, @PathParam("tripId") String tripId) {
         return Response.ok(enrichService.getTrip(userId, tripId)).build();
     }
 

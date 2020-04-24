@@ -21,7 +21,7 @@ public class AnalyticsApi {
     @Path("loadResults")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response loadResultsWebhook(LoadAnalysisRequest request){
-        analyticsService.processAnalysisResults(request.resultURL);
+        analyticsService.processAnalysisResults(request.itemName);
         return Response.ok().build();
     }
 

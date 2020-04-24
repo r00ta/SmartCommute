@@ -18,8 +18,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.routes.responses.DayRidePassengersResponse;
 import com.r00ta.telematics.platform.users.IUserService;
+import com.r00ta.telematics.platform.users.UserService;
 import com.r00ta.telematics.platform.users.models.User;
 import com.r00ta.telematics.platform.users.models.UserStatistics;
 import com.r00ta.telematics.platform.users.requests.NewUserRequest;
@@ -37,10 +40,15 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirements;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("/users")
 @SecurityScheme(securitySchemeName = "jwt", type = SecuritySchemeType.HTTP, scheme = "bearer", bearerFormat = "jwt")
 public class UserApi {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserApi.class);
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     @Inject
     IUserService userService;
@@ -54,13 +62,14 @@ public class UserApi {
     })
     @PermitAll
     @Operation(summary = "Creates a new user.", description = "Creates a new user.")
-    public Response createNewUser(NewUserRequest userRequest) {
+    public Response createNewUser(NewUserRequest userRequest) throws JsonProcessingException {
         String userId = UUID.randomUUID().toString();
         User user = new User(userRequest, userId);
         boolean success = userService.createUser(user);
         if (success) {
             return Response.ok(new NewUserResponse(userId)).build();
         }
+        LOGGER.warn("Can't create user. Request: " + mapper.writeValueAsString(userRequest));
         return Response.status(400, "Can't create the user").build();
     }
 

@@ -74,6 +74,8 @@ public class EnrichedTrip {
             distance += Geoid.WGS84.distance(previous, next).floatValue();
             previous = next;
         }
+
+        System.out.println(distance);
         return distance;
     }
 

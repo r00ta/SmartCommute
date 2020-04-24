@@ -4,11 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -25,23 +23,26 @@ import com.ibm.cloud.objectstorage.oauth.BasicIBMOAuthCredentials;
 import com.ibm.cloud.objectstorage.services.s3.AmazonS3;
 import com.ibm.cloud.objectstorage.services.s3.AmazonS3ClientBuilder;
 import com.ibm.cloud.objectstorage.services.s3.model.Bucket;
+import com.ibm.cloud.objectstorage.services.s3.model.GetObjectRequest;
 import com.ibm.cloud.objectstorage.services.s3.model.ListObjectsRequest;
 import com.ibm.cloud.objectstorage.services.s3.model.ObjectListing;
 import com.ibm.cloud.objectstorage.services.s3.model.ObjectMetadata;
 import com.ibm.cloud.objectstorage.services.s3.model.PutObjectRequest;
+import com.ibm.cloud.objectstorage.services.s3.model.S3Object;
 import com.ibm.cloud.objectstorage.services.s3.model.S3ObjectSummary;
 import com.ibm.cloud.objectstorage.services.s3.transfer.TransferManager;
 import com.ibm.cloud.objectstorage.services.s3.transfer.TransferManagerBuilder;
 import com.ibm.cloud.objectstorage.services.s3.transfer.Upload;
+import com.r00ta.telematics.platform.models.AnalysisResults;
 import com.r00ta.telematics.platform.models.AnalyticsRoute;
 import com.r00ta.telematics.platform.utils.DocumentKeyBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
-public class IbmCloudUploader implements IDataLakeUploader {
+public class IbmCloudProvider implements IDataLakeProvider {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IbmCloudUploader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IbmCloudProvider.class);
 
     private static AmazonS3 _cosClient;
     private static String api_key;
@@ -49,6 +50,7 @@ public class IbmCloudUploader implements IDataLakeUploader {
     private static String endpoint_url;
     private static String location;
     private static String bucketName;
+    private static String resultBucketName;
     private final static ObjectMapper mapper = new ObjectMapper();
 
     @PostConstruct
@@ -63,6 +65,7 @@ public class IbmCloudUploader implements IDataLakeUploader {
         _cosClient = createClient(api_key, service_instance_id, endpoint_url, location);
 
         bucketName = "routes";
+        resultBucketName = "resultAnalysis";
     }
 
     @Override
@@ -84,7 +87,7 @@ public class IbmCloudUploader implements IDataLakeUploader {
         createTextFile(bucketName, itemName, fileText);
 
         // get the list of files from the new bucket
-        listObjects(bucketName, _cosClient);
+//        listObjects(bucketName, _cosClient);
 
         // remove new file
         //deleteItem(bucketName, itemName);
@@ -99,6 +102,41 @@ public class IbmCloudUploader implements IDataLakeUploader {
         // remove the new bucket
 //        deleteBucket(bucketName);
         return true;
+    }
+
+    @Override
+    public AnalysisResults readAnalysisResults(String itemName){
+        try {
+            return mapper.readValue(getItem(resultBucketName, itemName), AnalysisResults.class);
+        } catch (JsonProcessingException e) {
+            LOGGER.error("Can't read analysis result file.", e);
+        }
+        return null;
+    }
+
+    private static String getItem(String bucketName, String itemName) {
+        System.out.printf("Retrieving item from bucket: %s, key: %s\n", bucketName, itemName);
+
+        S3Object item = _cosClient.getObject(new GetObjectRequest(bucketName, itemName));
+
+        try {
+            final int bufferSize = 1024;
+            final char[] buffer = new char[bufferSize];
+            final StringBuilder out = new StringBuilder();
+            InputStreamReader in = new InputStreamReader(item.getObjectContent());
+
+            for (; ; ) {
+                int rsz = in.read(buffer, 0, buffer.length);
+                if (rsz < 0)
+                    break;
+                out.append(buffer, 0, rsz);
+            }
+
+            System.out.println(out.toString());
+        } catch (IOException ioe){
+            System.out.printf("Error reading file %s: %s\n", itemName, ioe.getMessage());
+        }
+        return null;
     }
 
     private static void createLargeFile(String bucketName) throws IOException {
@@ -122,7 +160,7 @@ public class IbmCloudUploader implements IDataLakeUploader {
         AWSCredentials credentials;
         credentials = new BasicIBMOAuthCredentials(api_key, service_instance_id);
 
-        ClientConfiguration clientConfig = new ClientConfiguration().withRequestTimeout(5000);
+        ClientConfiguration clientConfig = new ClientConfiguration().withRequestTimeout(15000);
         clientConfig.setUseTcpKeepAlive(true);
 
         AmazonS3 cosClient = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials))

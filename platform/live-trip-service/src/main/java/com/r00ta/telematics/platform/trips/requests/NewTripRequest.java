@@ -9,13 +9,6 @@ import com.r00ta.telematics.platform.trips.models.ObdEngineRpmSample;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class NewTripRequest {
-
-    @JsonProperty("userId")
-    public String userId;
-
-    @JsonProperty("tripId")
-    public String tripId;
-
     @JsonProperty("routeId")
     public String routeId;
 

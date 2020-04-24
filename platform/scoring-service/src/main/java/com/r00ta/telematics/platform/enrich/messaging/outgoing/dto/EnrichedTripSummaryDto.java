@@ -48,6 +48,6 @@ public class EnrichedTripSummaryDto implements CloudEventDto {
 
     @Override
     public String getEventProducer() {
-        return "Enrichment-scoring service";
+        return "Enrichment-scoring";
     }
 }

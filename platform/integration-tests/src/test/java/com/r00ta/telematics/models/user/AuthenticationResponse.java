@@ -1,4 +1,4 @@
-package com.r00ta.telematics.models;
+package com.r00ta.telematics.models.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

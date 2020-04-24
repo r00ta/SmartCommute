@@ -11,6 +11,6 @@ public class UserMatching implements CloudEventDto {
 
     @Override
     public String getEventProducer() {
-        return null;
+        return "RouteAnalytics";
     }
 }

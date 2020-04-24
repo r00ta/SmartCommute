@@ -26,9 +26,7 @@ public class RouteMatching {
 
     public RouteMatchModel calculateRouteMatching(TripModel trip) {
         String gpx = GpxFactory.getGpxAsString(trip);
-        System.out.println(gpx);
         String response = httpHelper.doPost(String.format("matchroute.json?apiKey=%s&routemode=car&attributes=SPEED_LIMITS_FCn(FROM_REF_SPEED_LIMIT,TO_REF_SPEED_LIMIT)", apiKey), gpx);
-        System.out.println(response);
         try {
             return MAPPER.readValue(response, RouteMatchModel.class);
         } catch (JsonProcessingException e) {

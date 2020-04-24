@@ -1,4 +1,4 @@
-package com.r00ta.telematics.models;
+package com.r00ta.telematics.models.livetrip;
 
 import java.time.DayOfWeek;
 import java.util.Date;

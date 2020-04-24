@@ -31,7 +31,7 @@ public class RouteAnalyticsDto implements CloudEventDto {
 
     @Override
     public String getEventProducer() {
-        return null;
+        return "Enrichment-scoring";
     }
 
     public RouteAnalyticsDto(EnrichedTrip enrichedTrip) {

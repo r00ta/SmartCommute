@@ -18,7 +18,7 @@ public class EnrichedTripKafkaConsumer {
     @Inject
     IUserService userService;
 
-    @Incoming("enrichment-topic")
+    @Incoming("scoring-topic")
     public void onProcessInstanceEvent(EnrichedCloudEvent event) {
         processEvent(event);
     }

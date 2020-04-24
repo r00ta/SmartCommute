@@ -27,8 +27,10 @@ public class EnrichedTripSummary {
         this.userId = scoreModel.userId;
         this.tripId = scoreModel.tripId;
         this.score = scoreModel.score;
+        System.out.println(scoreModel.distanceInM);
         this.distanceInM = scoreModel.distanceInM;
         this.duration = scoreModel.duration;
+        this.co2Saved = scoreModel.co2Saved;
     }
 
     public EnrichedTripSummary() {

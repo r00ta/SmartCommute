@@ -5,6 +5,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 public class LoadAnalysisRequest {
 
-    @JsonProperty("resultURL")
-    public String resultURL;
+    @JsonProperty("itemName")
+    public String itemName;
 }

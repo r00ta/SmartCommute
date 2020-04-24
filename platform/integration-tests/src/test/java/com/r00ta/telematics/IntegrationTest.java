@@ -5,14 +5,20 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import javax.ws.rs.NotFoundException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.r00ta.telematics.models.AuthenticationResponse;
-import com.r00ta.telematics.models.AvailableLiveSessionsResponse;
-import com.r00ta.telematics.models.LiveChunksResponse;
-import com.r00ta.telematics.models.LiveSessionSummary;
+import com.r00ta.telematics.models.user.AuthenticationResponse;
+import com.r00ta.telematics.models.livetrip.AvailableLiveSessionsResponse;
+import com.r00ta.telematics.models.scoring.EnrichedTrip;
+import com.r00ta.telematics.models.livetrip.LiveChunksResponse;
+import com.r00ta.telematics.models.livetrip.LiveSessionSummary;
+import com.r00ta.telematics.models.livetrip.TripModel;
+import com.r00ta.telematics.models.user.UserStatistics;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -38,6 +44,7 @@ public class IntegrationTest {
     private static String userId;
     private static String routeId;
     private static String sessionId;
+    private static String tripId;
 
     @Test
     @Order(1)
@@ -94,14 +101,8 @@ public class IntegrationTest {
     @Test
     @Order(5)
     public void createLiveTripRoute() {
-        String body = new JsonObject()
-                .put("userId", userId)
-                .put("day", "FRIDAY")
-                .put("routeId", routeId)
-                .toString();
-
-        LiveSessionSummary session = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(body)
-                .when().post("http://localhost:1337/users/" + userId + "/liveSessions").then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveSessionSummary.class);
+        LiveSessionSummary session = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken)
+                .when().post("http://localhost:1337/users/" + userId + "/liveSessions?day=FRIDAY&routeId=" + routeId).then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveSessionSummary.class);
 
         sessionId = session.sessionId;
 
@@ -121,8 +122,6 @@ public class IntegrationTest {
     @Test
     @Order(7)
     public void putNewChunksInLiveTrips() throws InterruptedException, IOException {
-
-
         String chunk0 = getResourceAsString("/chunk0.json");
         String chunk1 = getResourceAsString("/chunk1.json");
         String chunk2 = getResourceAsString("/chunk2.json");
@@ -148,6 +147,37 @@ public class IntegrationTest {
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).isLive == false);
     }
 
+
+    @Test
+    @Order(8)
+    public void createNewTrip() throws InterruptedException, IOException {
+        String trip = getResourceAsString("/testTrip.json");
+
+        tripId = UUID.randomUUID().toString();
+
+        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(trip).when().post("http://localhost:1337/users/" + userId + "/trips/" + tripId).then().statusCode(200);
+
+        retryUntilSuccess(
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1337/users/" + userId + "/trips/" +  tripId)
+                        .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", TripModel.class).positions.size() >= 20);
+    }
+
+    @Test
+    @Order(9)
+    public void retrieveEnrichedTrip() throws InterruptedException {
+        retryUntilSuccess(
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1338/users/" + userId + "/enrichedTrips/" +  tripId)
+                        .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", EnrichedTrip.class).positions.size() >= 20);
+    }
+
+    @Test
+    @Order(10)
+    public void retrieveUpdatedUserStatistics() throws InterruptedException {
+        retryUntilSuccess(
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1339/users/" + userId)
+                        .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", UserStatistics.class).totalDistanceDrivenInM >= 20);
+    }
+
     private String getResourceAsString(String path) throws IOException {
         InputStream resourceAsStream = IntegrationTest.class.getResourceAsStream(path);
         StringWriter writer = new StringWriter();
@@ -156,9 +186,11 @@ public class IntegrationTest {
     }
 
     private Response executeUntilSuccess(Callable callable) throws InterruptedException {
+        ExecutorService executor = new ScheduledThreadPoolExecutor(1);
         for (int i = 0; i <= 20; i++) {
             try {
-                Response response = (Response) callable.call();
+                Future<Response> future = executor.submit(callable);
+                Response response = future.get();
                 if (response.statusCode() == 200) {
                     return response;
                 }
@@ -170,9 +202,11 @@ public class IntegrationTest {
     }
 
     private boolean retryUntilSuccess(Callable callable) throws InterruptedException {
+        ExecutorService executor = new ScheduledThreadPoolExecutor(1);
         for (int i = 0; i <= 20; i++) {
             try {
-                boolean assertionResult = (boolean) callable.call();
+                Future<Boolean> future = executor.submit(callable);
+                Boolean assertionResult = future.get();
                 if (assertionResult) {
                     return true;
                 }

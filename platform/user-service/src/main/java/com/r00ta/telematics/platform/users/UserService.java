@@ -12,9 +12,13 @@ import com.r00ta.telematics.platform.users.models.LiveTrip;
 import com.r00ta.telematics.platform.users.models.User;
 import com.r00ta.telematics.platform.users.models.UserStatistics;
 import com.r00ta.telematics.platform.users.storage.IUsersStorageExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class UserService implements IUserService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     @Inject
     IUsersStorageExtension storageExtension;
@@ -34,12 +38,11 @@ public class UserService implements IUserService {
 
     @Override
     public boolean createUser(User user) {
+        LOGGER.info("New create user process started: userId = " + user.userId);
         UserStatistics userStatisticsDocument = new UserStatistics(user.userId);
-        boolean successOverview = storeUserStatisticsDocument(user.userId, userStatisticsDocument);
-        if (successOverview) {
-            return storageExtension.createUser(user);
-        }
-        return false;
+        boolean success = storeUserStatisticsDocument(user.userId, userStatisticsDocument) && storageExtension.createUser(user);
+        LOGGER.info("User statistics document and user document have been created: " + String.valueOf(success));
+        return success;
     }
 
     @Override
@@ -76,12 +79,12 @@ public class UserService implements IUserService {
 
     @Override
     public boolean processScore(EnrichedTripSummary enrichedTripSummary) {
+        LOGGER.info("processing new score for user: " + enrichedTripSummary.userId);
         UserStatistics userStatistics = storageExtension.getUserOverview(enrichedTripSummary.userId);
-
         userStatistics.updateStatistics(enrichedTripSummary);
-
+        LOGGER.info(String.format("User statistic document for user %s has been fetched and locally updated.", enrichedTripSummary.userId));
         boolean success = storageExtension.storeUserStatisticsDocument(enrichedTripSummary.userId, userStatistics);
-
+        LOGGER.info(String.format("Score processed with success: %s, for user %s", String.valueOf(success), enrichedTripSummary.userId));
         return success;
     }
 }

@@ -44,7 +44,7 @@ public class EnrichService implements IEnrichService {
         }
 
         // obd info are not stored!
-        EnrichedTrip matchedTrip = EnrichedTrip.fromRouteMatch(trip.userId, trip.userId, trip.routeId, routeMatch);
+        EnrichedTrip matchedTrip = EnrichedTrip.fromRouteMatch(trip.userId, trip.tripId, trip.routeId, routeMatch);
         LOGGER.info("Enriched trip created");
         DriverScoring.setPointScores(matchedTrip);
 
