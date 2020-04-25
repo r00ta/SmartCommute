@@ -30,12 +30,15 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static io.restassured.RestAssured.given;
 
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class IntegrationTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(IntegrationTest.class);
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -49,6 +52,7 @@ public class IntegrationTest {
     @Test
     @Order(1)
     public void createUser() {
+        LOGGER.info("Creating user test.");
         String body = new JsonObject().put("birthDay", "2020-04-22").put("email", email).put("name", "pippo").put("passwordHash", "pass").put("surename", "ciccio").toString();
 
         given().contentType(ContentType.JSON).body(body)
@@ -60,6 +64,7 @@ public class IntegrationTest {
     @Test
     @Order(2)
     public void authenticateUser() throws InterruptedException {
+        LOGGER.info("Auth user test.");
         String body = new JsonObject().put("email", email).put("password", "pass").toString();
 
         AuthenticationResponse response = executeUntilSuccess(() -> given().contentType(ContentType.JSON).body(body).when().post("http://localhost:1339/users/auth"))
@@ -76,6 +81,7 @@ public class IntegrationTest {
     @Test
     @Order(3)
     public void authenticationTest() {
+        LOGGER.info("Testing authentication.");
         given().header("Authorization", "Bearer " + jwtToken)
                 .when().get("http://localhost:1339/users/" + userId).then().statusCode(200);
     }
@@ -83,6 +89,7 @@ public class IntegrationTest {
     @Test
     @Order(4)
     public void createRoute() {
+        LOGGER.info("Creating route.");
         String body = new JsonObject()
                 .put("availableAsPassenger", true)
                 .put("days", new JsonArray().add("FRIDAY"))
@@ -101,6 +108,7 @@ public class IntegrationTest {
     @Test
     @Order(5)
     public void createLiveTripRoute() {
+        LOGGER.info("Creating live trip");
         LiveSessionSummary session = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken)
                 .when().post("http://localhost:1337/users/" + userId + "/liveSessions?day=FRIDAY&routeId=" + routeId).then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveSessionSummary.class);
 
@@ -112,6 +120,7 @@ public class IntegrationTest {
     @Test
     @Order(6)
     public void retrieveLiveTripSessions() throws InterruptedException {
+        LOGGER.info("Retrieving live trip.");
         retryUntilSuccess(
                 () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1337/users/" + userId + "/liveSessions")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", AvailableLiveSessionsResponse.class).sessions.size() == 1);
@@ -122,6 +131,7 @@ public class IntegrationTest {
     @Test
     @Order(7)
     public void putNewChunksInLiveTrips() throws InterruptedException, IOException {
+        LOGGER.info("Submit new chunks");
         String chunk0 = getResourceAsString("/chunk0.json");
         String chunk1 = getResourceAsString("/chunk1.json");
         String chunk2 = getResourceAsString("/chunk2.json");
@@ -151,6 +161,7 @@ public class IntegrationTest {
     @Test
     @Order(8)
     public void createNewTrip() throws InterruptedException, IOException {
+        LOGGER.info("Creating trip.");
         String trip = getResourceAsString("/testTrip.json");
 
         tripId = UUID.randomUUID().toString();
@@ -165,6 +176,7 @@ public class IntegrationTest {
     @Test
     @Order(9)
     public void retrieveEnrichedTrip() throws InterruptedException {
+        LOGGER.info("Fetching enriched trip.");
         retryUntilSuccess(
                 () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1338/users/" + userId + "/enrichedTrips/" +  tripId)
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", EnrichedTrip.class).positions.size() >= 20);
@@ -173,6 +185,7 @@ public class IntegrationTest {
     @Test
     @Order(10)
     public void retrieveUpdatedUserStatistics() throws InterruptedException {
+        LOGGER.info("Fetching user statistics.");
         retryUntilSuccess(
                 () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1339/users/" + userId)
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", UserStatistics.class).totalDistanceDrivenInM >= 20);
@@ -187,7 +200,7 @@ public class IntegrationTest {
 
     private Response executeUntilSuccess(Callable callable) throws InterruptedException {
         ExecutorService executor = new ScheduledThreadPoolExecutor(1);
-        for (int i = 0; i <= 20; i++) {
+        for (int i = 0; i <= 60; i++) {
             try {
                 Future<Response> future = executor.submit(callable);
                 Response response = future.get();
@@ -195,6 +208,7 @@ public class IntegrationTest {
                     return response;
                 }
             } catch (Exception e) {
+                LOGGER.info("Request failed due to " + e.getMessage());
             }
             Thread.sleep(1000);
         }
@@ -203,7 +217,7 @@ public class IntegrationTest {
 
     private boolean retryUntilSuccess(Callable callable) throws InterruptedException {
         ExecutorService executor = new ScheduledThreadPoolExecutor(1);
-        for (int i = 0; i <= 20; i++) {
+        for (int i = 0; i <= 60; i++) {
             try {
                 Future<Boolean> future = executor.submit(callable);
                 Boolean assertionResult = future.get();
@@ -211,6 +225,7 @@ public class IntegrationTest {
                     return true;
                 }
             } catch (Exception e) {
+                LOGGER.info("Request failed due to " + e.getMessage());
             }
             Thread.sleep(1000);
         }
