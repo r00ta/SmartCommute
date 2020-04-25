@@ -55,10 +55,17 @@ public class IntegrationTest {
         LOGGER.info("Creating user test.");
         String body = new JsonObject().put("birthDay", "2020-04-22").put("email", email).put("name", "pippo").put("passwordHash", "pass").put("surename", "ciccio").toString();
 
+        given().contentType(ContentType.JSON).get("http://localhost:9200/").prettyPrint();
+        given().contentType(ContentType.JSON).get("http://localhost:1337/").prettyPrint();
+        given().contentType(ContentType.JSON).get("http://localhost:1338/").prettyPrint();
+        given().contentType(ContentType.JSON).get("http://localhost:1339/").prettyPrint();
+
         given().contentType(ContentType.JSON).body(body)
                 .when().post("http://localhost:1339/users")
                 .then()
                 .statusCode(200);
+
+        given().contentType(ContentType.JSON).get("http://localhost:9200/").prettyPrint();
     }
 
     @Test
