@@ -3,6 +3,7 @@ package com.r00ta.telematics.platform;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,8 +18,8 @@ public class ElasticSearchStorageManager implements IStorageManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchStorageManager.class);
 
-    //    private static final String HOST = "http://elasticsearch:9200/";
-    private static final String HOST = "http://localhost:9200/";
+    private static final String HOST = "http://elasticsearch:9200/";
+//    private static final String HOST = "http://localhost:9200/";
 
     private static ObjectMapper objectMapper = new ObjectMapper();
     private HttpHelper httpHelper = new HttpHelper(HOST);

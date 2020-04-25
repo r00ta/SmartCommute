@@ -14,6 +14,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.r00ta.telematics.android.network.HttpRequestProvider;
+import com.r00ta.telematics.android.responses.AuthenticationResponse;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,12 +77,6 @@ public class SignupActivity extends AppCompatActivity {
 
         _signupButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
-        progressDialog.show();
-
         final String nameUser = _usernameText.getText().toString().toLowerCase();
         final String password = _passwordText.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
@@ -81,54 +84,29 @@ public class SignupActivity extends AppCompatActivity {
 
         // TODO: Implement your own signup logic here.
 
-        Handler handler = new Handler();
-// remove
-        onSignupSuccess();
-        Runnable r = new Runnable() {
-            public void run() {
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put("nameUser", nameUser);
-                    jsonObject.put("password", password);
-                    jsonObject.put("language", language);
+        String url = "http://10.0.2.2:1337/users";
+        JSONObject body = null;
+        try {
+            body = new JSONObject().put("birthDay", "321321").put("email", nameUser).put("name", nameUser).put("passwordHash", password).put("surename", "pippo");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, body, new Response.Listener<JSONObject>() {
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-//                AndroidNetworking.post("http://10.0.2.2:8000/createUser")
-//                        .addJSONObjectBody(jsonObject)
-//                        .setTag("test")
-//                        .build()
-//                        .getAsJSONObject(new JSONObjectRequestListener() {
-//                            @Override
-//                            public void onResponse(JSONObject response) {
-//                                Log.d(response.toString(),"Create SUCCESS");
-//                                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//
-//                                SharedPreferences.Editor editor = prefs.edit();
-//
-//                                // Edit the saved preferences
-//                                editor.putString("nameUser", nameUser);
-//                                editor.putString("password", password);
-//                                editor.commit();
-//                                progressDialog.dismiss();
-//                                onSignupSuccess();
-//                            }
-//                            @Override
-//                            public void onError(ANError error) {
-//                                Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-//                                Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-//                                progressDialog.dismiss();
-//                                onSignupFailed();
-//                            }
-//                        });
-            }
-        };
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        onSignupSuccess();
+                    }
+                }, new Response.ErrorListener() {
 
-        handler.post(
-                r
-        );
-
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Log.i("Signup", "FAILED");
+                    }
+                });
+        HttpRequestProvider.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }
 
 

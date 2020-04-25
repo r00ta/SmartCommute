@@ -1,6 +1,7 @@
 package com.r00ta.telematics.android;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -38,31 +39,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         checkPermissions();
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//        nameUser = prefs.getString("nameUser","0");
-//        passwd = prefs.getString("password","0");
-//        Log.d("chupa",nameUser);
-//        if(nameUser.equals("0")){
-//            Intent intent = new Intent(this, LoginActivity.class);
-//            startActivity(intent);
-//        }
-
-//        // Get or generate DeviceID
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//        String userId = prefs.getString("userId","0");
-//        Log.i("userId", userId);
-//
-//        if(userId.equals("0")) {
-//            SharedPreferences.Editor editor = prefs.edit();
-//            // Edit the saved preferences
-//            editor.putString("userId", userId);
-//            editor.commit();
-//        }
-
-
+        Context mContext = getApplicationContext();
+        SharedPreferences smartCommutePreferences = mContext.getSharedPreferences("smartCommutePreferences", Context.MODE_PRIVATE);
+        String jwtBearer = smartCommutePreferences.getString("jwtBearer", "0");
+        if(jwtBearer.equals("0")){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void checkPermissions(){
@@ -82,5 +66,4 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, permissionArray, 1);
         }
     }
-
 }

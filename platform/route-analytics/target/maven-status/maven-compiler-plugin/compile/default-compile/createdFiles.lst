@@ -1,10 +1,9 @@
 com/r00ta/telematics/platform/messaging/incoming/dto/RouteModelDto.class
-com/r00ta/telematics/platform/IbmCloudUploader.class
+com/r00ta/telematics/platform/models/AnalysisResults.class
 com/r00ta/telematics/platform/messaging/incoming/RouteKafkaConsumer.class
 com/r00ta/telematics/platform/requests/LoadAnalysisRequest.class
 com/r00ta/telematics/platform/messaging/outgoing/AnalyticsKafkaProducer.class
 com/r00ta/telematics/platform/api/AnalyticsApi.class
-com/r00ta/telematics/platform/IDataLakeUploader.class
 com/r00ta/telematics/platform/messaging/incoming/dto/CloudEvent.class
 com/r00ta/telematics/platform/models/UserMatching.class
 com/r00ta/telematics/platform/utils/DocumentKeyBuilder.class
@@ -14,4 +13,6 @@ com/r00ta/telematics/platform/AnalyticsService.class
 com/r00ta/telematics/platform/IAnalyticsService.class
 com/r00ta/telematics/platform/models/EnrichedGpsLocation.class
 com/r00ta/telematics/platform/models/AnalyticsRoute.class
+com/r00ta/telematics/platform/IbmCloudProvider.class
 com/r00ta/telematics/platform/models/EnrichedMetadata.class
+com/r00ta/telematics/platform/IDataLakeProvider.class

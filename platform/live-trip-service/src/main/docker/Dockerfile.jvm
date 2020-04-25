@@ -7,11 +7,11 @@
 #
 # Then, build the image with:
 #
-# docker build -f src/main/docker/Dockerfile.jvm -t quarkus/OpenPoolingPlatform-jvm .
+# docker build -f src/main/docker/Dockerfile.jvm -t quarkus/live-trip-service-jvm .
 #
 # Then run the container using:
 #
-# docker run -i --rm -p 8080:8080 quarkus/OpenPoolingPlatform-jvm
+# docker run -i --rm -p 8080:8080 quarkus/live-trip-service-jvm
 #
 ###
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.1
@@ -41,7 +41,7 @@ ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jb
 COPY target/lib/* /deployments/lib/
 COPY target/*-runner.jar /deployments/app.jar
 
-EXPOSE 8080
+EXPOSE 1337
 USER 1001
 
 ENTRYPOINT [ "/deployments/run-java.sh" ]

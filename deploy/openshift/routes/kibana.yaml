@@ -1,0 +1,34 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: kibana
+  namespace: smartcommute-2020
+  selfLink: /apis/route.openshift.io/v1/namespaces/smartcommute-2020/routes/kibana
+  uid: 77520e55-86f4-11ea-836d-0a580a80010f
+  resourceVersion: '58004'
+  creationTimestamp: '2020-04-25T12:58:32Z'
+  labels:
+    io.kompose.service: kibana
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  host: kibana-smartcommute-2020.apps-crc.testing
+  subdomain: ''
+  to:
+    kind: Service
+    name: kibana
+    weight: 100
+  port:
+    targetPort: '5601'
+  wildcardPolicy: None
+status:
+  ingress:
+    - host: kibana-smartcommute-2020.apps-crc.testing
+      routerName: default
+      conditions:
+        - type: Admitted
+          status: 'True'
+          lastTransitionTime: '2020-04-25T12:58:32Z'
+      wildcardPolicy: None
+      routerCanonicalHostname: apps-crc.testing
+

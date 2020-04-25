@@ -2,8 +2,8 @@ com/r00ta/telematics/platform/trips/models/TripModel.class
 com/r00ta/telematics/platform/live/responses/LiveChunkResponse.class
 com/r00ta/telematics/platform/trips/messaging/dto/TripModelDto.class
 com/r00ta/telematics/platform/trips/storage/ITripStorageExtension.class
-com/r00ta/telematics/platform/trips/responses/TripsHeadersByTimeRangeResponse.class
 com/r00ta/telematics/platform/trips/requests/NewTripRequest.class
+com/r00ta/telematics/platform/trips/responses/TripsHeadersByTimeRangeResponse.class
 com/r00ta/telematics/platform/live/models/LiveSessionModel.class
 com/r00ta/telematics/platform/trips/api/TripApi.class
 com/r00ta/telematics/platform/trips/messaging/TripKafkaProducer.class
@@ -13,8 +13,8 @@ com/r00ta/telematics/platform/live/messaging/dto/LiveModelDto.class
 com/r00ta/telematics/platform/live/models/GpsLocation.class
 com/r00ta/telematics/platform/live/LiveService.class
 com/r00ta/telematics/platform/trips/ITripService.class
-com/r00ta/telematics/platform/database/StorageManager.class
 com/r00ta/telematics/platform/trips/storage/TripStorageExtension.class
+com/r00ta/telematics/platform/database/StorageManager.class
 com/r00ta/telematics/platform/trips/responses/TripsByTimeRangeResponse.class
 com/r00ta/telematics/platform/live/models/MetaInformationModel.class
 com/r00ta/telematics/platform/live/storage/LiveStorageExtension.class

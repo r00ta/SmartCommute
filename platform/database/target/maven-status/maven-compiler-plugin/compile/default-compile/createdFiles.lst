@@ -1,0 +1,6 @@
+com/r00ta/telematics/platform/model/ElasticSearchResponse.class
+com/r00ta/telematics/platform/utils/HttpHelper.class
+com/r00ta/telematics/platform/model/ElasticHits.class
+com/r00ta/telematics/platform/ElasticSearchStorageManager.class
+com/r00ta/telematics/platform/model/Hit.class
+com/r00ta/telematics/platform/IStorageManager.class

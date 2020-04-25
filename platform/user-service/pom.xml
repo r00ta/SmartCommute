@@ -30,7 +30,6 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
-
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy</artifactId>
@@ -55,18 +54,15 @@
       <artifactId>cloudevents-api</artifactId>
       <version>1.2.0</version>
     </dependency>
-
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
       <version>4.5.10</version>
     </dependency>
-
     <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
@@ -80,36 +76,20 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-jackson</artifactId>
     </dependency>
-
-
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-jwt</artifactId>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>io.quarkus</groupId>-->
-<!--      <artifactId>quarkus-resteasy-jsonb</artifactId>-->
-<!--    </dependency>-->
-
-    <!-- https://mvnrepository.com/artifact/org.simplejavamail/simple-java-mail -->
     <dependency>
       <groupId>org.simplejavamail</groupId>
       <artifactId>simple-java-mail</artifactId>
       <version>6.0.3</version>
     </dependency>
-
-
-    <!-- https://mvnrepository.com/artifact/io.jenetics/jpx -->
     <dependency>
       <groupId>io.jenetics</groupId>
       <artifactId>jpx</artifactId>
       <version>1.7.0</version>
     </dependency>
-
-
-
-
-
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>

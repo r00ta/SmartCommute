@@ -1,6 +1,7 @@
 package com.r00ta.telematics.android;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +15,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.r00ta.telematics.android.network.HttpRequestProvider;
+import com.r00ta.telematics.android.responses.AuthenticationResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,16 +48,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-// replace
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-//        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-//                .connectTimeout(20, TimeUnit.SECONDS)
-//                .readTimeout(20, TimeUnit.SECONDS)
-//                .writeTimeout(20, TimeUnit.SECONDS)
-//                .retryOnConnectionFailure(false)
-//                .build();
-//        AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
+
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -81,66 +84,62 @@ public class LoginActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
+        String email = _emailText.getText().toString().toLowerCase();
+        String password = _passwordText.getText().toString();
 
-        final String email = _emailText.getText().toString().toLowerCase();
-        final String password = _passwordText.getText().toString();
+        Context mContext = getApplicationContext();
+        SharedPreferences smartCommutePreferences = mContext.getSharedPreferences("smartCommutePreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = smartCommutePreferences.edit();
+        editor.putString("email", email);
+        editor.putString("password", password);
+        editor.commit();
 
         Log.d(password, "CREATE");
 
-//        Handler handler = new Handler();
-//
-//        Runnable r = new Runnable() {
-//            public void run() {
-//                JSONObject jsonObject = new JSONObject();
-//                try {
-//                    jsonObject.put("email", email);
-//                    jsonObject.put("password", password);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                final Runnable oldThis = this;
-//                // TODO: Implement your own authentication logic here.
-////                AndroidNetworking.post("http://10.0.2.2:8000/loginUser")
-////                        .addJSONObjectBody(jsonObject)
-////                        .setTag("test")
-////                        .build()
-////                        .getAsJSONObject(new JSONObjectRequestListener() {
-////                            @Override
-////                            public void onResponse(JSONObject response) {
-////                                Log.d(response.toString(),"LOGIN SUCCESS");
-////                                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-////
-////                                SharedPreferences.Editor editor = prefs.edit();
-////
-////                                // Edit the saved preferences
-////                                editor.putString("nameUser", email);
-////                                editor.putString("password", password);
-////                                editor.commit();
-////                                progressDialog.dismiss();
-////                                onLoginSuccess();
-////                            }
-////                            @Override
-////                            public void onError(ANError error) {
-////                                Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-////                                Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-////                                progressDialog.dismiss();
-////                                onLoginFailed();
-////                            }
-////                        });
-//            }
-//        };
-        finish();
-//        handler.post(
-//                r
-//        );
+        String url = "http://10.0.2.2:1337/users/auth";
+        JSONObject body = null;
+        try {
+            body = new JSONObject().put("email", email).put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, body, new Response.Listener<JSONObject>() {
 
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        AuthenticationResponse authentication = null;
+                        try {
+                            authentication = new ObjectMapper().readValue(response.toString(), AuthenticationResponse.class);
+                        } catch (JsonProcessingException e) {
+                            Toast.makeText(LoginActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        onLoginSuccess(authentication);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Toast.makeText(getApplicationContext(), "Login failed.", Toast.LENGTH_SHORT).show();
+                        Log.i("Login", "FAILED");
+                    }
+                });
+        HttpRequestProvider.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }
 
+
+    public void onLoginSuccess(AuthenticationResponse authenticationResponse){
+        Context mContext = getApplicationContext();
+        SharedPreferences smartCommutePreferences = mContext.getSharedPreferences("smartCommutePreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = smartCommutePreferences.edit();
+        editor.putString("userId", authenticationResponse.userId);
+        editor.putString("jwtBearer", authenticationResponse.jwtBearer);
+        editor.commit();
+
+        finish();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
