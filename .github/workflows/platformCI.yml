@@ -20,6 +20,6 @@ jobs:
     - name: Build docker images
       run: ./pipelines/build-docker-images.sh
     - name: Run docker compose
-      run: docker-compose -f deploy/docker-compose/docker-compose.yml up
+      run: docker-compose -f deploy/docker-compose/docker-compose.yml up -d
     - name: Run integration tests
       run: mvn -f platform/pom.xml clean package
