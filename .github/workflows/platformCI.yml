@@ -1,0 +1,25 @@
+name: Platform CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
+    - name: Build services
+      run: mvn -f platform/pom.xml clean package -DskipTests      
+    - name: Build docker images
+      run: ./pipelines/build-docker-images.sh
+    - name: Run docker compose
+      run: docker-compose -f deploy/docker-compose/docker-compose.yml up
+    - name: Run integration tests
+      run: mvn -f platform/pom.xml clean package
