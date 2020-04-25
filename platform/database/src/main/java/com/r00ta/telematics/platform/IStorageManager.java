@@ -6,5 +6,5 @@ public interface IStorageManager {
 
     String create(String key, String request, String index);
 
-    <T> List<T> search(String request, String index, Class<T> type);
+    <T> List<T> search(SmartQuery query, String index, Class<T> type);
 }

@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
+import com.r00ta.telematics.platform.SmartQuery;
+import com.r00ta.telematics.platform.operators.StringOperator;
 import com.r00ta.telematics.platform.users.models.User;
 import com.r00ta.telematics.platform.users.models.UserStatistics;
 
@@ -44,23 +46,15 @@ public class UsersStorageExtension implements IUsersStorageExtension {
 
     @Override
     public Optional<User> getUserById(String userId) {
-        String request = "{ \n" +
-                "    \"query\": {\n" +
-                "        \"match\": { \"userId\" : \"" + userId + "\"}\n" +
-                "    }\n" +
-                "}\n";
-        List<User> users = storageManager.search(request, USER_INDEX, User.class);
+        SmartQuery query = new SmartQuery().where("userId", StringOperator.EQUALS, userId);
+        List<User> users = storageManager.search(query, USER_INDEX, User.class);
         return users.isEmpty() ? null : Optional.of(users.get(0));
     }
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        String request = "{ \n" +
-                "    \"query\": {\n" +
-                "        \"match\": { \"email\" : \"" + email + "\"}\n" +
-                "    }\n" +
-                "}\n";
-        List<User> users = storageManager.search(request, USER_INDEX, User.class);
+        SmartQuery query = new SmartQuery().where("email", StringOperator.EQUALS, email);
+        List<User> users = storageManager.search(query, USER_INDEX, User.class);
         return users.isEmpty() ? null : Optional.of(users.get(0));
     }
 
@@ -77,23 +71,15 @@ public class UsersStorageExtension implements IUsersStorageExtension {
 
     @Override
     public Optional<UserStatistics> getUserOverview(String userId) {
-        String request = "{ \n" +
-                "    \"query\": {\n" +
-                "        \"match\": { \"userId\" : \"" + userId + "\"}\n" +
-                "    }\n" +
-                "}\n";
-        List<UserStatistics> users = storageManager.search(request, USER_STATISTICS_INDEX, UserStatistics.class);
+        SmartQuery query = new SmartQuery().where("userId", StringOperator.EQUALS, userId);
+        List<UserStatistics> users = storageManager.search(query, USER_STATISTICS_INDEX, UserStatistics.class);
         return users.isEmpty() ? null : Optional.of(users.get(0));
     }
 
     @Override
     public List<String> getUserNews(String userId) {
-        String request = "{ \n" +
-                "    \"query\": {\n" +
-                "        \"match\": { \"userId\" : \"" + userId + "\"}\n" +
-                "    }\n" +
-                "}\n";
-        return storageManager.search(request, USER_NEWS_INDEX, String.class);
+        SmartQuery query = new SmartQuery().where("userId", StringOperator.EQUALS, userId);
+        return storageManager.search(query, USER_NEWS_INDEX, String.class);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.r00ta.telematics.platform.elastic.ElasticQueryFactory;
 import com.r00ta.telematics.platform.model.ElasticSearchResponse;
 import com.r00ta.telematics.platform.model.Hit;
 import com.r00ta.telematics.platform.utils.HttpHelper;
@@ -29,8 +30,10 @@ public class ElasticSearchStorageManager implements IStorageManager {
         return response;
     }
 
-    public <T> List<T> search(String request, String index, Class<T> type) {
+    public <T> List<T> search(SmartQuery query, String index, Class<T> type) {
+        String request = ElasticQueryFactory.build(query);
         LOGGER.info("ES query " + request);
+
         String response = httpHelper.doPost(index + "/_search", request);
         JavaType javaType = TypeFactory.defaultInstance()
                 .constructParametricType(ElasticSearchResponse.class, type);

@@ -254,6 +254,7 @@
     <orderEntry type="library" name="Maven: io.prometheus:simpleclient:0.8.1" level="project" />
     <orderEntry type="library" name="Maven: io.prometheus:simpleclient_servlet:0.8.1" level="project" />
     <orderEntry type="library" name="Maven: io.prometheus:simpleclient_common:0.8.1" level="project" />
+    <orderEntry type="library" name="Maven: org.json:json:20190722" level="project" />
     <orderEntry type="module" module-name="messaging" />
   </component>
 </module>

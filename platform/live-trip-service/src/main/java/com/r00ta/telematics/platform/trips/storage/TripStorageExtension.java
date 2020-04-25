@@ -10,6 +10,9 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
+import com.r00ta.telematics.platform.SmartQuery;
+import com.r00ta.telematics.platform.operators.LongOperator;
+import com.r00ta.telematics.platform.operators.StringOperator;
 import com.r00ta.telematics.platform.trips.models.TripModel;
 import com.r00ta.telematics.platform.trips.models.TripSummaryModel;
 
@@ -42,23 +45,15 @@ public class TripStorageExtension implements ITripStorageExtension {
 
     @Override
     public Optional<TripSummaryModel> getTripHeaderById(String userId, String tripId) {
-        String request = "{ \n" +
-                "    \"query\": {\n" +
-                "        \"match\": { \"tripId\" : \"" + tripId + "\"}\n" +
-                "    }\n" +
-                "}\n";
-        List<TripSummaryModel> summaryOpt = storageManager.search(request, TRIPHEADERSINDEX, TripSummaryModel.class);
+        SmartQuery query = new SmartQuery().where("tripId", StringOperator.EQUALS, tripId);
+        List<TripSummaryModel> summaryOpt = storageManager.search(query, TRIPHEADERSINDEX, TripSummaryModel.class);
         return summaryOpt.isEmpty() ? null : Optional.of(summaryOpt.get(0));
     }
 
     @Override
     public List<TripSummaryModel> getTripsHeadersByTimeRange(String userId, Long from, Long to) {
-        String request = String.format(
-                "{\"size\": 10000, \"query\" : { \"bool\": {\n" +
-                        "          \"must\": [{\"match\": { \"userId\" : \"" + userId + "\"} }," +
-                        "{\"range\" : {\"startTimestamp\" : {\"gte\" : %s, \"lte\" : %s}}}" +
-                        " ] } } }", from, to);
-        return storageManager.search(request, TRIPHEADERSINDEX, TripSummaryModel.class);
+        SmartQuery query = new SmartQuery().where("userId", StringOperator.EQUALS, userId).where("startTimestamp", LongOperator.GTE, from).where("startTimestamp", LongOperator.LTE, to).limit(10000);
+        return storageManager.search(query, TRIPHEADERSINDEX, TripSummaryModel.class);
     }
 
     @Override
@@ -74,22 +69,14 @@ public class TripStorageExtension implements ITripStorageExtension {
 
     @Override
     public Optional<TripModel> getTripById(String userId, String tripId) {
-        String request = "{ \n" +
-                "    \"query\": {\n" +
-                "        \"match\": { \"tripId\" : \"" + tripId + "\"}\n" +
-                "    }\n" +
-                "}\n";
-        List<TripModel> trips = storageManager.search(request, TRIPINDEX, TripModel.class);
+        SmartQuery query = new SmartQuery().where("tripId", StringOperator.EQUALS, tripId);
+        List<TripModel> trips = storageManager.search(query, TRIPINDEX, TripModel.class);
         return trips.isEmpty() ? null : Optional.of(trips.get(0));
     }
 
     @Override
     public List<TripModel> getTripsByTimeRange(String userId, Long from, Long to) {
-        String request = String.format(
-                "{\"size\": 10000, \"query\" : { \"bool\": {\n" +
-                        "          \"must\": [{\"match\": { \"userId\" : \"" + userId + "\"} }," +
-                        "{\"range\" : {\"startTimestamp\" : {\"gte\" : %d, \"lte\" : %d}}}" +
-                        " ] } } }", from, to);
-        return storageManager.search(request, TRIPINDEX, TripModel.class);
+        SmartQuery query = new SmartQuery().where("userId", StringOperator.EQUALS, userId).where("startTimestamp", LongOperator.GTE, from).where("startTimestamp", LongOperator.LTE, to).limit(10000);
+        return storageManager.search(query, TRIPINDEX, TripModel.class);
     }
 }

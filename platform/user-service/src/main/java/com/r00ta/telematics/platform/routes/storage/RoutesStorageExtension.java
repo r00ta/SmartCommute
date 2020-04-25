@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
+import com.r00ta.telematics.platform.SmartQuery;
+import com.r00ta.telematics.platform.operators.StringOperator;
 import com.r00ta.telematics.platform.routes.models.Route;
 
 // TODO: check application scoped? Request scoped?
@@ -29,23 +31,15 @@ public class RoutesStorageExtension implements IRoutesStorageExtension {
 
     @Override
     public Optional<Route> getRouteById(String routeId) {
-        String request = "{ \n" +
-                "    \"query\": {\n" +
-                "        \"match\": { \"routeId\" : \"" + routeId + "\"}\n" +
-                "    }\n" +
-                "}\n";
-        List<Route> routes = storageManager.search(request, ROUTES_INDEX, Route.class);
+        SmartQuery query = new SmartQuery().where("routeId", StringOperator.EQUALS, routeId);
+        List<Route> routes = storageManager.search(query, ROUTES_INDEX, Route.class);
         return routes.isEmpty() ? null : Optional.of(routes.get(0));
     }
 
     @Override
     public List<Route> getUserRoutes(String userId) {
-        String request = "{ \n" +
-                "    \"query\": {\n" +
-                "        \"match\": { \"userId\" : \"" + userId + "\"}\n" +
-                "    }\n" +
-                "}\n";
-        return storageManager.search(request, ROUTES_INDEX, Route.class);
+        SmartQuery query = new SmartQuery().where("userId", StringOperator.EQUALS, userId);
+        return storageManager.search(query, ROUTES_INDEX, Route.class);
     }
 
     @Override

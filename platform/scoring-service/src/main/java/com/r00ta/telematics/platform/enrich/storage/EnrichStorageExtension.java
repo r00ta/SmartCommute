@@ -10,7 +10,10 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
+import com.r00ta.telematics.platform.SmartQuery;
 import com.r00ta.telematics.platform.enrich.models.EnrichedTrip;
+import com.r00ta.telematics.platform.operators.LongOperator;
+import com.r00ta.telematics.platform.operators.StringOperator;
 
 // TODO: check application scoped? Request scoped?
 @ApplicationScoped
@@ -40,22 +43,14 @@ public class EnrichStorageExtension implements IEnrichStorageExtension {
 
     @Override
     public Optional<EnrichedTrip> getTripById(String tripId) {
-        String request = "{ \n" +
-                "    \"query\": {\n" +
-                "        \"match\": { \"tripId\" : \"" + tripId + "\"}\n" +
-                "    }\n" +
-                "}\n";
-        List<EnrichedTrip> trip = storageManager.search(request, ENRICHED_TRIP_INDEX, EnrichedTrip.class);
+        SmartQuery query = new SmartQuery().where("tripId", StringOperator.EQUALS, tripId);
+        List<EnrichedTrip> trip = storageManager.search(query, ENRICHED_TRIP_INDEX, EnrichedTrip.class);
         return trip.isEmpty() ? null : Optional.of(trip.get(0));
     }
 
     @Override
     public List<EnrichedTrip> getTripsByTimeRange(String userId, Long from, Long to) {
-        String request = String.format(
-                "{\"size\": 10000, \"query\" : { \"bool\": {\n" +
-                        "          \"must\": [{\"match\": { \"userId\" : \"" + userId + "\"} }," +
-                        "{\"range\" : {\"startTimestamp\" : {\"gte\" : %d, \"lte\" : %d}}}" +
-                        " ] } } }", from, to);
-        return storageManager.search(request, ENRICHED_TRIP_INDEX, EnrichedTrip.class);
+        SmartQuery query = new SmartQuery().where("userId", StringOperator.EQUALS, userId).where("startTimestamp", LongOperator.GTE, from).where("startTimestamp", LongOperator.LTE, to).limit(10000);
+        return storageManager.search(query, ENRICHED_TRIP_INDEX, EnrichedTrip.class);
     }
 }

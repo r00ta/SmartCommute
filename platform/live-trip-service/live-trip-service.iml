@@ -240,6 +240,7 @@
     <orderEntry type="library" name="Maven: jakarta.servlet:jakarta.servlet-api:4.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.resteasy:resteasy-json-p-provider:4.5.3.Final" level="project" />
     <orderEntry type="module" module-name="database" />
+    <orderEntry type="library" name="Maven: org.json:json:20190722" level="project" />
     <orderEntry type="module" module-name="messaging" />
   </component>
 </module>

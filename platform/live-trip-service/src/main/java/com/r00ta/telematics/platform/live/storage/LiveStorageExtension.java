@@ -10,8 +10,11 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
+import com.r00ta.telematics.platform.SmartQuery;
 import com.r00ta.telematics.platform.live.models.LiveChunkModel;
 import com.r00ta.telematics.platform.live.models.LiveSessionSummary;
+import com.r00ta.telematics.platform.operators.LongOperator;
+import com.r00ta.telematics.platform.operators.StringOperator;
 
 // TODO: check application scoped? Request scoped?
 @ApplicationScoped
@@ -46,8 +49,8 @@ public class LiveStorageExtension implements ILiveStorageExtension {
                 "        \"match\": { \"sessionId\" : \"" + sessionId + "\"}\n" +
                 "    }\n" +
                 "}\n";
-
-        List<LiveSessionSummary> summary = storageManager.search(request, LIVESUMMARYINDEX, LiveSessionSummary.class);
+        SmartQuery query = new SmartQuery().where("sessionId", StringOperator.EQUALS, sessionId);
+        List<LiveSessionSummary> summary = storageManager.search(query, LIVESUMMARYINDEX, LiveSessionSummary.class);
         return summary.isEmpty() ? null : Optional.of(summary.get(0));
     }
 
@@ -72,22 +75,14 @@ public class LiveStorageExtension implements ILiveStorageExtension {
 
     @Override
     public List<LiveSessionSummary> getAvailableLiveSessionSummaries(String userId) {
-        String request = "{ \n" +
-                "    \"query\": {\n" +
-                "        \"match\": { \"userId\" : \"" + userId + "\"}\n" +
-                "    }\n" +
-                "}\n";
-        return storageManager.search(request, LIVESUMMARYINDEX, LiveSessionSummary.class);
+        SmartQuery query = new SmartQuery().where("userId", StringOperator.EQUALS, userId);
+        return storageManager.search(query, LIVESUMMARYINDEX, LiveSessionSummary.class);
     }
 
     @Override
     public List<LiveChunkModel> getLiveSessionChunks(String userId, String sessionId, Long lastChunk) {
-        String request = String.format(
-                "{\"size\": 10000, \"query\" : { \"bool\": {\n" +
-                        "          \"must\": [{\"match\": { \"sessionId\" : \"" + sessionId + "\"} }," +
-                        "{\"range\" : {\"chunkSeqNumber\" : {\"gte\" : %d}}}" +
-                        " ] } } }", lastChunk);
-        return storageManager.search(request, LIVECHUNKSINDEX, LiveChunkModel.class);
+        SmartQuery query = new SmartQuery().where("sessionId", StringOperator.EQUALS, sessionId).where("chunkSeqNumber", LongOperator.GTE, lastChunk).limit(10000);
+        return storageManager.search(query, LIVECHUNKSINDEX, LiveChunkModel.class);
     }
 
     @Override
