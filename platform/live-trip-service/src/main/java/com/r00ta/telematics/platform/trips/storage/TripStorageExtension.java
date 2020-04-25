@@ -1,6 +1,7 @@
 package com.r00ta.telematics.platform.trips.storage;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -40,13 +41,14 @@ public class TripStorageExtension implements ITripStorageExtension {
     }
 
     @Override
-    public TripSummaryModel getTripHeaderById(String userId, String tripId) {
+    public Optional<TripSummaryModel> getTripHeaderById(String userId, String tripId) {
         String request = "{ \n" +
                 "    \"query\": {\n" +
                 "        \"match\": { \"tripId\" : \"" + tripId + "\"}\n" +
                 "    }\n" +
                 "}\n";
-        return storageManager.search(request, TRIPHEADERSINDEX, TripSummaryModel.class).get(0);
+        List<TripSummaryModel> summaryOpt = storageManager.search(request, TRIPHEADERSINDEX, TripSummaryModel.class);
+        return summaryOpt.isEmpty() ? null : Optional.of(summaryOpt.get(0));
     }
 
     @Override
@@ -71,13 +73,14 @@ public class TripStorageExtension implements ITripStorageExtension {
     }
 
     @Override
-    public TripModel getTripById(String userId, String tripId) {
+    public Optional<TripModel> getTripById(String userId, String tripId) {
         String request = "{ \n" +
                 "    \"query\": {\n" +
                 "        \"match\": { \"tripId\" : \"" + tripId + "\"}\n" +
                 "    }\n" +
                 "}\n";
-        return storageManager.search(request, TRIPINDEX, TripModel.class).get(0);
+        List<TripModel> trips = storageManager.search(request, TRIPINDEX, TripModel.class);
+        return trips.isEmpty() ? null : Optional.of(trips.get(0));
     }
 
     @Override

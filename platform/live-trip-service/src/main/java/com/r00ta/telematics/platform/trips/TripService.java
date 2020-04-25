@@ -1,6 +1,7 @@
 package com.r00ta.telematics.platform.trips;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -22,7 +23,7 @@ public class TripService implements ITripService {
     TripKafkaProducer kafkaProducer;
 
     @Override
-    public TripSummaryModel getTripHeaderById(String userId, String tripId) {
+    public Optional<TripSummaryModel> getTripHeaderById(String userId, String tripId) {
         return storageManager.getTripHeaderById(userId, tripId);
     }
 
@@ -45,7 +46,7 @@ public class TripService implements ITripService {
     }
 
     @Override
-    public TripModel getTrip(String userId, String tripId) {
+    public Optional<TripModel> getTrip(String userId, String tripId) {
         return storageManager.getTripById(userId, tripId);
     }
 

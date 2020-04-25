@@ -1,6 +1,7 @@
 package com.r00ta.telematics.platform.routes.storage;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -27,13 +28,14 @@ public class RoutesStorageExtension implements IRoutesStorageExtension {
     }
 
     @Override
-    public Route getRouteById(String routeId) {
+    public Optional<Route> getRouteById(String routeId) {
         String request = "{ \n" +
                 "    \"query\": {\n" +
                 "        \"match\": { \"routeId\" : \"" + routeId + "\"}\n" +
                 "    }\n" +
                 "}\n";
-        return storageManager.search(request, ROUTES_INDEX, Route.class).get(0);
+        List<Route> routes = storageManager.search(request, ROUTES_INDEX, Route.class);
+        return routes.isEmpty() ? null : Optional.of(routes.get(0));
     }
 
     @Override

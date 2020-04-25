@@ -2,6 +2,9 @@ package com.r00ta.telematics.platform.routes;
 
 import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Optional;
+
+import javax.ws.rs.NotFoundException;
 
 import com.r00ta.telematics.platform.mocks.RoutesStorageMock;
 import com.r00ta.telematics.platform.mocks.UserServiceMock;
@@ -35,7 +38,8 @@ public class RouteServiceTest {
         Route route = new Route(userId, routeRequest, "MyRouteId");
         Assertions.assertEquals(true, routeService.storeRoute(route));
 
-        Route retrievedRoute = routeService.getRouteById(route.routeId);
+        Route retrievedRoute = routeService.getRouteById(route.routeId).get();
+
         Assertions.assertEquals(route.routeId, retrievedRoute.routeId);
         Assertions.assertEquals(route.availableAsPassenger, retrievedRoute.availableAsPassenger);
 
@@ -68,10 +72,10 @@ public class RouteServiceTest {
 
         Assertions.assertEquals(true, success);
 
-        Route retrievedDriverRoute = routeService.getRouteById(driverRoute.routeId);
+        Route retrievedDriverRoute = routeService.getRouteById(driverRoute.routeId).get();
         Assertions.assertEquals(0, retrievedDriverRoute.dayRides.get(DayOfWeek.FRIDAY).passengerReferences.size());
 
-        Route retrievedPassengerRoute = routeService.getRouteById(passengerRoute.routeId);
+        Route retrievedPassengerRoute = routeService.getRouteById(passengerRoute.routeId).get();
         Assertions.assertEquals(true, retrievedPassengerRoute.dayRides.get(DayOfWeek.FRIDAY).isADriverRide);
         Assertions.assertEquals(0, retrievedPassengerRoute.dayRides.get(DayOfWeek.FRIDAY).passengerReferences.size());
     }
@@ -101,10 +105,10 @@ public class RouteServiceTest {
 
         Assertions.assertEquals(true, success);
 
-        Route retrievedDriverRoute = routeService.getRouteById(driverRoute.routeId);
+        Route retrievedDriverRoute = routeService.getRouteById(driverRoute.routeId).get();
         Assertions.assertEquals(0, retrievedDriverRoute.dayRides.get(DayOfWeek.FRIDAY).passengerReferences.size());
 
-        Route retrievedPassengerRoute = routeService.getRouteById(passengerRoute.routeId);
+        Route retrievedPassengerRoute = routeService.getRouteById(passengerRoute.routeId).get();
         Assertions.assertEquals(true, retrievedPassengerRoute.dayRides.get(DayOfWeek.FRIDAY).isADriverRide);
         Assertions.assertEquals(0, retrievedPassengerRoute.dayRides.get(DayOfWeek.FRIDAY).passengerReferences.size());
     }

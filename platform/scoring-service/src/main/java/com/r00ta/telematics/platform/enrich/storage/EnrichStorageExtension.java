@@ -1,6 +1,7 @@
 package com.r00ta.telematics.platform.enrich.storage;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -38,13 +39,14 @@ public class EnrichStorageExtension implements IEnrichStorageExtension {
     }
 
     @Override
-    public EnrichedTrip getTripById(String tripId) {
+    public Optional<EnrichedTrip> getTripById(String tripId) {
         String request = "{ \n" +
                 "    \"query\": {\n" +
                 "        \"match\": { \"tripId\" : \"" + tripId + "\"}\n" +
                 "    }\n" +
                 "}\n";
-        return storageManager.search(request, ENRICHED_TRIP_INDEX, EnrichedTrip.class).get(0);
+        List<EnrichedTrip> trip = storageManager.search(request, ENRICHED_TRIP_INDEX, EnrichedTrip.class);
+        return trip.isEmpty() ? null : Optional.of(trip.get(0));
     }
 
     @Override

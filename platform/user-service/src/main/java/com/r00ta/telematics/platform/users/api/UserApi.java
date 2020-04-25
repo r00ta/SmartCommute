@@ -1,6 +1,7 @@
 package com.r00ta.telematics.platform.users.api;
 
 import java.security.Principal;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.annotation.security.PermitAll;
@@ -89,7 +90,12 @@ public class UserApi {
             return Response.ok().status(401, "User is requesting data of another user.").build();
         }
 
-        return Response.ok(userService.getUserOverview(userId)).build();
+        Optional<UserStatistics> userOverview = userService.getUserOverview(userId);
+        if (!userOverview.isPresent()){
+            return Response.status(400, "User not found.").build();
+        }
+
+        return Response.ok(userOverview.get()).build();
     }
 
     @GET

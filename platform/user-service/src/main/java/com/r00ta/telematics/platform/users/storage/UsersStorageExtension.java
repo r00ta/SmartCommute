@@ -1,6 +1,7 @@
 package com.r00ta.telematics.platform.users.storage;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -42,23 +43,25 @@ public class UsersStorageExtension implements IUsersStorageExtension {
     }
 
     @Override
-    public User getUserById(String userId) {
+    public Optional<User> getUserById(String userId) {
         String request = "{ \n" +
                 "    \"query\": {\n" +
                 "        \"match\": { \"userId\" : \"" + userId + "\"}\n" +
                 "    }\n" +
                 "}\n";
-        return storageManager.search(request, USER_INDEX, User.class).get(0);
+        List<User> users = storageManager.search(request, USER_INDEX, User.class);
+        return users.isEmpty() ? null : Optional.of(users.get(0));
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
         String request = "{ \n" +
                 "    \"query\": {\n" +
                 "        \"match\": { \"email\" : \"" + email + "\"}\n" +
                 "    }\n" +
                 "}\n";
-        return storageManager.search(request, USER_INDEX, User.class).get(0);
+        List<User> users = storageManager.search(request, USER_INDEX, User.class);
+        return users.isEmpty() ? null : Optional.of(users.get(0));
     }
 
     @Override
@@ -73,13 +76,14 @@ public class UsersStorageExtension implements IUsersStorageExtension {
     }
 
     @Override
-    public UserStatistics getUserOverview(String userId) {
+    public Optional<UserStatistics> getUserOverview(String userId) {
         String request = "{ \n" +
                 "    \"query\": {\n" +
                 "        \"match\": { \"userId\" : \"" + userId + "\"}\n" +
                 "    }\n" +
                 "}\n";
-        return storageManager.search(request, USER_STATISTICS_INDEX, UserStatistics.class).get(0);
+        List<UserStatistics> users = storageManager.search(request, USER_STATISTICS_INDEX, UserStatistics.class);
+        return users.isEmpty() ? null : Optional.of(users.get(0));
     }
 
     @Override

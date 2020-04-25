@@ -1,5 +1,7 @@
 package com.r00ta.telematics.platform.trips.api;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
@@ -78,6 +80,10 @@ public class TripApi {
     })
     @Operation(summary = "Gets a trip by id.", description = "Gets a trip by id.")
     public Response getTripById(@PathParam("userId") String userId, @PathParam("tripId") String tripId) {
-        return Response.ok(tripService.getTrip(userId, tripId)).build();
+        Optional<TripModel> trip = tripService.getTrip(userId, tripId);
+        if (!trip.isPresent()){
+            return Response.status(400, "Trip not found.").build();
+        }
+        return Response.ok(trip.get()).build();
     }
 }

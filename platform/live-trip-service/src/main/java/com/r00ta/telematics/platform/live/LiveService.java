@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -47,7 +48,7 @@ public class LiveService implements ILiveService {
     }
 
     @Override
-    public LiveSessionSummary getLiveSessionSummary(String sessionId) {
+    public Optional<LiveSessionSummary> getLiveSessionSummary(String sessionId) {
         return storageManager.getLiveSessionSummary(sessionId);
     }
 

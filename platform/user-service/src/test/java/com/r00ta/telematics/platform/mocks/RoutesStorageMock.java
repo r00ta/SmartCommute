@@ -3,6 +3,7 @@ package com.r00ta.telematics.platform.mocks;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -16,8 +17,8 @@ public class RoutesStorageMock implements IRoutesStorageExtension {
     private Map<String, Route> storage = new HashMap<>();
 
     @Override
-    public Route getRouteById(String routeId){
-        return storage.get(routeId);
+    public Optional<Route> getRouteById(String routeId){
+        return Optional.of(storage.get(routeId));
     }
 
     @Override

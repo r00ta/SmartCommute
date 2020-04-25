@@ -1,5 +1,7 @@
 package com.r00ta.telematics.platform.authentication.api;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -36,10 +38,14 @@ public class AuthApi {
     })
     @Operation(summary = "Authenticate a user, returning a jwt to access the resources of the platform.", description = "Authenticate a user, returning a jwt to access the resources of the platform.")
     public Response authUser(AuthenticationRequest userRequest) throws Exception {
-        User user = authService.getUserByEmail(userRequest.email);
-        if (user.passwordHash.equals(userRequest.password)) {
-            String token = authService.generateToken(user.userId);
-            return Response.ok(new AuthenticationResponse(user.userId, token)).build();
+        Optional<User> user = authService.getUserByEmail(userRequest.email);
+        if (!user.isPresent()){
+            return Response.status(400, "User not found.").build();
+        }
+
+        if (user.get().passwordHash.equals(userRequest.password)) {
+            String token = authService.generateToken(user.get().userId);
+            return Response.ok(new AuthenticationResponse(user.get().userId, token)).build();
         } else {
             return Response.status(401, "Wrong password.").build();
         }

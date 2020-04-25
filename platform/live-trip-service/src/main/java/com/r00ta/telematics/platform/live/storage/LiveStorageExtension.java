@@ -1,6 +1,7 @@
 package com.r00ta.telematics.platform.live.storage;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -39,19 +40,25 @@ public class LiveStorageExtension implements ILiveStorageExtension {
     }
 
     @Override
-    public LiveSessionSummary getLiveSessionSummary(String sessionId) {
+    public Optional<LiveSessionSummary> getLiveSessionSummary(String sessionId) {
         String request = "{ \n" +
                 "    \"query\": {\n" +
                 "        \"match\": { \"sessionId\" : \"" + sessionId + "\"}\n" +
                 "    }\n" +
                 "}\n";
 
-        return storageManager.search(request, LIVESUMMARYINDEX, LiveSessionSummary.class).get(0);
+        List<LiveSessionSummary> summary = storageManager.search(request, LIVESUMMARYINDEX, LiveSessionSummary.class);
+        return summary.isEmpty() ? null : Optional.of(summary.get(0));
     }
 
     @Override
     public boolean updateLiveSessionSummary(String sessionId, boolean isLive) {
-        LiveSessionSummary summary = getLiveSessionSummary(sessionId);
+        Optional<LiveSessionSummary> summaryOpt = getLiveSessionSummary(sessionId);
+        if (!summaryOpt.isPresent()){
+            return false;
+        }
+
+        LiveSessionSummary summary = summaryOpt.get();
         summary.isLive = isLive;
 
         try {

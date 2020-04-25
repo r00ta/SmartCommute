@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.r00ta.telematics.platform.routes.models.Route;
 import com.r00ta.telematics.platform.users.IUserService;
@@ -19,12 +20,12 @@ public class UserServiceMock implements IUserService {
     private Map<String, List<String>> newsStorage = new HashMap<>();
 
     @Override
-    public User getUserById(String user) {
-        return storage.get(user);
+    public Optional<User> getUserById(String user) {
+        return Optional.of(storage.get(user));
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
         return null;
     }
 
@@ -35,7 +36,7 @@ public class UserServiceMock implements IUserService {
     }
 
     @Override
-    public UserStatistics getUserOverview(String userId) {
+    public Optional<UserStatistics> getUserOverview(String userId) {
         return null;
     }
 

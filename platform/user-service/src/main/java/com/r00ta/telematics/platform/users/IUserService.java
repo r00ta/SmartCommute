@@ -1,6 +1,7 @@
 package com.r00ta.telematics.platform.users;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.r00ta.telematics.platform.users.models.EnrichedTripSummary;
 import com.r00ta.telematics.platform.users.models.LiveTrip;
@@ -9,13 +10,13 @@ import com.r00ta.telematics.platform.users.models.UserStatistics;
 
 public interface IUserService {
 
-    User getUserById(String user);
+    Optional<User> getUserById(String user);
 
-    User getUserByEmail(String email);
+    Optional<User> getUserByEmail(String email);
 
     boolean createUser(User user);
 
-    UserStatistics getUserOverview(String userId);
+    Optional<UserStatistics> getUserOverview(String userId);
 
     List<String> getUserNews(String userId);
 

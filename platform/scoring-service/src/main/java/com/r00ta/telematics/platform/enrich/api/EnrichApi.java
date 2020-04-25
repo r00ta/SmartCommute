@@ -1,5 +1,7 @@
 package com.r00ta.telematics.platform.enrich.api;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
@@ -55,7 +57,12 @@ public class EnrichApi {
     })
     @Operation(summary = "Gets an enriched trip by id.", description = "Gets an enriched trip by id.")
     public Response getEnrichedTripById(@PathParam("userId") String userId, @PathParam("tripId") String tripId) {
-        return Response.ok(enrichService.getTrip(userId, tripId)).build();
+        Optional<EnrichedTrip> trip = enrichService.getTrip(userId, tripId);
+        if (!trip.isPresent()){
+            return Response.status(400, "Trip not found.").build();
+        }
+
+        return Response.ok(trip.get()).build();
     }
 
     @POST

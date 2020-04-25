@@ -6,12 +6,14 @@ import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.NotFoundException;
 
 import com.r00ta.telematics.platform.routes.models.DayRouteDrive;
 import com.r00ta.telematics.platform.routes.models.PassengerRideReference;
 import com.r00ta.telematics.platform.routes.models.Route;
 import com.r00ta.telematics.platform.routes.storage.IRoutesStorageExtension;
 import com.r00ta.telematics.platform.users.IUserService;
+import com.r00ta.telematics.platform.users.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +29,7 @@ public class RouteService implements IRouteService {
     IUserService userService;
 
     @Override
-    public Route getRouteById(String routeId) {
+    public Optional<Route> getRouteById(String routeId) {
         return storageExtension.getRouteById(routeId);
     }
 
@@ -42,20 +44,35 @@ public class RouteService implements IRouteService {
     }
 
     public List<PassengerRideReference> getPassengers(String userId, String routeId, DayOfWeek day) {
-        Route userRoute = getRouteById(routeId);
-        LOGGER.info(String.valueOf(userRoute.dayRides.get(day)));
-        return userRoute.dayRides.get(day).passengerReferences;
+        Optional<Route> userRoute = getRouteById(routeId);
+        if (!userRoute.isPresent()){
+            throw new NotFoundException("Route not found.");
+        }
+
+        LOGGER.info(String.valueOf(userRoute.get().dayRides.get(day)));
+        return userRoute.get().dayRides.get(day).passengerReferences;
     }
 
     @Override
     public boolean deletePassenger(String userId, String routeId, String passengerId, DayOfWeek[] days) {
-        Route userRoute = getRouteById(routeId);
+        Optional<Route> userRouteOpt = getRouteById(routeId);
+
+        if (!userRouteOpt.isPresent()){
+            LOGGER.warn("Route not found " + routeId);
+            return false;
+        }
+        Route userRoute = userRouteOpt.get();
 
         String passengerRouteId = userRoute.findPassengerRouteId(passengerId);
 
         removePassengerFromDriverRoute(userRoute, passengerId, days); // delete from all days
 
-        Route passengerRoute = getRouteById(passengerRouteId);
+        Optional<Route> passengerRouteOpt = getRouteById(passengerRouteId);
+        if (!passengerRouteOpt.isPresent()){
+            LOGGER.warn("Route not found " + passengerRouteId);
+            return false;
+        }
+        Route passengerRoute = passengerRouteOpt.get();
 
         removeDriverFromPassengerRoute(passengerRoute, userRoute.userId, days); // delete from all days
 
@@ -68,20 +85,33 @@ public class RouteService implements IRouteService {
         }
 
         // Notify the other user of the change
-        userService.storeNews(passengerId, String.format("%s has just removed you from his routes. Your routes have been adjusted accordingly.", userService.getUserById(userId).name));
+        Optional<User> userOpt = userService.getUserById(userId);
+        if (!userOpt.isPresent()){
+            return false;
+        }
 
-        return true;
+        return userService.storeNews(passengerId, String.format("%s has just removed you from his routes. Your routes have been adjusted accordingly.", userOpt.get().name));
     }
 
     @Override
     public boolean deleteDriver(String userId, String routeId, String driverId, DayOfWeek[] days) {
-        Route passengerRoute = getRouteById(routeId);
+        Optional<Route> passengerRouteOpt = getRouteById(routeId);
+        if (!passengerRouteOpt.isPresent()){
+            LOGGER.warn("Route not found " + routeId);
+            return false;
+        }
+        Route passengerRoute = passengerRouteOpt.get();
 
         String driverRouteId = passengerRoute.findDriverRouteId(driverId);
 
         removeDriverFromPassengerRoute(passengerRoute, driverId, days);
 
-        Route driverRoute = getRouteById(driverRouteId);
+        Optional<Route> driverRouteOpt = getRouteById(driverRouteId);
+        if (!driverRouteOpt.isPresent()){
+            LOGGER.warn("Route not found " + driverRouteId);
+            return false;
+        }
+        Route driverRoute = driverRouteOpt.get();
 
         removePassengerFromDriverRoute(driverRoute, userId, days); // delete from all days
 
@@ -95,7 +125,12 @@ public class RouteService implements IRouteService {
         }
 
         // Notify the other user of the change
-        userService.storeNews(driverId, String.format("%s has just removed you from his routes. Your routes have been adjusted accordingly.", userService.getUserById(userId).name));
+        Optional<User> userOpt = userService.getUserById(userId);
+        if (!userOpt.isPresent()){
+            return false;
+        }
+
+        userService.storeNews(driverId, String.format("%s has just removed you from his routes. Your routes have been adjusted accordingly.", userOpt.get().name));
 
         return true;
     }

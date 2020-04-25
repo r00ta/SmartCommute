@@ -3,6 +3,7 @@ package com.r00ta.telematics.platform.live.api;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.RequestScoped;
@@ -101,7 +102,11 @@ public class LiveApi {
             response.chunks = liveSessionChunks.stream().map(x -> new LiveChunkResponse(x.chunkSeqNumber, x.positions)).collect(Collectors.toList());
         }
         else{
-            response.isLive = liveService.getLiveSessionSummary(sessionId).isLive;
+            Optional<LiveSessionSummary> summary = liveService.getLiveSessionSummary(sessionId);
+            if (!summary.isPresent()){
+                return Response.status(400, "Live session summary not found.").build();
+            }
+            response.isLive = summary.get().isLive;
             response.chunks = new ArrayList<>();
         }
         return Response.ok(response).build();

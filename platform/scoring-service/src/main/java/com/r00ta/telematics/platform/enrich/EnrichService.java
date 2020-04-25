@@ -1,6 +1,7 @@
 package com.r00ta.telematics.platform.enrich;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -67,7 +68,7 @@ public class EnrichService implements IEnrichService {
     }
 
     @Override
-    public EnrichedTrip getTrip(String userId, String tripId) {
+    public Optional<EnrichedTrip> getTrip(String userId, String tripId) {
         return storageExtension.getTripById(tripId);
     }
 

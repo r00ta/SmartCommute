@@ -1,6 +1,7 @@
 package com.r00ta.telematics.platform.users;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -27,12 +28,12 @@ public class UserService implements IUserService {
     IRouteService routeService;
 
     @Override
-    public User getUserById(String user) {
+    public Optional<User> getUserById(String user) {
         return storageExtension.getUserById(user);
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
         return storageExtension.getUserByEmail(email);
     }
 
@@ -46,7 +47,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserStatistics getUserOverview(String userId) {
+    public Optional<UserStatistics> getUserOverview(String userId) {
         return storageExtension.getUserOverview(userId);
     }
 
@@ -69,7 +70,7 @@ public class UserService implements IUserService {
     public boolean notifyLiveTrip(LiveTrip liveTrip) {
         List<PassengerRideReference> passengers = routeService.getPassengers(liveTrip.userId, liveTrip.routeId, liveTrip.day);
         for (PassengerRideReference passenger : passengers) {
-            User user = getUserById(passenger.passengerUserId);
+            Optional<User> user = getUserById(passenger.passengerUserId);
             // send email to user.mail;
             // set that the driver/passengers can receive reviews.
         }
@@ -80,7 +81,12 @@ public class UserService implements IUserService {
     @Override
     public boolean processScore(EnrichedTripSummary enrichedTripSummary) {
         LOGGER.info("processing new score for user: " + enrichedTripSummary.userId);
-        UserStatistics userStatistics = storageExtension.getUserOverview(enrichedTripSummary.userId);
+        Optional<UserStatistics> userStatisticsOpt = storageExtension.getUserOverview(enrichedTripSummary.userId);
+        if (!userStatisticsOpt.isPresent()){
+            LOGGER.warn("Failed to retrieve user Statistics.");
+            return false;
+        }
+        UserStatistics userStatistics = userStatisticsOpt.get();
         userStatistics.updateStatistics(enrichedTripSummary);
         LOGGER.info(String.format("User statistic document for user %s has been fetched and locally updated.", enrichedTripSummary.userId));
         boolean success = storageExtension.storeUserStatisticsDocument(enrichedTripSummary.userId, userStatistics);

@@ -2,13 +2,14 @@ package com.r00ta.telematics.platform.routes;
 
 import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Optional;
 
 import com.r00ta.telematics.platform.routes.models.PassengerRideReference;
 import com.r00ta.telematics.platform.routes.models.Route;
 
 public interface IRouteService {
 
-    Route getRouteById(String routeId);
+    Optional<Route> getRouteById(String routeId);
 
     List<Route> getUserRoutes(String userId);
 

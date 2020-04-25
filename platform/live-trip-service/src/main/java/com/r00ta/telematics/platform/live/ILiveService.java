@@ -2,6 +2,9 @@ package com.r00ta.telematics.platform.live;
 
 import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Optional;
+
+import javax.swing.text.html.Option;
 
 import com.r00ta.telematics.platform.live.models.LiveChunkModel;
 import com.r00ta.telematics.platform.live.models.LiveSessionSummary;
@@ -12,7 +15,7 @@ public interface ILiveService {
 
     boolean updateLiveSession(String userId, String sessionId, LiveChunkModel chunk);
 
-    LiveSessionSummary getLiveSessionSummary(String sessionId);
+    Optional<LiveSessionSummary> getLiveSessionSummary(String sessionId);
 
     List<LiveSessionSummary> getAvailableLiveSessions(String userId);
 
