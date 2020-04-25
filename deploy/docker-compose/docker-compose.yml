@@ -51,14 +51,14 @@ services:
       - 5601:5601
 
   live-trip-service:
-    image: quarkus/live-trip-service-jvm 
+    image: r00ta/live-trip-service-jvm 
     depends_on:
       - kafka-cluster
     ports:
       - 1337:1337
 
   scoring-enrichment-service:
-    image: quarkus/scoring-service-jvm 
+    image: r00ta/scoring-service-jvm 
     depends_on:
       - kafka-cluster
 
@@ -66,7 +66,7 @@ services:
       - 1338:1338
 
   user-service:
-    image: quarkus/user-service-jvm 
+    image: r00ta/user-service-jvm 
     depends_on:
       - kafka-cluster
     ports:
