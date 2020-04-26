@@ -1,0 +1,35 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: live-trip-service
+  namespace: smartcommute-2020
+  selfLink: >-
+    /apis/route.openshift.io/v1/namespaces/smartcommute-2020/routes/live-trip-service
+  uid: 97ae8f00-87a4-11ea-aa0b-0a580a800173
+  resourceVersion: '65176'
+  creationTimestamp: '2020-04-26T09:59:17Z'
+  labels:
+    io.kompose.service: live-trip-service
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  host: live-trip-service-smartcommute-2020.apps-crc.testing
+  subdomain: ''
+  to:
+    kind: Service
+    name: live-trip-service
+    weight: 100
+  port:
+    targetPort: '1337'
+  wildcardPolicy: None
+status:
+  ingress:
+    - host: live-trip-service-smartcommute-2020.apps-crc.testing
+      routerName: default
+      conditions:
+        - type: Admitted
+          status: 'True'
+          lastTransitionTime: '2020-04-26T09:59:17Z'
+      wildcardPolicy: None
+      routerCanonicalHostname: apps-crc.testing
+

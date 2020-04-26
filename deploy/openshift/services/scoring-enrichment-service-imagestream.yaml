@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ImageStream
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: scoring-enrichment-service
+  name: scoring-enrichment-service
+spec:
+  tags:
+  - annotations: null
+    from:
+      kind: DockerImage
+      name: r00ta/scoring-service-jvm:latest
+    generation: null
+    importPolicy: {}
+    name: latest
+status:
+  dockerImageRepository: ""

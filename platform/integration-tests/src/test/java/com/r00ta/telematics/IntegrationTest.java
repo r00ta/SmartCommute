@@ -40,6 +40,13 @@ import static io.restassured.RestAssured.given;
 public class IntegrationTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(IntegrationTest.class);
 
+//    private static final String liveTripEndpoint = "http://live-trip-service-smartcommute-2020.apps-crc.testing:80";
+//    private static final String scoringEndpoint = "http://scoring-service-smartcommute-2020.apps-crc.testing:80";
+//    private static final String userEndpoint = "http://user-service-smartcommute-2020.apps-crc.testing:80";
+    private static final String liveTripEndpoint = "http://localhost:1337";
+    private static final String scoringEndpoint = "http://localhost:1338";
+    private static final String userEndpoint = "http://localhost:1339";
+
     private static final ObjectMapper mapper = new ObjectMapper();
 
     private static String email = UUID.randomUUID().toString();
@@ -56,7 +63,7 @@ public class IntegrationTest {
         String body = new JsonObject().put("birthDay", "2020-04-22").put("email", email).put("name", "pippo").put("passwordHash", "pass").put("surename", "ciccio").toString();
 
         given().contentType(ContentType.JSON).body(body)
-                .when().post("http://localhost:1339/users")
+                .when().post(userEndpoint + "/users")
                 .then()
                 .statusCode(200);
     }
@@ -67,7 +74,7 @@ public class IntegrationTest {
         LOGGER.info("Auth user test.");
         String body = new JsonObject().put("email", email).put("password", "pass").toString();
 
-        AuthenticationResponse response = executeUntilSuccess(() -> given().contentType(ContentType.JSON).body(body).when().post("http://localhost:1339/users/auth"))
+        AuthenticationResponse response = executeUntilSuccess(() -> given().contentType(ContentType.JSON).body(body).when().post(userEndpoint + "/users/auth"))
                 .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", AuthenticationResponse.class);
 
 
@@ -83,7 +90,7 @@ public class IntegrationTest {
     public void authenticationTest() {
         LOGGER.info("Testing authentication.");
         given().header("Authorization", "Bearer " + jwtToken)
-                .when().get("http://localhost:1339/users/" + userId).then().statusCode(200);
+                .when().get(userEndpoint + "/users/" + userId).then().statusCode(200);
     }
 
     @Test
@@ -99,7 +106,7 @@ public class IntegrationTest {
                 .toString();
 
         String routeId = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(body)
-                .when().post("http://localhost:1339/users/" + userId + "/routes").then().extract().jsonPath().getString("routeId");
+                .when().post(userEndpoint + "/users/" + userId + "/routes").then().extract().jsonPath().getString("routeId");
 
         Assertions.assertNotNull(routeId);
         this.routeId = routeId;
@@ -110,7 +117,7 @@ public class IntegrationTest {
     public void createLiveTripRoute() {
         LOGGER.info("Creating live trip");
         LiveSessionSummary session = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken)
-                .when().post("http://localhost:1337/users/" + userId + "/liveSessions?day=FRIDAY&routeId=" + routeId).then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveSessionSummary.class);
+                .when().post(liveTripEndpoint + "/users/" + userId + "/liveSessions?day=FRIDAY&routeId=" + routeId).then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveSessionSummary.class);
 
         sessionId = session.sessionId;
 
@@ -122,7 +129,7 @@ public class IntegrationTest {
     public void retrieveLiveTripSessions() throws InterruptedException {
         LOGGER.info("Retrieving live trip.");
         retryUntilSuccess(
-                () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1337/users/" + userId + "/liveSessions")
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", AvailableLiveSessionsResponse.class).sessions.size() == 1);
 
         Assertions.assertTrue(true);
@@ -136,24 +143,24 @@ public class IntegrationTest {
         String chunk1 = getResourceAsString("/chunk1.json");
         String chunk2 = getResourceAsString("/chunk2.json");
 
-        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(chunk0).when().put("http://localhost:1337/users/" + userId + "/liveSessions/" + sessionId).then().statusCode(200);
-        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(chunk1).when().put("http://localhost:1337/users/" + userId + "/liveSessions/" + sessionId).then().statusCode(200);
-        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(chunk2).when().put("http://localhost:1337/users/" + userId + "/liveSessions/" + sessionId).then().statusCode(200);
+        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(chunk0).when().put(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId).then().statusCode(200);
+        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(chunk1).when().put(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId).then().statusCode(200);
+        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(chunk2).when().put(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId).then().statusCode(200);
 
         retryUntilSuccess(
-                () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1337/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=0")
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=0")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).chunks.size() == 3);
         retryUntilSuccess(
-                () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1337/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=1")
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=1")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).chunks.size() == 2);
         retryUntilSuccess(
-                () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1337/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=2")
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=2")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).chunks.size() == 1);
         retryUntilSuccess(
-                () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1337/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=3")
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=3")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).chunks.size() == 0);
         retryUntilSuccess(
-                () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1337/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=0")
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=0")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).isLive == false);
     }
 
@@ -166,10 +173,10 @@ public class IntegrationTest {
 
         tripId = UUID.randomUUID().toString();
 
-        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(trip).when().post("http://localhost:1337/users/" + userId + "/trips/" + tripId).then().statusCode(200);
+        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(trip).when().post(liveTripEndpoint + "/users/" + userId + "/trips/" + tripId).then().statusCode(200);
 
         retryUntilSuccess(
-                () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1337/users/" + userId + "/trips/" +  tripId)
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/trips/" +  tripId)
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", TripModel.class).positions.size() >= 20);
     }
 
@@ -178,7 +185,7 @@ public class IntegrationTest {
     public void retrieveEnrichedTrip() throws InterruptedException {
         LOGGER.info("Fetching enriched trip.");
         retryUntilSuccess(
-                () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1338/users/" + userId + "/enrichedTrips/" +  tripId)
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(scoringEndpoint + "/users/" + userId + "/enrichedTrips/" +  tripId)
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", EnrichedTrip.class).positions.size() >= 20);
     }
 
@@ -187,7 +194,7 @@ public class IntegrationTest {
     public void retrieveUpdatedUserStatistics() throws InterruptedException {
         LOGGER.info("Fetching user statistics.");
         retryUntilSuccess(
-                () -> given().header("Authorization", "Bearer " + jwtToken).when().get("http://localhost:1339/users/" + userId)
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(userEndpoint + "/users/" + userId)
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", UserStatistics.class).totalDistanceDrivenInM >= 20);
     }
 

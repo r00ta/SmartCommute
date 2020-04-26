@@ -26,27 +26,27 @@ public class ElasticSearchStorageManager implements IStorageManager {
     private HttpHelper httpHelper = new HttpHelper(HOST);
 
     public String create(String key, String request, String index) {
-        String response = httpHelper.doPost(index + "/_doc/" + key, request);
-        return response;
-    }
+            String response = httpHelper.doPost(index + "/_doc/" + key, request);
+            return response;
+        }
 
-    public <T> List<T> search(SmartQuery query, String index, Class<T> type) {
-        String request = ElasticQueryFactory.build(query);
-        LOGGER.info("ES query " + request);
+        public <T> List<T> search(SmartQuery query, String index, Class<T> type) {
+            String request = ElasticQueryFactory.build(query);
+            LOGGER.info("ES query " + request);
 
-        String response = httpHelper.doPost(index + "/_search", request);
-        JavaType javaType = TypeFactory.defaultInstance()
-                .constructParametricType(ElasticSearchResponse.class, type);
-        LOGGER.info("ES returned " + response);
-        try {
-            // TODO: check performance issue with generics
-            List<Hit<T>> hits = ((ElasticSearchResponse) objectMapper.readValue(response, javaType)).hits.hits;
-            if (hits.size() == 0) {
-                return new ArrayList<>();
-            }
-            return hits.stream().map(x -> x.source).collect(Collectors.toList());
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            String response = httpHelper.doPost(index + "/_search", request);
+            JavaType javaType = TypeFactory.defaultInstance()
+                    .constructParametricType(ElasticSearchResponse.class, type);
+            LOGGER.info("ES returned " + response);
+            try {
+                // TODO: check performance issue with generics
+                List<Hit<T>> hits = ((ElasticSearchResponse) objectMapper.readValue(response, javaType)).hits.hits;
+                if (hits.size() == 0) {
+                    return new ArrayList<>();
+                }
+                return hits.stream().map(x -> x.source).collect(Collectors.toList());
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
         }
         return null;
     }

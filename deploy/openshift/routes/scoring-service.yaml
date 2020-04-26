@@ -1,0 +1,35 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: scoring-service
+  namespace: smartcommute-2020
+  selfLink: >-
+    /apis/route.openshift.io/v1/namespaces/smartcommute-2020/routes/scoring-service
+  uid: 8de21cc7-87a4-11ea-aa0b-0a580a800173
+  resourceVersion: '65139'
+  creationTimestamp: '2020-04-26T09:59:01Z'
+  labels:
+    io.kompose.service: scoring-enrichment-service
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  host: scoring-service-smartcommute-2020.apps-crc.testing
+  subdomain: ''
+  to:
+    kind: Service
+    name: scoring-enrichment-service
+    weight: 100
+  port:
+    targetPort: '1338'
+  wildcardPolicy: None
+status:
+  ingress:
+    - host: scoring-service-smartcommute-2020.apps-crc.testing
+      routerName: default
+      conditions:
+        - type: Admitted
+          status: 'True'
+          lastTransitionTime: '2020-04-26T09:59:01Z'
+      wildcardPolicy: None
+      routerCanonicalHostname: apps-crc.testing
+

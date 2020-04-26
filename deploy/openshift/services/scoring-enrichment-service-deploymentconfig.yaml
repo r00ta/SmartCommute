@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --provider=openshift
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: scoring-enrichment-service
+  name: scoring-enrichment-service
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: scoring-enrichment-service
+  strategy:
+    resources: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: scoring-enrichment-service
+    spec:
+      containers:
+      - image: ' '
+        name: scoring-enrichment-service
+        ports:
+        - containerPort: 1338
+        resources: {}
+      restartPolicy: Always
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - scoring-enrichment-service
+      from:
+        kind: ImageStreamTag
+        name: scoring-enrichment-service:latest
+    type: ImageChange
+status: {}
