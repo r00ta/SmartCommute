@@ -77,7 +77,7 @@ public class LiveApi {
     public Response updateLiveSession(@PathParam("userId") String userId, @PathParam("sessionId") String sessionId, LiveChunkUpdateRequest request) {
         LiveChunkModel model = new LiveChunkModel(userId, sessionId, request.chunkSeqNumber, request.positions, request.isLastChunk);
         boolean success = liveService.updateLiveSession(userId, sessionId, model);
-        if (success){
+        if (success) {
             return Response.ok().build();
         }
         return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), "Bad Request.").build();
@@ -97,13 +97,12 @@ public class LiveApi {
         LiveChunksResponse response = new LiveChunksResponse();
         response.sessionId = sessionId;
         response.userId = userId;
-        if (liveSessionChunks != null && liveSessionChunks.size() != 0){
+        if (liveSessionChunks != null && liveSessionChunks.size() != 0) {
             response.isLive = !liveSessionChunks.stream().anyMatch(x -> x.isLastChunk);
             response.chunks = liveSessionChunks.stream().map(x -> new LiveChunkResponse(x.chunkSeqNumber, x.positions)).collect(Collectors.toList());
-        }
-        else{
+        } else {
             Optional<LiveSessionSummary> summary = liveService.getLiveSessionSummary(sessionId);
-            if (!summary.isPresent()){
+            if (!summary.isPresent()) {
                 return Response.status(400, "Live session summary not found.").build();
             }
             response.isLive = summary.get().isLive;

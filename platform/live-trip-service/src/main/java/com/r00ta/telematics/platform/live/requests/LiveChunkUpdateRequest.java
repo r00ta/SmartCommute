@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.r00ta.telematics.platform.live.models.GpsLocation;
 
 public class LiveChunkUpdateRequest {
+
     @JsonProperty("chunkSeqNumber")
     public Long chunkSeqNumber;
 

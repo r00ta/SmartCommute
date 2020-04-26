@@ -82,7 +82,7 @@ public class UserService implements IUserService {
     public boolean processScore(EnrichedTripSummary enrichedTripSummary) {
         LOGGER.info("processing new score for user: " + enrichedTripSummary.userId);
         Optional<UserStatistics> userStatisticsOpt = storageExtension.getUserOverview(enrichedTripSummary.userId);
-        if (!userStatisticsOpt.isPresent()){
+        if (!userStatisticsOpt.isPresent()) {
             LOGGER.warn("Failed to retrieve user Statistics.");
             return false;
         }

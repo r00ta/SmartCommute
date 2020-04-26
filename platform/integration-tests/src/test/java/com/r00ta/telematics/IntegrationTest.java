@@ -12,12 +12,12 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import javax.ws.rs.NotFoundException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.r00ta.telematics.models.user.AuthenticationResponse;
 import com.r00ta.telematics.models.livetrip.AvailableLiveSessionsResponse;
-import com.r00ta.telematics.models.scoring.EnrichedTrip;
 import com.r00ta.telematics.models.livetrip.LiveChunksResponse;
 import com.r00ta.telematics.models.livetrip.LiveSessionSummary;
 import com.r00ta.telematics.models.livetrip.TripModel;
+import com.r00ta.telematics.models.scoring.EnrichedTrip;
+import com.r00ta.telematics.models.user.AuthenticationResponse;
 import com.r00ta.telematics.models.user.UserStatistics;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
@@ -38,9 +38,10 @@ import static io.restassured.RestAssured.given;
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class IntegrationTest {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(IntegrationTest.class);
 
-//    private static final String liveTripEndpoint = "http://live-trip-service-smartcommute-2020.apps-crc.testing:80";
+    //    private static final String liveTripEndpoint = "http://live-trip-service-smartcommute-2020.apps-crc.testing:80";
 //    private static final String scoringEndpoint = "http://scoring-service-smartcommute-2020.apps-crc.testing:80";
 //    private static final String userEndpoint = "http://user-service-smartcommute-2020.apps-crc.testing:80";
     private static final String liveTripEndpoint = "http://localhost:1337";
@@ -76,7 +77,6 @@ public class IntegrationTest {
 
         AuthenticationResponse response = executeUntilSuccess(() -> given().contentType(ContentType.JSON).body(body).when().post(userEndpoint + "/users/auth"))
                 .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", AuthenticationResponse.class);
-
 
         userId = response.userId;
         jwtToken = response.jwtBearer;
@@ -164,7 +164,6 @@ public class IntegrationTest {
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).isLive == false);
     }
 
-
     @Test
     @Order(8)
     public void createNewTrip() throws InterruptedException, IOException {
@@ -176,7 +175,7 @@ public class IntegrationTest {
         given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(trip).when().post(liveTripEndpoint + "/users/" + userId + "/trips/" + tripId).then().statusCode(200);
 
         retryUntilSuccess(
-                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/trips/" +  tripId)
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/trips/" + tripId)
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", TripModel.class).positions.size() >= 20);
     }
 
@@ -185,7 +184,7 @@ public class IntegrationTest {
     public void retrieveEnrichedTrip() throws InterruptedException {
         LOGGER.info("Fetching enriched trip.");
         retryUntilSuccess(
-                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(scoringEndpoint + "/users/" + userId + "/enrichedTrips/" +  tripId)
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(scoringEndpoint + "/users/" + userId + "/enrichedTrips/" + tripId)
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", EnrichedTrip.class).positions.size() >= 20);
     }
 

@@ -3,8 +3,6 @@ package com.r00ta.telematics.models.livetrip;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.r00ta.telematics.models.livetrip.GpsLocation;
-import com.r00ta.telematics.models.livetrip.ObdEngineRpmSample;
 
 public class TripModel {
 

@@ -3,6 +3,7 @@ package com.r00ta.telematics.platform.enrich.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ObdEngineRpmSample {
+
     @JsonProperty("timestamp")
     public Long timestmap;
 

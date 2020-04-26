@@ -34,21 +34,6 @@ public class AuthService implements IAuthService {
     @Inject
     IUserService userService;
 
-    @Override
-    public Optional<User> getUserByEmail(String email) {
-        return userService.getUserByEmail(email);
-    }
-
-    @Override
-    public String generateToken(String userId) {
-
-        JwtSchema schema = JwtSchema.createUserJwtSchema(userId);
-        HashMap<String, Long> timeClaims = new HashMap<>();
-        long exp = currentTimeInSecs() + 60 * 60 * 24 * 30;
-        timeClaims.put(Claims.exp.name(), exp);
-        return generateTokenString(schema, timeClaims);
-    }
-
     public static String generateTokenString(JwtSchema userJwt, Map<String, Long> timeClaims) {
         // Use the test private key associated with the test public key for a valid signature
         PrivateKey pk = readPrivateKey("/privateKey.pem");
@@ -133,5 +118,20 @@ public class AuthService implements IAuthService {
     private static int currentTimeInSecs() {
         long currentTimeMS = System.currentTimeMillis();
         return (int) (currentTimeMS / 1000);
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        return userService.getUserByEmail(email);
+    }
+
+    @Override
+    public String generateToken(String userId) {
+
+        JwtSchema schema = JwtSchema.createUserJwtSchema(userId);
+        HashMap<String, Long> timeClaims = new HashMap<>();
+        long exp = currentTimeInSecs() + 60 * 60 * 24 * 30;
+        timeClaims.put(Claims.exp.name(), exp);
+        return generateTokenString(schema, timeClaims);
     }
 }

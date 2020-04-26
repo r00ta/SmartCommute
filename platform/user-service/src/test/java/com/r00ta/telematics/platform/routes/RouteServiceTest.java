@@ -2,9 +2,6 @@ package com.r00ta.telematics.platform.routes;
 
 import java.time.DayOfWeek;
 import java.util.List;
-import java.util.Optional;
-
-import javax.ws.rs.NotFoundException;
 
 import com.r00ta.telematics.platform.mocks.RoutesStorageMock;
 import com.r00ta.telematics.platform.mocks.UserServiceMock;
@@ -112,7 +109,6 @@ public class RouteServiceTest {
         Assertions.assertEquals(true, retrievedPassengerRoute.dayRides.get(DayOfWeek.FRIDAY).isADriverRide);
         Assertions.assertEquals(0, retrievedPassengerRoute.dayRides.get(DayOfWeek.FRIDAY).passengerReferences.size());
     }
-
 
     private NewRouteRequest createNewPassengerRouteRequest() {
         NewRouteRequest routeRequest = new NewRouteRequest();

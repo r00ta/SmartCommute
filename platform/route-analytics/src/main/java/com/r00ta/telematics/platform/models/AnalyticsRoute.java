@@ -19,8 +19,7 @@ public class AnalyticsRoute {
     @JsonProperty("startTimestamp")
     public Long startTimestamp;
 
-
-    public static AnalyticsRoute from(RouteModelDto route){
+    public static AnalyticsRoute from(RouteModelDto route) {
         AnalyticsRoute a = new AnalyticsRoute();
         a.userId = route.userId;
         a.routeId = route.routeId;
@@ -28,5 +27,4 @@ public class AnalyticsRoute {
         a.startTimestamp = route.startTimestamp;
         return a;
     }
-
 }

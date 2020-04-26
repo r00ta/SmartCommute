@@ -24,6 +24,13 @@ public class RouteAnalyticsDto implements CloudEventDto {
     @JsonProperty("documentVersion")
     public String documentVersion = "1.0";
 
+    public RouteAnalyticsDto(EnrichedTrip enrichedTrip) {
+        this.userId = enrichedTrip.userId;
+        this.routeId = enrichedTrip.tripId;
+        this.positions = enrichedTrip.positions;
+        this.startTimestamp = enrichedTrip.startTimestamp;
+    }
+
     @Override
     public String getEventId() {
         return null;
@@ -33,12 +40,4 @@ public class RouteAnalyticsDto implements CloudEventDto {
     public String getEventProducer() {
         return "Enrichment-scoring";
     }
-
-    public RouteAnalyticsDto(EnrichedTrip enrichedTrip) {
-        this.userId = enrichedTrip.userId;
-        this.routeId = enrichedTrip.tripId;
-        this.positions = enrichedTrip.positions;
-        this.startTimestamp = enrichedTrip.startTimestamp;
-    }
-
 }

@@ -34,7 +34,7 @@ public class TripService implements ITripService {
 
     @Override
     public boolean storeAndSendTripAsync(String userId, TripModel trip) {
-        if (trip.positions == null || trip.positions.size() == 0){ // not going to send an empty trip in the platform
+        if (trip.positions == null || trip.positions.size() == 0) { // not going to send an empty trip in the platform
             return false;
         }
 

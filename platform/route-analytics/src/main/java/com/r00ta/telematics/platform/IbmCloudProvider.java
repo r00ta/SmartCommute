@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public class IbmCloudProvider implements IDataLakeProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IbmCloudProvider.class);
-
+    private final static ObjectMapper mapper = new ObjectMapper();
     private static AmazonS3 _cosClient;
     private static String api_key;
     private static String service_instance_id;
@@ -51,68 +51,6 @@ public class IbmCloudProvider implements IDataLakeProvider {
     private static String location;
     private static String bucketName;
     private static String resultBucketName;
-    private final static ObjectMapper mapper = new ObjectMapper();
-
-    @PostConstruct
-    void setup() {
-        // Constants for IBM COS values
-        SDKGlobalConfiguration.IAM_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token";
-        api_key = "-PmwZ-01v_cGsKUWqCdm8ZGLMr1ntgX9yc3jKfI4Xfxt"; // example: xxxd12V2QHXbjaM99G9tWyYDgF_0gYdlQ8aWALIQxXx4
-        service_instance_id = "crn:v1:bluemix:public:cloud-object-storage:global:a/4e12949933064a189d5149a9687c3e0d:489a4b86-a9d8-43ab-ab18-5c65b5c21793::"; // example: crn:v1:bluemix:public:cloud-object-storage:global:a/xx999cd94a0dda86fd8eff3191349999:9999b05b-x999-4917-xxxx-9d5b326a1111::
-        endpoint_url = "https://s3.us-south.cloud-object-storage.appdomain.cloud"; // example: https://s3.us-south.cloud-object-storage.appdomain.cloud
-        location = "us-south-standard"; // example: us-south-standard
-        // Create client connection details
-        _cosClient = createClient(api_key, service_instance_id, endpoint_url, location);
-
-        bucketName = "routes";
-        resultBucketName = "resultAnalysis";
-    }
-
-    @Override
-    public boolean uploadRoute(AnalyticsRoute route) throws JsonProcessingException {
-        // Setting string values
-        // todo change tripid to routeid
-        LOGGER.info("going to push.");
-        String itemName = DocumentKeyBuilder.build(route.userId, route.routeId);
-        String fileText = mapper.writeValueAsString(route);
-        LOGGER.info(fileText);
-
-        // create a new bucket
-        // createBucket(bucketName, _cosClient);
-
-        // get the list of buckets
-        listBuckets(_cosClient);
-
-        // create a new text file & upload
-        createTextFile(bucketName, itemName, fileText);
-
-        // get the list of files from the new bucket
-//        listObjects(bucketName, _cosClient);
-
-        // remove new file
-        //deleteItem(bucketName, itemName);
-
-        // create & upload the large file using transfer manager & remove large file
-//        try {
-//            createLargeFile(bucketName);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        // remove the new bucket
-//        deleteBucket(bucketName);
-        return true;
-    }
-
-    @Override
-    public AnalysisResults readAnalysisResults(String itemName){
-        try {
-            return mapper.readValue(getItem(resultBucketName, itemName), AnalysisResults.class);
-        } catch (JsonProcessingException e) {
-            LOGGER.error("Can't read analysis result file.", e);
-        }
-        return null;
-    }
 
     private static String getItem(String bucketName, String itemName) {
         System.out.printf("Retrieving item from bucket: %s, key: %s\n", bucketName, itemName);
@@ -127,13 +65,14 @@ public class IbmCloudProvider implements IDataLakeProvider {
 
             for (; ; ) {
                 int rsz = in.read(buffer, 0, buffer.length);
-                if (rsz < 0)
+                if (rsz < 0) {
                     break;
+                }
                 out.append(buffer, 0, rsz);
             }
 
             System.out.println(out.toString());
-        } catch (IOException ioe){
+        } catch (IOException ioe) {
             System.out.printf("Error reading file %s: %s\n", itemName, ioe.getMessage());
         }
         return null;
@@ -257,5 +196,66 @@ public class IbmCloudProvider implements IDataLakeProvider {
         } finally {
             transferManager.shutdownNow();
         }
+    }
+
+    @PostConstruct
+    void setup() {
+        // Constants for IBM COS values
+        SDKGlobalConfiguration.IAM_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token";
+        api_key = "-PmwZ-01v_cGsKUWqCdm8ZGLMr1ntgX9yc3jKfI4Xfxt"; // example: xxxd12V2QHXbjaM99G9tWyYDgF_0gYdlQ8aWALIQxXx4
+        service_instance_id = "crn:v1:bluemix:public:cloud-object-storage:global:a/4e12949933064a189d5149a9687c3e0d:489a4b86-a9d8-43ab-ab18-5c65b5c21793::"; // example: crn:v1:bluemix:public:cloud-object-storage:global:a/xx999cd94a0dda86fd8eff3191349999:9999b05b-x999-4917-xxxx-9d5b326a1111::
+        endpoint_url = "https://s3.us-south.cloud-object-storage.appdomain.cloud"; // example: https://s3.us-south.cloud-object-storage.appdomain.cloud
+        location = "us-south-standard"; // example: us-south-standard
+        // Create client connection details
+        _cosClient = createClient(api_key, service_instance_id, endpoint_url, location);
+
+        bucketName = "routes";
+        resultBucketName = "resultAnalysis";
+    }
+
+    @Override
+    public boolean uploadRoute(AnalyticsRoute route) throws JsonProcessingException {
+        // Setting string values
+        // todo change tripid to routeid
+        LOGGER.info("going to push.");
+        String itemName = DocumentKeyBuilder.build(route.userId, route.routeId);
+        String fileText = mapper.writeValueAsString(route);
+        LOGGER.info(fileText);
+
+        // create a new bucket
+        // createBucket(bucketName, _cosClient);
+
+        // get the list of buckets
+        listBuckets(_cosClient);
+
+        // create a new text file & upload
+        createTextFile(bucketName, itemName, fileText);
+
+        // get the list of files from the new bucket
+//        listObjects(bucketName, _cosClient);
+
+        // remove new file
+        //deleteItem(bucketName, itemName);
+
+        // create & upload the large file using transfer manager & remove large file
+//        try {
+//            createLargeFile(bucketName);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        // remove the new bucket
+//        deleteBucket(bucketName);
+        return true;
+    }
+
+    @Override
+    public AnalysisResults readAnalysisResults(String itemName) {
+        try {
+            return mapper.readValue(getItem(resultBucketName, itemName), AnalysisResults.class);
+        } catch (JsonProcessingException e) {
+            LOGGER.error("Can't read analysis result file.", e);
+        }
+        return null;
     }
 }

@@ -8,6 +8,13 @@ import android.preference.PreferenceManager;
 import java.text.DateFormat;
 import java.util.Date;
 
+import android.content.Context;
+import android.location.Location;
+import android.preference.PreferenceManager;
+
+import java.text.DateFormat;
+import java.util.Date;
+
 class Utils {
 
     static final String KEY_REQUESTING_LOCATION_UPDATES = "requesting_location_updates";
@@ -40,5 +47,10 @@ class Utils {
     static String getLocationText(Location location) {
         return location == null ? "Unknown location" :
                 "(" + location.getLatitude() + ", " + location.getLongitude() + ")";
+    }
+
+    static String getLocationTitle(Context context) {
+        return context.getString(R.string.location_updated,
+                DateFormat.getDateTimeInstance().format(new Date()));
     }
 }

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class DocumentKeyBuilder {
 
-    public static String build(String userId, String routeId){
+    public static String build(String userId, String routeId) {
         LocalDate currentDate = LocalDate.now();
 
         String day = String.valueOf(currentDate.getDayOfMonth());

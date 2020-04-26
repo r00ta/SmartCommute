@@ -1,6 +1,5 @@
 package com.r00ta.telematics.platform.api;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -20,9 +19,8 @@ public class AnalyticsApi {
     @POST
     @Path("loadResults")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response loadResultsWebhook(LoadAnalysisRequest request){
+    public Response loadResultsWebhook(LoadAnalysisRequest request) {
         analyticsService.processAnalysisResults(request.itemName);
         return Response.ok().build();
     }
-
 }

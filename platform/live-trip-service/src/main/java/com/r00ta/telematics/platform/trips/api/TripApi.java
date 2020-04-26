@@ -81,7 +81,7 @@ public class TripApi {
     @Operation(summary = "Gets a trip by id.", description = "Gets a trip by id.")
     public Response getTripById(@PathParam("userId") String userId, @PathParam("tripId") String tripId) {
         Optional<TripModel> trip = tripService.getTrip(userId, tripId);
-        if (!trip.isPresent()){
+        if (!trip.isPresent()) {
             return Response.status(400, "Trip not found.").build();
         }
         return Response.ok(trip.get()).build();

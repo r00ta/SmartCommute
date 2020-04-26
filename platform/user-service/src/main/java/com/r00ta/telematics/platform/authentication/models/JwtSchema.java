@@ -1,12 +1,11 @@
 package com.r00ta.telematics.platform.authentication.models;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JwtSchema {
+
     @JsonProperty("groups")
     public Set<String> groups;
 
@@ -19,7 +18,7 @@ public class JwtSchema {
     @JsonProperty("iss")
     public String iss = "https://quarkus.io/using-jwt-rbac";
 
-    public static JwtSchema createUserJwtSchema(String userId){
+    public static JwtSchema createUserJwtSchema(String userId) {
         JwtSchema schema = new JwtSchema();
         schema.groups = Set.of("User");
         schema.birthdate = "2001-07-13";

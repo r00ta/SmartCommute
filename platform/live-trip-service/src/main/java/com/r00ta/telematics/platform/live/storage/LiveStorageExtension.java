@@ -57,7 +57,7 @@ public class LiveStorageExtension implements ILiveStorageExtension {
     @Override
     public boolean updateLiveSessionSummary(String sessionId, boolean isLive) {
         Optional<LiveSessionSummary> summaryOpt = getLiveSessionSummary(sessionId);
-        if (!summaryOpt.isPresent()){
+        if (!summaryOpt.isPresent()) {
             return false;
         }
 

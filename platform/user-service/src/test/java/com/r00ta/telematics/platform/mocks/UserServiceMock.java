@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.r00ta.telematics.platform.routes.models.Route;
 import com.r00ta.telematics.platform.users.IUserService;
 import com.r00ta.telematics.platform.users.models.EnrichedTripSummary;
 import com.r00ta.telematics.platform.users.models.LiveTrip;
@@ -42,7 +41,7 @@ public class UserServiceMock implements IUserService {
 
     @Override
     public List<String> getUserNews(String userId) {
-        if (newsStorage.containsKey(userId)){
+        if (newsStorage.containsKey(userId)) {
             return newsStorage.get(userId);
         }
         return new ArrayList<>();
@@ -50,7 +49,7 @@ public class UserServiceMock implements IUserService {
 
     @Override
     public boolean storeNews(String userId, String news) {
-        if (newsStorage.containsKey(userId)){
+        if (newsStorage.containsKey(userId)) {
             return newsStorage.get(userId).add(news);
         }
         newsStorage.put(userId, new ArrayList<>());

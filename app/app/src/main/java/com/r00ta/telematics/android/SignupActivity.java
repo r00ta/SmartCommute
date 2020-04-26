@@ -33,7 +33,8 @@ import butterknife.ButterKnife;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
-    @BindView(R.id.language_input) EditText _languageText;
+    private static final int REQUEST_LOGIN = 0;
+    @BindView(R.id.birthday_input) EditText _birthdayText;
     @BindView(R.id.input_email) EditText _usernameText;
     @BindView(R.id.input_password) EditText _passwordText;
     @BindView(R.id.input_reEnterPassword) EditText _reEnterPasswordText;
@@ -80,7 +81,7 @@ public class SignupActivity extends AppCompatActivity {
         final String nameUser = _usernameText.getText().toString().toLowerCase();
         final String password = _passwordText.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
-        final String language = _languageText.getText().toString();
+        final String language = _birthdayText.getText().toString();
 
         // TODO: Implement your own signup logic here.
 
@@ -113,9 +114,11 @@ public class SignupActivity extends AppCompatActivity {
 
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
-        setResult(RESULT_OK, null);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivityForResult(intent, REQUEST_LOGIN);
         finish();
     }
+
     public void onSignupFailedFormatParameters() {
         _signupButton.setEnabled(true);
     }
@@ -132,7 +135,7 @@ public class SignupActivity extends AppCompatActivity {
         String username = _usernameText.getText().toString().toLowerCase();
         String password = _passwordText.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
-        String language = _languageText.getText().toString();
+        String language = _birthdayText.getText().toString();
 
         if (username.isEmpty()) {
             _usernameText.setError("username cannot be empty");
@@ -155,11 +158,11 @@ public class SignupActivity extends AppCompatActivity {
             _reEnterPasswordText.setError(null);
         }
 
-        if (language.isEmpty() || (!language.equals("EN") && !language.equals("IT"))) {
-            _languageText.setError("Language not accepted");
+        if (language.isEmpty()) {
+            _birthdayText.setError("Birthday can't be empty.");
             valid = false;
         } else {
-            _languageText.setError(null);
+            _birthdayText.setError(null);
         }
         return valid;
     }

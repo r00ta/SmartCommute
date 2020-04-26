@@ -112,7 +112,8 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             authentication = new ObjectMapper().readValue(response.toString(), AuthenticationResponse.class);
                         } catch (JsonProcessingException e) {
-                            Toast.makeText(LoginActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();
+                            onLoginFailed();
+                            Log.i("Login", "FAILED");
                             return;
                         }
                         onLoginSuccess(authentication);
@@ -122,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        Toast.makeText(getApplicationContext(), "Login failed.", Toast.LENGTH_SHORT).show();
+                        onLoginFailed();
                         Log.i("Login", "FAILED");
                     }
                 });
@@ -137,7 +138,6 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("userId", authenticationResponse.userId);
         editor.putString("jwtBearer", authenticationResponse.jwtBearer);
         editor.commit();
-
         finish();
     }
 

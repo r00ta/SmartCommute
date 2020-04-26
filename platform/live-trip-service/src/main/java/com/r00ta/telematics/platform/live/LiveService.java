@@ -41,7 +41,7 @@ public class LiveService implements ILiveService {
     // TODO: sanity checks
     public boolean updateLiveSession(String userId, String sessionId, LiveChunkModel chunk) {
         boolean success = storageManager.updateLiveSession(sessionId, chunk);
-        if (chunk.isLastChunk){
+        if (chunk.isLastChunk) {
             storageManager.updateLiveSessionSummary(sessionId, false);
         }
         return success;

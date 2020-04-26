@@ -8,6 +8,7 @@ import com.r00ta.telematics.platform.models.EnrichedGpsLocation;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RouteModelDto {
+
     @JsonProperty("userId")
     public String userId;
 
@@ -19,5 +20,4 @@ public class RouteModelDto {
 
     @JsonProperty("startTimestamp")
     public Long startTimestamp;
-
 }

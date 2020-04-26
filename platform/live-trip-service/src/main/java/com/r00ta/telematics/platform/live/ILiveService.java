@@ -4,8 +4,6 @@ import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.text.html.Option;
-
 import com.r00ta.telematics.platform.live.models.LiveChunkModel;
 import com.r00ta.telematics.platform.live.models.LiveSessionSummary;
 

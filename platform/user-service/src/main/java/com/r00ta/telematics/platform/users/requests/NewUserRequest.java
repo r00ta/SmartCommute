@@ -2,7 +2,6 @@ package com.r00ta.telematics.platform.users.requests;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class NewUserRequest {

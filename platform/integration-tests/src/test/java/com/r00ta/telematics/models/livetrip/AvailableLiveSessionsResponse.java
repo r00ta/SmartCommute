@@ -13,5 +13,6 @@ public class AvailableLiveSessionsResponse {
         this.sessions = sessions;
     }
 
-    public AvailableLiveSessionsResponse(){}
+    public AvailableLiveSessionsResponse() {
+    }
 }
