@@ -11,13 +11,23 @@ import io.realm.annotations.PrimaryKey;
 public class TripModel extends RealmObject {
     @PrimaryKey
     private String tripId;
-    private String userId;
-    private String routeId;
-    public Long startTimestamp;
 
-    public RealmList<GpsLocation> positions;
-    public RealmList<ObdEngineRpmSample> engineRpmSamples;
+    private String routeId;
+
+    private Long startTimestamp;
+
+    private boolean isFinished;
+    private RealmList<GpsLocation> positions;
+    private RealmList<ObdEngineRpmSample> engineRpmSamples;
 
     // ... Generated getters and setters ...
 
+    public TripModel(){}
+
+    public TripModel(String tripId, String routeId, Long startTimestamp){
+        this.tripId = tripId;
+        this.routeId = routeId;
+        this.startTimestamp = startTimestamp;
+        this.isFinished = false;
+    }
 }

@@ -44,6 +44,9 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.r00ta.telematics.android.persistence.models.TripModel;
+
+import io.realm.Realm;
 
 /**
  * A bound and started service that is promoted to a foreground service when location updates have
@@ -81,7 +84,7 @@ public class LocationUpdatesService extends Service {
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
 
     /**
      * The fastest rate for active location updates. Updates will never be more frequent
@@ -126,11 +129,18 @@ public class LocationUpdatesService extends Service {
      */
     private Location mLocation;
 
+    private String currentTripId;
+
+    private Realm realmInstance;
+
     public LocationUpdatesService() {
     }
 
     @Override
     public void onCreate() {
+        // Get a Realm instance for this thread
+        realmInstance = Realm.getDefaultInstance();
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         mLocationCallback = new LocationCallback() {
@@ -188,7 +198,7 @@ public class LocationUpdatesService extends Service {
         // and binds with this service. The service should cease to be a foreground service
         // when that happens.
         Log.i(TAG, "in onBind()");
-        stopForeground(true);
+        //stopForeground(true);
         mChangingConfiguration = false;
         return mBinder;
     }
@@ -199,7 +209,7 @@ public class LocationUpdatesService extends Service {
         // and binds once again with this service. The service should cease to be a foreground
         // service when that happens.
         Log.i(TAG, "in onRebind()");
-        stopForeground(true);
+        //stopForeground(true);
         mChangingConfiguration = false;
         super.onRebind(intent);
     }
@@ -211,16 +221,17 @@ public class LocationUpdatesService extends Service {
         // Called when the last client (MainActivity in case of this sample) unbinds from this
         // service. If this method is called due to a configuration change in MainActivity, we
         // do nothing. Otherwise, we make this service a foreground service.
-        if (!mChangingConfiguration && Utils.requestingLocationUpdates(this)) {
-            Log.i(TAG, "Starting foreground service");
+//        if (!mChangingConfiguration && Utils.requestingLocationUpdates(this)) {
+//            Log.i(TAG, "Starting foreground service");
 
-            startForeground(NOTIFICATION_ID, getNotification());
-        }
+//            startForeground(NOTIFICATION_ID, getNotification());
+//        }
         return true; // Ensures onRebind() is called when a client re-binds.
     }
 
     @Override
     public void onDestroy() {
+        Log.i(TAG, "On destroy");
         mServiceHandler.removeCallbacksAndMessages(null);
     }
 
@@ -228,8 +239,18 @@ public class LocationUpdatesService extends Service {
      * Makes a request for location updates. Note that in this sample we merely log the
      * {@link SecurityException}.
      */
-    public void requestLocationUpdates() {
+    public void requestLocationUpdates(String tripId) {
         Log.i(TAG, "Requesting location updates");
+        this.currentTripId = tripId;
+        // Use them like regular java objects
+        final TripModel trip = new TripModel(tripId, null, System.currentTimeMillis());
+        realmInstance.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(trip);
+            }
+        });
+
         Utils.setRequestingLocationUpdates(this, true);
         startService(new Intent(getApplicationContext(), LocationUpdatesService.class));
         try {
@@ -257,46 +278,6 @@ public class LocationUpdatesService extends Service {
         }
     }
 
-    /**
-     * Returns the {@link NotificationCompat} used as part of the foreground service.
-     */
-    private Notification getNotification() {
-        Intent intent = new Intent(this, LocationUpdatesService.class);
-
-        CharSequence text = Utils.getLocationText(mLocation);
-
-        // Extra to help us figure out if we arrived in onStartCommand via the notification or not.
-        intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true);
-
-        // The PendingIntent that leads to a call to onStartCommand() in this service.
-        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        // The PendingIntent to launch activity.
-        PendingIntent activityPendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), 0);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .addAction(R.drawable.ic_launch, getString(R.string.launch_activity),
-                        activityPendingIntent)
-                .addAction(R.drawable.ic_cancel, getString(R.string.remove_location_updates),
-                        servicePendingIntent)
-                .setContentText(text)
-                .setContentTitle(Utils.getLocationTitle(this))
-                .setOngoing(true)
-                .setPriority(Notification.PRIORITY_HIGH)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setTicker(text)
-                .setWhen(System.currentTimeMillis());
-
-        // Set the Channel ID for Android O.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(CHANNEL_ID); // Channel ID
-        }
-
-        return builder.build();
-    }
-
     private void getLastLocation() {
         try {
             mFusedLocationClient.getLastLocation()
@@ -320,15 +301,18 @@ public class LocationUpdatesService extends Service {
 
         mLocation = location;
 
+        // persist.
+
+
         // Notify anyone listening for broadcasts about the new location.
         Intent intent = new Intent(ACTION_BROADCAST);
         intent.putExtra(EXTRA_LOCATION, location);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
         // Update notification content if running as a foreground service.
-        if (serviceIsRunningInForeground(this)) {
-            mNotificationManager.notify(NOTIFICATION_ID, getNotification());
-        }
+//        if (serviceIsRunningInForeground(this)) {
+//            mNotificationManager.notify(NOTIFICATION_ID, getNotification());
+//        }
     }
 
     /**

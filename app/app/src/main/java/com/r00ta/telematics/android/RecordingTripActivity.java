@@ -1,3 +1,5 @@
+
+
 package com.r00ta.telematics.android;
 
 import android.Manifest;
@@ -23,16 +25,28 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
 
-public class RecordingTripActivity extends AppCompatActivity implements  SharedPreferences.OnSharedPreferenceChangeListener{
+import java.util.UUID;
+
+public class RecordingTripActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, OnMapReadyCallback {
     private static final String TAG = "RecordingTripActivity";
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
 
     // The BroadcastReceiver used to listen from broadcasts from the service.
     private MyReceiver myReceiver;
+
+    private GoogleMap googleMap;
 
     // A reference to the service used to get location updates.
     private LocationUpdatesService mService = null;
@@ -56,6 +70,7 @@ public class RecordingTripActivity extends AppCompatActivity implements  SharedP
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            Log.i(TAG, "On disconnected");
             mService = null;
             mBound = false;
         }
@@ -66,6 +81,9 @@ public class RecordingTripActivity extends AppCompatActivity implements  SharedP
         super.onCreate(savedInstanceState);
         myReceiver = new MyReceiver();
         setContentView(R.layout.activity_recording);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapView);
+        mapFragment.getMapAsync(this);
 
         // Check that the user hasn't revoked permissions by going to Settings.
         if (Utils.requestingLocationUpdates(this)) {
@@ -90,7 +108,7 @@ public class RecordingTripActivity extends AppCompatActivity implements  SharedP
                 if (!checkPermissions()) {
                     requestPermissions();
                 } else {
-                    mService.requestLocationUpdates();
+                    mService.requestLocationUpdates(UUID.randomUUID().toString());
                 }
             }
         });
@@ -114,27 +132,31 @@ public class RecordingTripActivity extends AppCompatActivity implements  SharedP
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(TAG, "On resume");
         LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
                 new IntentFilter(LocationUpdatesService.ACTION_BROADCAST));
     }
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver);
+        Log.i(TAG, "On pause");
+        //LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver);
         super.onPause();
     }
 
     @Override
     protected void onStop() {
+        Log.i(TAG, "On stop");
         if (mBound) {
             // Unbind from the service. This signals to the service that this activity is no longer
             // in the foreground, and the service can respond by promoting itself to a foreground
             // service.
-            unbindService(mServiceConnection);
-            mBound = false;
+            Log.i(TAG, "Unbind on stop");
+//            unbindService(mServiceConnection);
+//            mBound = false;
         }
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .unregisterOnSharedPreferenceChangeListener(this);
+//        PreferenceManager.getDefaultSharedPreferences(this)
+//                .unregisterOnSharedPreferenceChangeListener(this);
         super.onStop();
     }
 
@@ -142,7 +164,7 @@ public class RecordingTripActivity extends AppCompatActivity implements  SharedP
      * Returns the current state of the permissions needed.
      */
     private boolean checkPermissions() {
-        return  PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+        return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
@@ -194,7 +216,7 @@ public class RecordingTripActivity extends AppCompatActivity implements  SharedP
                 Log.i(TAG, "User interaction was cancelled.");
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission was granted.
-                mService.requestLocationUpdates();
+                mService.requestLocationUpdates(UUID.randomUUID().toString());
             } else {
                 // Permission denied.
                 setButtonsState(false);
@@ -221,6 +243,22 @@ public class RecordingTripActivity extends AppCompatActivity implements  SharedP
         }
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        // Add a marker in Sydney, Australia,
+        // and move the map's camera to the same location.
+        this.googleMap = googleMap;
+//        LatLng sydney = new LatLng(-33.852, 151.211);
+//        googleMap.addMarker(new MarkerOptions().position(sydney)
+//                .title("Marker in Sydney"));
+//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    private void setLocationOnMap(LatLng location) {
+        googleMap.addCircle(new CircleOptions().center(location).radius(10));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 12.0f));
+    }
+
     /**
      * Receiver for broadcasts sent by {@link LocationUpdatesService}.
      */
@@ -229,10 +267,12 @@ public class RecordingTripActivity extends AppCompatActivity implements  SharedP
         public void onReceive(Context context, Intent intent) {
             Location location = intent.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION);
             if (location != null) {
+                setLocationOnMap(new LatLng(location.getLatitude(), location.getLongitude()));
                 Toast.makeText(RecordingTripActivity.this, Utils.getLocationText(location),
                         Toast.LENGTH_SHORT).show();
             }
         }
+
     }
 
     @Override
