@@ -39,6 +39,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.UUID;
 
+import io.realm.Realm;
+
 public class RecordingTripActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, OnMapReadyCallback {
     private static final String TAG = "RecordingTripActivity";
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
@@ -57,6 +59,8 @@ public class RecordingTripActivity extends AppCompatActivity implements SharedPr
     // UI elements.
     private Button mRequestLocationUpdatesButton;
     private Button mRemoveLocationUpdatesButton;
+
+    private Realm realmInstance;
 
     // Monitors the state of the connection to the service.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -80,6 +84,7 @@ public class RecordingTripActivity extends AppCompatActivity implements SharedPr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myReceiver = new MyReceiver();
+        realmInstance = Realm.getDefaultInstance();
         setContentView(R.layout.activity_recording);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapView);
@@ -117,6 +122,9 @@ public class RecordingTripActivity extends AppCompatActivity implements SharedPr
             @Override
             public void onClick(View view) {
                 mService.removeLocationUpdates();
+                unbindService(mServiceConnection);
+                RealmUtils.closeAllSessions(realmInstance);
+                finish();
             }
         });
 
