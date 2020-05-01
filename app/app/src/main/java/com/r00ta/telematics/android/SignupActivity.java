@@ -14,17 +14,22 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.r00ta.telematics.android.network.AuthManager;
 import com.r00ta.telematics.android.network.HttpRequestProvider;
 import com.r00ta.telematics.android.responses.AuthenticationResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,14 +86,14 @@ public class SignupActivity extends AppCompatActivity {
         final String nameUser = _usernameText.getText().toString().toLowerCase();
         final String password = _passwordText.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
-        final String language = _birthdayText.getText().toString();
+        final String birthDay = _birthdayText.getText().toString();
 
         // TODO: Implement your own signup logic here.
 
-        String url = "http://10.0.2.2:1337/users";
+        String url = "http://13.72.87.22:1339/users";
         JSONObject body = null;
         try {
-            body = new JSONObject().put("birthDay", "321321").put("email", nameUser).put("name", nameUser).put("passwordHash", password).put("surename", "pippo");
+            body = new JSONObject().put("birthDay", birthDay).put("email", nameUser).put("name", nameUser).put("passwordHash", password).put("surename", "pippo");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -106,7 +111,14 @@ public class SignupActivity extends AppCompatActivity {
                         // TODO: Handle error
                         Log.i("Signup", "FAILED");
                     }
-                });
+                }){
+            @Override
+            public Map<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
         HttpRequestProvider.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }
 

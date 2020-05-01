@@ -25,7 +25,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,7 +33,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.UUID;
@@ -85,6 +83,7 @@ public class RecordingTripActivity extends AppCompatActivity implements SharedPr
         super.onCreate(savedInstanceState);
         myReceiver = new MyReceiver();
         realmInstance = Realm.getDefaultInstance();
+
         setContentView(R.layout.activity_recording);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapView);
@@ -123,7 +122,7 @@ public class RecordingTripActivity extends AppCompatActivity implements SharedPr
             public void onClick(View view) {
                 mService.removeLocationUpdates();
                 unbindService(mServiceConnection);
-                RealmUtils.closeAllSessions(realmInstance);
+                RealmUtils.closeAllSessions(getApplicationContext(), realmInstance);
                 finish();
             }
         });
@@ -276,8 +275,8 @@ public class RecordingTripActivity extends AppCompatActivity implements SharedPr
             Location location = intent.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION);
             if (location != null) {
                 setLocationOnMap(new LatLng(location.getLatitude(), location.getLongitude()));
-                Toast.makeText(RecordingTripActivity.this, Utils.getLocationText(location),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(RecordingTripActivity.this, Utils.getLocationText(location),
+//                        Toast.LENGTH_SHORT).show();
             }
         }
 

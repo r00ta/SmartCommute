@@ -1,10 +1,8 @@
 package com.r00ta.telematics.android;
 
-import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.location.Location;
@@ -26,6 +24,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.r00ta.telematics.android.persistence.models.GpsLocation;
 import com.r00ta.telematics.android.persistence.models.TripModel;
 
 import io.realm.Realm;
@@ -114,6 +113,8 @@ public class LocationUpdatesService extends Service {
     private String currentTripId;
 
     private Realm realmInstance;
+
+    private boolean isRecording;
 
     public LocationUpdatesService() {
     }
@@ -252,6 +253,7 @@ public class LocationUpdatesService extends Service {
         Log.i(TAG, "Removing location updates");
         try {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+            isRecording = false;
             Utils.setRequestingLocationUpdates(this, false);
             stopSelf();
         } catch (SecurityException unlikely) {
@@ -267,6 +269,7 @@ public class LocationUpdatesService extends Service {
                         @Override
                         public void onComplete(@NonNull Task<Location> task) {
                             if (task.isSuccessful() && task.getResult() != null) {
+                                isRecording = true;
                                 mLocation = task.getResult();
                             } else {
                                 Log.w(TAG, "Failed to get location.");
@@ -278,12 +281,30 @@ public class LocationUpdatesService extends Service {
         }
     }
 
-    private void onNewLocation(Location location) {
+    private void onNewLocation(final Location location) {
         Log.i(TAG, "New location: " + location);
 
         mLocation = location;
 
+        realmInstance.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                TripModel trip = realm.where(TripModel.class).equalTo("tripId", currentTripId).findFirst();
+
+                GpsLocation gpsLocation = realm.createObject(GpsLocation.class);
+                gpsLocation.timestamp = location.getTime();
+                gpsLocation.accuracy = location.getAccuracy();
+                gpsLocation.bearing = location.getBearing();
+                gpsLocation.latitude = location.getLatitude();
+                gpsLocation.longitude = location.getLongitude();
+                gpsLocation.speed = location.getSpeed();
+                gpsLocation.elevation = location.getAltitude();
+                trip.positions.add(gpsLocation);
+            }
+        });
+
         // persist.
+
 
 
         // Notify anyone listening for broadcasts about the new location.

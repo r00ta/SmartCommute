@@ -1,5 +1,7 @@
 package com.r00ta.telematics.android.persistence.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.realm.RealmObject;
 
 public class GpsLocation  extends RealmObject {
@@ -9,13 +11,13 @@ public class GpsLocation  extends RealmObject {
 
     public Double longitude;
 
-    public Double accuracy;
+    public float accuracy;
 
     public Float speed;
 
     public Float bearing;
 
-    public Float elevation;
+    public double elevation;
 
     public GpsLocation() {
     }

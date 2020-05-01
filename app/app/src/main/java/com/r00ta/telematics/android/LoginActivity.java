@@ -16,17 +16,22 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.r00ta.telematics.android.network.AuthManager;
 import com.r00ta.telematics.android.network.HttpRequestProvider;
 import com.r00ta.telematics.android.responses.AuthenticationResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -96,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Log.d(password, "CREATE");
 
-        String url = "http://10.0.2.2:1337/users/auth";
+        String url = "http://13.72.87.22:1339/users/auth";
         JSONObject body = null;
         try {
             body = new JSONObject().put("email", email).put("password", password);
@@ -126,7 +131,14 @@ public class LoginActivity extends AppCompatActivity {
                         onLoginFailed();
                         Log.i("Login", "FAILED");
                     }
-                });
+                }){
+            @Override
+            public Map<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };;
         HttpRequestProvider.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }
 
