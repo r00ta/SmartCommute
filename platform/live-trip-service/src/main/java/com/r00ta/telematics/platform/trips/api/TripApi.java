@@ -1,5 +1,7 @@
 package com.r00ta.telematics.platform.trips.api;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -14,11 +16,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.trips.ITripService;
 import com.r00ta.telematics.platform.trips.models.TripModel;
+import com.r00ta.telematics.platform.trips.requests.CompressedNewTripRequest;
 import com.r00ta.telematics.platform.trips.requests.NewTripRequest;
 import com.r00ta.telematics.platform.trips.responses.TripsByTimeRangeResponse;
 import com.r00ta.telematics.platform.trips.responses.TripsHeadersByTimeRangeResponse;
+import com.r00ta.telematics.platform.trips.utils.Gzip;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -28,6 +33,8 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 @Path("/users/{userId}")
 public class TripApi {
+
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     @Inject
     ITripService tripService;
@@ -65,7 +72,15 @@ public class TripApi {
             @APIResponse(description = "Bad request.", responseCode = "500", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     })
     @Operation(summary = "Stores a new trip", description = "Stores a new trip")
-    public Response storeNewTrip(@PathParam("userId") String userId, @PathParam("tripId") String tripId, NewTripRequest trip) {
+    public Response storeNewTrip(@PathParam("userId") String userId, @PathParam("tripId") String tripId, CompressedNewTripRequest compressedTripRequest) {
+        NewTripRequest trip = null;
+        try {
+            trip = decompressTripRequest(compressedTripRequest);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Response.status(400, "Failed to decompress trip request").build();
+        }
+
         TripModel model = new TripModel(userId, tripId, trip.routeId, trip.startTimestamp, trip.positions, trip.engineRpmSamples);
         tripService.storeAndSendTripAsync(userId, model);
         return Response.ok().build();
@@ -85,5 +100,9 @@ public class TripApi {
             return Response.status(400, "Trip not found.").build();
         }
         return Response.ok(trip.get()).build();
+    }
+
+    private NewTripRequest decompressTripRequest(CompressedNewTripRequest request) throws IOException {
+        return mapper.readValue(Gzip.decompress(Base64.getDecoder().decode(request.base64gzipNewTripRequest)), NewTripRequest.class);
     }
 }

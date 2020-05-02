@@ -90,7 +90,7 @@ public class SignupActivity extends AppCompatActivity {
 
         // TODO: Implement your own signup logic here.
 
-        String url = "http://13.72.87.22:1339/users";
+        String url =  ClientConfig.BASE_HOST + ":1339/users";
         JSONObject body = null;
         try {
             body = new JSONObject().put("birthDay", birthDay).put("email", nameUser).put("name", nameUser).put("passwordHash", password).put("surename", "pippo");

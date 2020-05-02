@@ -1,4 +1,6 @@
 cd platform
+mvn clean package -DskipTests
+
 cd live-trip-service
 docker build -f src/main/docker/Dockerfile.jvm -t r00ta/live-trip-service-jvm:latest .
 

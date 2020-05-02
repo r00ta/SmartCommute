@@ -27,5 +27,7 @@ com/r00ta/telematics/platform/live/api/LiveApi.class
 com/r00ta/telematics/platform/live/ILiveService.class
 com/r00ta/telematics/platform/trips/models/ObdEngineRpmSample.class
 com/r00ta/telematics/platform/live/storage/ILiveStorageExtension.class
+com/r00ta/telematics/platform/trips/requests/CompressedNewTripRequest.class
+com/r00ta/telematics/platform/trips/utils/Gzip.class
 com/r00ta/telematics/platform/live/messaging/LiveTripKafkaProducer.class
 com/r00ta/telematics/platform/live/models/LiveChunkModel.class

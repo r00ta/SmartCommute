@@ -46,7 +46,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.resolver:maven-resolver-api:1.4.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.resolver:maven-resolver-util:1.4.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.shared:maven-shared-utils:3.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: commons-io:commons-io:2.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.google.inject:guice:no_aop:4.2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.plexus:plexus-utils:3.2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.sisu:org.eclipse.sisu.plexus:0.3.4" level="project" />
@@ -242,5 +241,6 @@
     <orderEntry type="module" module-name="database" />
     <orderEntry type="library" name="Maven: org.json:json:20190722" level="project" />
     <orderEntry type="module" module-name="messaging" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.6" level="project" />
   </component>
 </module>

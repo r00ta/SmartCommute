@@ -71,10 +71,3 @@ services:
       - kafka-cluster
     ports:
       - 1339:1339
-
-  # consumer:
-  #   build: kogito-consumer/
-  #   ports:
-  #     - 8180:8180
-  #   depends_on:
-  #     - kafka

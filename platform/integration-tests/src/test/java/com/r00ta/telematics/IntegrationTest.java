@@ -1,13 +1,17 @@
 package com.r00ta.telematics;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.zip.GZIPOutputStream;
 
 import javax.ws.rs.NotFoundException;
 
@@ -19,6 +23,7 @@ import com.r00ta.telematics.models.livetrip.TripModel;
 import com.r00ta.telematics.models.scoring.EnrichedTrip;
 import com.r00ta.telematics.models.user.AuthenticationResponse;
 import com.r00ta.telematics.models.user.UserStatistics;
+import com.r00ta.telematics.utils.Gzip;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -168,11 +173,14 @@ public class IntegrationTest {
     @Order(8)
     public void createNewTrip() throws InterruptedException, IOException {
         LOGGER.info("Creating trip.");
-        String trip = getResourceAsString("/testTrip.json");
+        String plainTrip = getResourceAsString("/testTrip.json");
+        String body = new JsonObject()
+                .put("base64gzipNewTripRequest", new String(Base64.getEncoder().encode(Gzip.compress(plainTrip))))
+                .toString();
 
         tripId = UUID.randomUUID().toString();
 
-        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(trip).when().post(liveTripEndpoint + "/users/" + userId + "/trips/" + tripId).then().statusCode(200);
+        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(body).when().post(liveTripEndpoint + "/users/" + userId + "/trips/" + tripId).then().statusCode(200);
 
         retryUntilSuccess(
                 () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/trips/" + tripId)

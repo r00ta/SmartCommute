@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Log.d(password, "CREATE");
 
-        String url = "http://13.72.87.22:1339/users/auth";
+        String url = ClientConfig.BASE_HOST + ":1339/users/auth";
         JSONObject body = null;
         try {
             body = new JSONObject().put("email", email).put("password", password);

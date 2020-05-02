@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.r00ta.telematics.android.ClientConfig;
 import com.r00ta.telematics.android.responses.AuthenticationResponse;
 
 import org.json.JSONException;
@@ -52,7 +53,7 @@ public class AuthManager {
         String email = smartCommutePreferences.getString("email", "0");
         String password = smartCommutePreferences.getString("password", "0");
 
-        String url = "http://13.72.87.22:1337/users/auth";
+        String url =  ClientConfig.BASE_HOST + ":1337/users/auth";
         JSONObject body = null;
         try {
             body = new JSONObject().put("email", email).put("password", password);
@@ -87,7 +88,7 @@ public class AuthManager {
 
     private void onLoginFailed(){
         try {
-            Thread.sleep(1000 * 15);
+            Thread.sleep(1000 * 15); // sleep 15 seconds
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

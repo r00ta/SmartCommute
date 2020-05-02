@@ -10,6 +10,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.r00ta.telematics.android.ClientConfig;
 import com.r00ta.telematics.android.network.queue.QueueTripUpload;
 
 import org.json.JSONException;
@@ -46,10 +47,10 @@ public class NetworkUpload {
     }
 
     private void sendTrip(QueueTripUpload trip) {
-        String url = String.format("http://10.0.2.2:1337/users/%s/trips/%s", trip.userId, trip.tripId);
+        String url = String.format( ClientConfig.BASE_HOST + ":1337/users/%s/trips/%s", trip.userId, trip.tripId);
         JSONObject body = null;
         try {
-            body = new JSONObject().put("request", trip.compressedTrip);
+            body = new JSONObject().put("base64gzipNewTripRequest", trip.compressedTrip);
         } catch (JSONException e) {
             e.printStackTrace();
         }

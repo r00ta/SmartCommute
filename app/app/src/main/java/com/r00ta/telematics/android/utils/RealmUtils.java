@@ -1,8 +1,7 @@
-package com.r00ta.telematics.android;
+package com.r00ta.telematics.android.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Base64;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -34,10 +33,8 @@ public class RealmUtils {
                 for (TripModel trip : trips) {
                     try {
                         TripModelDto modelDto = new TripModelDto(trip);
-                        String base64GzippedTrip = Base64.encodeToString(compressGZIP(mapper.writeValueAsString(modelDto)), Base64.DEFAULT);
+                        String base64GzippedTrip = java.util.Base64.getEncoder().encodeToString(Gzip.compress(mapper.writeValueAsString(modelDto))));
                         realm.copyToRealmOrUpdate(new QueueTripUpload(trip.tripId, userId, base64GzippedTrip, modelDto.startTimestamp));
-//                        queueTripUpload.tripId = modelDto.tripId;
-//                        queueTripUpload.compressedTrip = base64GzippedTrip;
                         trip.isFinished = true;
                         Log.i("Realm", "Trip " + trip.tripId + " has been enqueued successfully");
                     } catch (IOException e) {
@@ -60,19 +57,5 @@ public class RealmUtils {
                 Log.i("LEN : ", String.valueOf(trips.size()));
             }
         });
-    }
-
-    public static byte[] compressGZIP(String input) throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try (GZIPOutputStream out = new GZIPOutputStream(outputStream)) {
-            try (ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8))) {
-                byte[] buffer = new byte[1024];
-                int len;
-                while ((len = in.read(buffer)) != -1) {
-                    out.write(buffer, 0, len);
-                }
-            }
-        }
-        return outputStream.toByteArray();
     }
 }
