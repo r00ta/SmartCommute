@@ -24,12 +24,14 @@ import com.r00ta.telematics.platform.trips.requests.NewTripRequest;
 import com.r00ta.telematics.platform.trips.responses.TripsByTimeRangeResponse;
 import com.r00ta.telematics.platform.trips.responses.TripsHeadersByTimeRangeResponse;
 import com.r00ta.telematics.platform.trips.utils.Gzip;
+import io.vertx.core.json.JsonObject;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.json.JSONObject;
 
 @Path("/users/{userId}")
 public class TripApi {
@@ -83,7 +85,7 @@ public class TripApi {
 
         TripModel model = new TripModel(userId, tripId, trip.routeId, trip.startTimestamp, trip.positions, trip.engineRpmSamples);
         tripService.storeAndSendTripAsync(userId, model);
-        return Response.ok().build();
+        return Response.ok(new JsonObject().put("status", "created").toString()).build();
     }
 
     @GET

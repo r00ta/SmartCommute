@@ -33,7 +33,7 @@ public class RealmUtils {
                 for (TripModel trip : trips) {
                     try {
                         TripModelDto modelDto = new TripModelDto(trip);
-                        String base64GzippedTrip = java.util.Base64.getEncoder().encodeToString(Gzip.compress(mapper.writeValueAsString(modelDto))));
+                        String base64GzippedTrip = java.util.Base64.getEncoder().encodeToString(Gzip.compress(mapper.writeValueAsString(modelDto)));
                         realm.copyToRealmOrUpdate(new QueueTripUpload(trip.tripId, userId, base64GzippedTrip, modelDto.startTimestamp));
                         trip.isFinished = true;
                         Log.i("Realm", "Trip " + trip.tripId + " has been enqueued successfully");

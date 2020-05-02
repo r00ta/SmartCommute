@@ -61,6 +61,7 @@ public class NetworkUpload {
                 (Request.Method.POST, url, body, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.i("Upload", "ok");
                         new RemoveQueueAsync(reqTripId).execute();
                         Log.i("Upload", "successful");
                     }
@@ -69,7 +70,11 @@ public class NetworkUpload {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        //int statusCode = error.networkResponse.statusCode;
+                        Log.i("upload error", error.getMessage());
+                        if (error.networkResponse != null){
+                            Log.i("upload error", String.valueOf(error.networkResponse.statusCode));
+                        }
+
                         new RequeueTripAsync(reqTripId).execute();
                         Log.i("upload", "FAILED");
                     }
@@ -78,7 +83,7 @@ public class NetworkUpload {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json");
-                headers.put("Authorization", "Bearer " + AuthManager.getInstance(ctx).getJwtToken());
+                //headers.put("Authorization", "Bearer " + AuthManager.getInstance(ctx).getJwtToken());
                 return headers;
             }
         };
