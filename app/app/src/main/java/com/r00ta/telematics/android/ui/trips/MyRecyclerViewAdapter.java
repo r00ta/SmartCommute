@@ -1,9 +1,13 @@
 package com.r00ta.telematics.android.ui.trips;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +15,7 @@ import java.util.Set;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.r00ta.telematics.android.R;
+import com.r00ta.telematics.android.RecordingTripActivity;
 import com.r00ta.telematics.android.persistence.retrieved.TripHeaders;
 import com.r00ta.telematics.android.utils.RealmRecyclerViewAdapter;
 
@@ -20,9 +25,11 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<TripHeaders, MyRecy
 
     private boolean inDeletionMode = false;
     private Set<Integer> countersToDelete = new HashSet<>();
+    private RecyclerViewClickListener mListener;
 
-    MyRecyclerViewAdapter(OrderedRealmCollection<TripHeaders> data) {
+    MyRecyclerViewAdapter(OrderedRealmCollection<TripHeaders> data, RecyclerViewClickListener listener) {
         super(data, true);
+        mListener = listener;
         // Only set this if the model class has a primary key that is also a integer or long.
         // In that case, {@code getItemId(int)} must also be overridden to return the key.
         // See https://developer.android.com/reference/android/support/v7/widget/RecyclerView.Adapter.html#hasStableIds()
@@ -45,7 +52,7 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<TripHeaders, MyRecy
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.trips_card_layout, parent, false);
-        return new MyViewHolder(itemView);
+        return new MyViewHolder(itemView, mListener);
     }
 
     @Override
@@ -84,7 +91,9 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<TripHeaders, MyRecy
         return getItem(index).id;
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
+        private RecyclerViewClickListener mListener;
+
         TextView startDate;
         TextView startLocation;
 
@@ -96,8 +105,15 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<TripHeaders, MyRecy
 
         public TripHeaders data;
 
-        MyViewHolder(View view) {
+        MyViewHolder(View view, RecyclerViewClickListener listener) {
             super(view);
+            mListener = listener;
+            view.setClickable(true);
+            view.setOnClickListener(this);
+
+            itemView.setClickable(true);
+            itemView.setOnClickListener(this);
+
             startDate = view.findViewById(R.id.startDate);
             startLocation = view.findViewById(R.id.startCity);
 
@@ -106,6 +122,11 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<TripHeaders, MyRecy
 
             tripDate = view.findViewById(R.id.trip_date);
             distance = view.findViewById(R.id.distance);
+        }
+
+        @Override
+        public void onClick(View view) {
+            mListener.onClick(view, getAdapterPosition());
         }
     }
 }

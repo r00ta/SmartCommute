@@ -13,11 +13,12 @@ public class TripHeaders extends RealmObject {
     public String endDate;
     public String tripDate;
     public String distance;
+    public String tripId;
     public Long startTimestamp;
 
     public TripHeaders(){}
 
-    public TripHeaders(Long id, String startLocation, String endLocation, String startDate, String endDate, String tripDate, String distance, Long startTimestamp){
+    public TripHeaders(Long id, String startLocation, String endLocation, String startDate, String endDate, String tripDate, String distance, String tripId, Long startTimestamp){
         this.id = id;
         this.startLocation = startLocation;
         this.endLocation = endLocation;
@@ -25,6 +26,7 @@ public class TripHeaders extends RealmObject {
         this.endDate = endDate;
         this.tripDate = tripDate;
         this.distance = distance;
+        this.tripId = tripId;
         this.startTimestamp = startTimestamp;
     }
 }

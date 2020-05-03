@@ -1,6 +1,7 @@
 package com.r00ta.telematics.android.ui.trips;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -38,10 +39,12 @@ import com.r00ta.telematics.android.RecordingTripActivity;
 import com.r00ta.telematics.android.network.AuthManager;
 import com.r00ta.telematics.android.network.HttpRequestProvider;
 import com.r00ta.telematics.android.network.NetworkUpload;
+import com.r00ta.telematics.android.network.models.EnrichedTripHeader;
 import com.r00ta.telematics.android.network.models.EnrichedTripHeadersResponse;
 import com.r00ta.telematics.android.network.queue.QueueTripUpload;
 import com.r00ta.telematics.android.persistence.retrieved.TripHeaders;
 import com.r00ta.telematics.android.responses.AuthenticationResponse;
+import com.r00ta.telematics.android.utils.DateUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +55,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class TripsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -100,12 +105,12 @@ public class TripsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     public void onRefresh() {
         fetchTripsAndUpdateUI();
         //        Toast.makeText(getContext(), "Refresh", Toast.LENGTH_SHORT).show();
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mSwipeRefreshLayout.setRefreshing(false);
-//            }
-//        }, 2000);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, 2000);
     }
 
     private void fetchTripsAndUpdateUI() {
@@ -128,7 +133,7 @@ public class TripsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                         Log.i("Fetched trips", "ok");
                         try {
                             EnrichedTripHeadersResponse headers = new ObjectMapper().readValue(response.toString(), EnrichedTripHeadersResponse.class);
-                            Log.i("Fetched trips", String.valueOf(headers.enrichedTrips.size()));
+                            new UpdateTripHeaderCollection(headers).execute();
                         } catch (JsonProcessingException e) {
                             e.printStackTrace();
                         }
@@ -163,7 +168,11 @@ public class TripsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     private void setUpRecyclerView() {
-        adapter = new MyRecyclerViewAdapter(realm.where(TripHeaders.class).findAll());
+        RecyclerViewClickListener listener = (view, position) -> { // open view on the trip! TODO
+            Toast.makeText(getContext(), adapter.getItem(position).tripId, Toast.LENGTH_SHORT).show();
+        };
+
+        adapter = new MyRecyclerViewAdapter(realm.where(TripHeaders.class).sort("id", Sort.DESCENDING).findAll(), listener);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
@@ -194,8 +203,43 @@ public class TripsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         public boolean isLongPressDragEnabled() {
             return true;
         }
+    }
 
+    private class UpdateTripHeaderCollection extends AsyncTask<String, String, String> {
+        public EnrichedTripHeadersResponse headers;
 
+        public UpdateTripHeaderCollection(EnrichedTripHeadersResponse headers) {
+            this.headers = headers;
+        }
+
+        protected String doInBackground(String... params) {
+            // Now in a background thread.
+
+            // Open the Realm
+            Realm realm = Realm.getDefaultInstance();
+            try {
+                // Work with Realm
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm bgRealm) {
+                        for (EnrichedTripHeader h : headers.enrichedTrips){
+                            TripHeaders isPresent = bgRealm.where(TripHeaders.class).equalTo("id", h.startTimestamp).findFirst();
+                            if (isPresent == null){
+                                bgRealm.copyToRealmOrUpdate(new TripHeaders(h.startTimestamp, h.startLocation, h.endLocation, DateUtils.getTimeInDay(h.startTimestamp), DateUtils.getTimeInDay(h.startTimestamp + h.durationInMilliseconds), DateUtils.getDay(h.startTimestamp), String.valueOf(h.distanceInM/1000), h.tripId, h.startTimestamp));
+                            }
+                        }
+                    }
+                });
+            }
+            catch (Exception e){
+            }
+            finally {
+                realm.close();
+            }
+
+            recyclerView.smoothScrollToPosition(0);
+            return null;
+        }
     }
 
 }

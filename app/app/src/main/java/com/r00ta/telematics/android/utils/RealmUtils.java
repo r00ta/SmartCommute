@@ -39,7 +39,7 @@ public class RealmUtils {
                         realm.copyToRealmOrUpdate(new QueueTripUpload(trip.tripId, userId, base64GzippedTrip, modelDto.startTimestamp));
 
                         // TEST adapter
-                        realm.copyToRealmOrUpdate(new TripHeaders((long)new Random().nextInt(), "Saronno", "Saronno", "10.30", "12.30", "04-03-2020", "12Km", 0L));
+                        //realm.copyToRealmOrUpdate(new TripHeaders((long)new Random().nextInt(), "Saronno", "Saronno", "10.30", "12.30", "04-03-2020", "12Km", 0L));
                         trip.isFinished = true;
                         Log.i("Realm", "Trip " + trip.tripId + " has been enqueued successfully");
                     } catch (IOException e) {
