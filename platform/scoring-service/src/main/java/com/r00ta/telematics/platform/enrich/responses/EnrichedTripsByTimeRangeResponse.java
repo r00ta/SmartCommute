@@ -4,16 +4,17 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.r00ta.telematics.platform.enrich.models.EnrichedTrip;
+import com.r00ta.telematics.platform.enrich.models.EnrichedTripHeader;
 
 public class EnrichedTripsByTimeRangeResponse {
 
-    @JsonProperty("enrichedTrips")
-    public List<EnrichedTrip> enrichedTrips;
+    @JsonProperty("enrichedTripsHeaders")
+    public List<EnrichedTripHeader> enrichedTrips;
 
     public EnrichedTripsByTimeRangeResponse() {
     }
 
-    public EnrichedTripsByTimeRangeResponse(List<EnrichedTrip> enrichedTrips) {
+    public EnrichedTripsByTimeRangeResponse(List<EnrichedTripHeader> enrichedTrips) {
         this.enrichedTrips = enrichedTrips;
     }
 }

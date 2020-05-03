@@ -20,6 +20,7 @@ public class AuthManager {
     private static AuthManager instance;
     private Context ctx;
     private String jwtToken;
+    private String userId;
     private int loginFailedCount = 0;
     private Boolean authenticationPending = false;
 
@@ -37,6 +38,10 @@ public class AuthManager {
 
     public String getJwtToken(){
         return jwtToken;
+    }
+
+    public String getUserId(){
+        return userId;
     }
 
     public synchronized void getNewJwtToken(){
@@ -121,5 +126,6 @@ public class AuthManager {
     private void updateInternalJwtToken(){
         SharedPreferences smartCommutePreferences = ctx.getSharedPreferences("smartCommutePreferences", Context.MODE_PRIVATE);
         jwtToken = smartCommutePreferences.getString("jwtToken", "0");
+        userId = smartCommutePreferences.getString("userId", "0");
     }
 }

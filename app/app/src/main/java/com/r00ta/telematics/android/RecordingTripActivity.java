@@ -147,7 +147,7 @@ public class RecordingTripActivity extends AppCompatActivity implements SharedPr
     @Override
     protected void onPause() {
         Log.i(TAG, "On pause");
-        //LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver);
         super.onPause();
     }
 

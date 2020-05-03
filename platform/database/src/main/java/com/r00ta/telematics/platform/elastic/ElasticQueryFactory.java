@@ -14,6 +14,10 @@ public class ElasticQueryFactory {
             json.put("size", query.limit);
         }
 
+        if (query.includedProperties != null){
+            json.put("_source", query.includedProperties);
+        }
+
         JSONObject internalQuery = new JSONObject();
 
         if (query.stringOperations.size() + query.longOperations.size() > 1) { // there are multiple conditions

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.r00ta.telematics.platform.enrich.models.EnrichedTrip;
+import com.r00ta.telematics.platform.enrich.models.EnrichedTripHeader;
 import com.r00ta.telematics.platform.enrich.models.TripModel;
 
 public interface IEnrichService {
@@ -14,5 +15,5 @@ public interface IEnrichService {
 
     Optional<EnrichedTrip> getTrip(String userId, String tripId);
 
-    List<EnrichedTrip> getTripsByTimeRange(String userId, Long from, Long to);
+    List<EnrichedTripHeader> getTripsHeadersByTimeRange(String userId, Long from, Long to);
 }

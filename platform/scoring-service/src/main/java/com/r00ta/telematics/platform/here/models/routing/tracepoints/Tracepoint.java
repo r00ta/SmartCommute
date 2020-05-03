@@ -1,4 +1,4 @@
-package com.r00ta.telematics.platform.here.models.tracepoints;
+package com.r00ta.telematics.platform.here.models.routing.tracepoints;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

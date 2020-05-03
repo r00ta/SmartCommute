@@ -1,7 +1,9 @@
 package com.r00ta.telematics.platform;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.r00ta.telematics.platform.operators.DateOperator;
 import com.r00ta.telematics.platform.operators.LongOperator;
@@ -16,6 +18,8 @@ public class SmartQuery {
     public List<InternalWhereDecision<DateOperator, String>> dateOperations = new ArrayList<>();
 
     public Integer limit = null;
+
+    public List<String> includedProperties;
 
     public SmartQuery() {
     }
@@ -34,6 +38,13 @@ public class SmartQuery {
         this.limit = limit;
         return this;
     }
+
+    public SmartQuery include(String ... params){
+        includedProperties = Arrays.stream(params).collect(Collectors.toList());
+        return this;
+    }
+
+
 
     public class InternalWhereDecision<T, K> {
 

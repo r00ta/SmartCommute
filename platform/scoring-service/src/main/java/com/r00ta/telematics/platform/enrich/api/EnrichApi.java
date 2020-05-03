@@ -42,9 +42,10 @@ public class EnrichApi {
             @APIResponse(description = "Gets enriched trips of a user by time range.", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = EnrichedTripsByTimeRangeResponse.class))),
             @APIResponse(description = "Bad request.", responseCode = "500", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     })
-    @Operation(summary = "Gets enriched trips of a user by time range.", description = "Gets enriched trips of a user by time range.")
+    @Operation(summary = "Gets enriched trips headers of a user by time range.", description = "Gets enriched trips of a user by time range.")
     public Response getTripsByTimeRange(@PathParam("userId") String userId, @QueryParam("from") @NotNull Long from, @QueryParam("to") @NotNull Long to) {
-        return Response.ok(new EnrichedTripsByTimeRangeResponse(enrichService.getTripsByTimeRange(userId, from, to))).build();
+
+        return Response.ok(new EnrichedTripsByTimeRangeResponse(enrichService.getTripsHeadersByTimeRange(userId, from, to))).build();
     }
 
     @GET

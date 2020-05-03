@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:orientation="vertical"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="10dp">
+
+        <RelativeLayout
+            android:layout_width="387dp"
+            android:layout_height="88dp"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="53dp"
+                android:layout_height="55dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/ic_location" />
+
+            <!--            <TextView-->
+<!--                android:id="@+id/tripDate"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_above="@+id/dots"-->
+<!--                android:layout_alignStart="@+id/dots"-->
+<!--                android:layout_alignParentTop="true"-->
+<!--                android:layout_marginStart="6dp"-->
+<!--                android:layout_marginTop="0dp"-->
+<!--                android:layout_marginBottom="0dp"-->
+<!--                android:text="@string/title"-->
+<!--                android:textSize="18sp"-->
+<!--                android:textStyle="normal"-->
+<!--                tools:text="@string/title" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/endDate"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="77dp"-->
+<!--                android:text="@string/title"-->
+<!--                android:textSize="18sp"-->
+<!--                android:textStyle="normal" />-->
+
+            <TextView
+                android:id="@+id/startDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_toEndOf="@+id/img"
+                android:text="@string/title"
+                android:textSize="18sp"
+                android:textStyle="normal" />
+
+            <!--            <TextView-->
+<!--                android:id="@+id/endCity"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="0dp"-->
+<!--                android:layout_toEndOf="@+id/img"-->
+<!--                android:text="@string/title"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textStyle="italic" />-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/log_end"-->
+<!--                android:layout_width="52dp"-->
+<!--                android:layout_height="56dp"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_marginStart="254dp"-->
+<!--                android:layout_marginEnd="0dp"-->
+<!--                android:layout_toEndOf="@+id/dots"-->
+<!--                android:contentDescription="@string/app_name"-->
+<!--                app:srcCompat="@drawable/ic_location" />-->
+
+            <TextView
+                android:id="@+id/startCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/startDate"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="12dp"
+                android:layout_toEndOf="@+id/img"
+                android:text="@string/title"
+                android:textSize="14sp"
+                android:textStyle="italic" />
+
+            <ImageView
+                android:id="@+id/dots"
+                android:layout_width="83dp"
+                android:layout_height="30dp"
+                android:layout_above="@+id/startCity"
+                android:layout_below="@+id/startDate"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="163dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="157dp"
+                android:layout_marginBottom="-19dp"
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/ic_dots" />
+
+            <TextView
+                android:id="@+id/trip_date"
+                android:layout_width="52dp"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/dots"
+                android:layout_alignStart="@+id/dots"
+                android:layout_marginStart="-8dp"
+                android:layout_marginBottom="10dp"
+                android:autoSizeTextType="uniform"
+                android:text="TextView"
+                tools:text="@string/title" />
+
+            <ImageView
+                android:id="@+id/endIcon"
+                android:layout_width="53dp"
+                android:layout_height="55dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="0dp"
+                android:contentDescription="@string/app_name"
+                app:srcCompat="@drawable/ic_location" />
+
+            <TextView
+                android:id="@+id/endDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="1dp"
+                android:layout_toStartOf="@+id/endIcon"
+                android:text="TextView"
+                tools:text="@string/title"
+                android:textSize="18sp"
+                android:textStyle="normal"/>
+
+            <TextView
+                android:id="@+id/endCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/endDate"
+                android:layout_alignEnd="@+id/endDate"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="0dp"
+                android:text="TextView"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                tools:text="@string/title" />
+
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dots"
+                android:layout_alignStart="@+id/dots"
+                android:layout_alignBottom="@+id/startCity"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="19dp"
+                android:layout_marginBottom="0dp"
+                android:text="TextView"
+                android:textSize="10sp" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

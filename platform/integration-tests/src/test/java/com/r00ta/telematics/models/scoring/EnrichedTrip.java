@@ -30,6 +30,12 @@ public class EnrichedTrip {
     @JsonProperty("score")
     public Float score;
 
+    @JsonProperty("startLocation")
+    public String startLocation;
+
+    @JsonProperty("endLocation")
+    public String endLocation;
+
     @JsonProperty("documentVersion")
     public String documentVersion = "1.0";
 

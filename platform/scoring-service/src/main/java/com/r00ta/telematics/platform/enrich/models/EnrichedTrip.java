@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.r00ta.telematics.platform.here.models.RouteMatchModel;
-import com.r00ta.telematics.platform.here.models.attributes.Attributes;
-import com.r00ta.telematics.platform.here.models.routelinks.RouteLink;
+import com.r00ta.telematics.platform.here.models.routing.RouteMatchModel;
+import com.r00ta.telematics.platform.here.models.routing.attributes.Attributes;
+import com.r00ta.telematics.platform.here.models.routing.routelinks.RouteLink;
 import io.jenetics.jpx.Point;
 import io.jenetics.jpx.WayPoint;
 import io.jenetics.jpx.geom.Geoid;
@@ -38,6 +38,12 @@ public class EnrichedTrip {
 
     @JsonProperty("score")
     public Float score;
+
+    @JsonProperty("startLocation")
+    public String startLocation;
+
+    @JsonProperty("endLocation")
+    public String endLocation;
 
     @JsonProperty("documentVersion")
     public String documentVersion = "1.0";

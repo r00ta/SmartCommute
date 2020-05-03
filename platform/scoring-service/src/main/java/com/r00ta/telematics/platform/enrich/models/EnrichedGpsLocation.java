@@ -1,9 +1,9 @@
 package com.r00ta.telematics.platform.enrich.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.r00ta.telematics.platform.here.models.attributes.Attributes;
-import com.r00ta.telematics.platform.here.models.attributes.SpeedLimitAttribute;
-import com.r00ta.telematics.platform.here.models.tracepoints.Tracepoint;
+import com.r00ta.telematics.platform.here.models.routing.attributes.Attributes;
+import com.r00ta.telematics.platform.here.models.routing.attributes.SpeedLimitAttribute;
+import com.r00ta.telematics.platform.here.models.routing.tracepoints.Tracepoint;
 
 public class EnrichedGpsLocation {
 

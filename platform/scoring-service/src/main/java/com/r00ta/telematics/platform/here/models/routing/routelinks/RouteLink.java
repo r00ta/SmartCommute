@@ -1,8 +1,8 @@
-package com.r00ta.telematics.platform.here.models.routelinks;
+package com.r00ta.telematics.platform.here.models.routing.routelinks;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.r00ta.telematics.platform.here.models.attributes.Attributes;
+import com.r00ta.telematics.platform.here.models.routing.attributes.Attributes;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RouteLink {

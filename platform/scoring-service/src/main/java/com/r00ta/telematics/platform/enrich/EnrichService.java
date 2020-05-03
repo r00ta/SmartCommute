@@ -12,11 +12,15 @@ import com.r00ta.telematics.platform.enrich.messaging.outgoing.TripKafkaProducer
 import com.r00ta.telematics.platform.enrich.messaging.outgoing.dto.EnrichedTripSummaryDto;
 import com.r00ta.telematics.platform.enrich.messaging.outgoing.dto.RouteAnalyticsDto;
 import com.r00ta.telematics.platform.enrich.models.EnrichedTrip;
+import com.r00ta.telematics.platform.enrich.models.EnrichedTripHeader;
 import com.r00ta.telematics.platform.enrich.models.TripModel;
 import com.r00ta.telematics.platform.enrich.scoring.DriverScoring;
 import com.r00ta.telematics.platform.enrich.storage.IEnrichStorageExtension;
+import com.r00ta.telematics.platform.here.HereConfiguration;
+import com.r00ta.telematics.platform.here.ReverseGeocoding;
 import com.r00ta.telematics.platform.here.RouteMatching;
-import com.r00ta.telematics.platform.here.models.RouteMatchModel;
+import com.r00ta.telematics.platform.here.models.geoaddress.HereGeoAddress;
+import com.r00ta.telematics.platform.here.models.routing.RouteMatchModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +28,9 @@ import org.slf4j.LoggerFactory;
 public class EnrichService implements IEnrichService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TripKafkaConsumer.class);
-    private static final RouteMatching routeMatching = new RouteMatching();
+    private static final RouteMatching routeMatching = new RouteMatching(new HereConfiguration());
+    private static final ReverseGeocoding reverseGeocoding = new ReverseGeocoding(new HereConfiguration());
+
 
     @Inject
     IEnrichStorageExtension storageExtension;
@@ -46,6 +52,17 @@ public class EnrichService implements IEnrichService {
 
         // obd info are not stored!
         EnrichedTrip matchedTrip = EnrichedTrip.fromRouteMatch(trip.userId, trip.tripId, trip.routeId, routeMatch);
+
+        Optional<HereGeoAddress> startAddress = reverseGeocoding.getAddressFromLocation(trip.positions.get(0));
+        if (startAddress.isPresent()){
+            matchedTrip.startLocation = startAddress.get().city;
+        }
+
+        Optional<HereGeoAddress> endAddress = reverseGeocoding.getAddressFromLocation(trip.positions.get(trip.positions.size()-1));
+        if (endAddress.isPresent()){
+            matchedTrip.endLocation = endAddress.get().city;
+        }
+
         LOGGER.info("Enriched trip created");
         DriverScoring.setPointScores(matchedTrip);
 
@@ -73,7 +90,7 @@ public class EnrichService implements IEnrichService {
     }
 
     @Override
-    public List<EnrichedTrip> getTripsByTimeRange(String userId, Long from, Long to) {
-        return storageExtension.getTripsByTimeRange(userId, from, to);
+    public List<EnrichedTripHeader> getTripsHeadersByTimeRange(String userId, Long from, Long to) {
+        return storageExtension.getTripsHeadersByTimeRange(userId, from, to);
     }
 }

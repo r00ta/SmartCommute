@@ -45,7 +45,7 @@
                 app:srcCompat="@mipmap/ic_routes_foreground" />
 
             <TextView
-                android:id="@+id/txt"
+                android:id="@+id/startDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -55,10 +55,10 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/sub_txt"
+                android:id="@+id/startCity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txt"
+                android:layout_below="@+id/startDate"
                 android:layout_marginStart="20dp"
                 android:layout_toRightOf="@+id/img"
                 android:text="Title"
@@ -72,7 +72,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="103dp"
                 android:layout_marginEnd="5dp"
-                android:layout_toEndOf="@+id/txt"
+                android:layout_toEndOf="@+id/startDate"
                 android:padding="12dp"
                 android:text="record" />
 

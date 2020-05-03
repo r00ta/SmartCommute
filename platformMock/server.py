@@ -27,5 +27,5 @@ def storeUser():
     return json.dumps({}),200,{'content-type':'application/json'}
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=1337)
+    app.run(host='0.0.0.0', port=1339)
 

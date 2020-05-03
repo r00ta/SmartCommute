@@ -1,4 +1,4 @@
-package com.r00ta.telematics.platform.here.models.attributes;
+package com.r00ta.telematics.platform.here.models.routing.attributes;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

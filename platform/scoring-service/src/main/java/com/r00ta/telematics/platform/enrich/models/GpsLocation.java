@@ -27,4 +27,9 @@ public class GpsLocation {
 
     public GpsLocation() {
     }
+
+    public GpsLocation(Double latitude, Double longitude){
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }

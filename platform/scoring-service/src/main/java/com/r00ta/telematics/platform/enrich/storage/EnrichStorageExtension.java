@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
 import com.r00ta.telematics.platform.SmartQuery;
 import com.r00ta.telematics.platform.enrich.models.EnrichedTrip;
+import com.r00ta.telematics.platform.enrich.models.EnrichedTripHeader;
 import com.r00ta.telematics.platform.operators.LongOperator;
 import com.r00ta.telematics.platform.operators.StringOperator;
 
@@ -49,8 +50,13 @@ public class EnrichStorageExtension implements IEnrichStorageExtension {
     }
 
     @Override
-    public List<EnrichedTrip> getTripsByTimeRange(String userId, Long from, Long to) {
-        SmartQuery query = new SmartQuery().where("userId", StringOperator.EQUALS, userId).where("startTimestamp", LongOperator.GTE, from).where("startTimestamp", LongOperator.LTE, to).limit(10000);
-        return storageManager.search(query, ENRICHED_TRIP_INDEX, EnrichedTrip.class);
+    public List<EnrichedTripHeader> getTripsHeadersByTimeRange(String userId, Long from, Long to) {
+        SmartQuery query = new SmartQuery()
+                .where("userId", StringOperator.EQUALS, userId)
+                .where("startTimestamp", LongOperator.GTE, from)
+                .where("startTimestamp", LongOperator.LTE, to)
+                .limit(10000)
+                .include(EnrichedTripHeader.getDocumentProperties());
+        return storageManager.search(query, ENRICHED_TRIP_INDEX, EnrichedTripHeader.class);
     }
 }

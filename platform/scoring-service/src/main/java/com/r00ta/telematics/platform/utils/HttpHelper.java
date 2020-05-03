@@ -7,20 +7,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpRequestRetryHandler;
+import org.apache.http.client.ServiceUnavailableRetryStrategy;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HttpHelper {
 
-    private static final CloseableHttpClient httpclient = HttpClients.createDefault();
+    private static final int maxRetries = 10;
+    private static final CloseableHttpClient httpclient = createHttpClient();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpHelper.class);
 
@@ -71,5 +75,30 @@ public class HttpHelper {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static CloseableHttpClient createHttpClient() {
+
+        return HttpClientBuilder.create().setRetryHandler(new HttpRequestRetryHandler() {
+            @Override
+            public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
+                return executionCount <= maxRetries;
+            }
+        }).setServiceUnavailableRetryStrategy(new ServiceUnavailableRetryStrategy() {
+            int waitPeriod = 100;
+
+            @Override
+            public boolean retryRequest(HttpResponse response, int executionCount, HttpContext context) {
+                waitPeriod *= 2;
+                return executionCount <= maxRetries &&
+                        response.getStatusLine().getStatusCode() >= 500; //important!
+            }
+
+            @Override
+            public long getRetryInterval() {
+                return waitPeriod;
+            }
+        })
+                .build();
     }
 }

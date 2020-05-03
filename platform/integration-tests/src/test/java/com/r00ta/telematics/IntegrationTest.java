@@ -21,6 +21,7 @@ import com.r00ta.telematics.models.livetrip.LiveChunksResponse;
 import com.r00ta.telematics.models.livetrip.LiveSessionSummary;
 import com.r00ta.telematics.models.livetrip.TripModel;
 import com.r00ta.telematics.models.scoring.EnrichedTrip;
+import com.r00ta.telematics.models.scoring.EnrichedTripsByTimeRangeResponse;
 import com.r00ta.telematics.models.user.AuthenticationResponse;
 import com.r00ta.telematics.models.user.UserStatistics;
 import com.r00ta.telematics.utils.Gzip;
@@ -189,6 +190,15 @@ public class IntegrationTest {
 
     @Test
     @Order(9)
+    public void retrieveEnrichedTripHeaders() throws InterruptedException {
+        LOGGER.info("Fetching enriched trip.");
+        retryUntilSuccess(
+                () -> given().header("Authorization", "Bearer " + jwtToken).when().get(scoringEndpoint + "/users/" + userId + "/enrichedTrips?from=1587755000000&to=1587765000000")
+                        .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", EnrichedTripsByTimeRangeResponse.class).enrichedTrips.size() >= 1);
+    }
+
+    @Test
+    @Order(10)
     public void retrieveEnrichedTrip() throws InterruptedException {
         LOGGER.info("Fetching enriched trip.");
         retryUntilSuccess(
@@ -197,7 +207,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Order(10)
+    @Order(11)
     public void retrieveUpdatedUserStatistics() throws InterruptedException {
         LOGGER.info("Fetching user statistics.");
         retryUntilSuccess(

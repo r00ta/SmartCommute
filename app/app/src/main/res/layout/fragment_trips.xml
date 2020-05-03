@@ -1,59 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.routes.RoutesFragment">
-
-    <androidx.cardview.widget.CardView
-        android:orientation="vertical"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeToRefresh4Maps"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true"
-        app:cardElevation="5dp"
-        app:contentPadding="10dp">
-
-        <RelativeLayout
-            android:layout_width="387dp"
-            android:layout_height="88dp"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <ImageView
-                android:id="@+id/img"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:contentDescription="@string/app_name"
-                app:srcCompat="@mipmap/ic_cars_foreground" />
-
-            <TextView
-                android:id="@+id/txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_toRightOf="@+id/img"
-                android:text="Title"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/sub_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txt"
-                android:layout_marginStart="20dp"
-                android:layout_toRightOf="@+id/img"
-                android:text="Title"
-                android:textSize="18sp"
-                android:textStyle="italic" />
-
-        </RelativeLayout>
-
-    </androidx.cardview.widget.CardView>
+        android:layout_height="match_parent">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        />
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/recordOccasionalTrip"

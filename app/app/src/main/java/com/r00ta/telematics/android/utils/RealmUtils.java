@@ -10,11 +10,13 @@ import com.r00ta.telematics.android.network.NetworkUpload;
 import com.r00ta.telematics.android.network.models.TripModelDto;
 import com.r00ta.telematics.android.network.queue.QueueTripUpload;
 import com.r00ta.telematics.android.persistence.models.TripModel;
+import com.r00ta.telematics.android.persistence.retrieved.TripHeaders;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Random;
 import java.util.zip.GZIPOutputStream;
 
 import io.realm.Realm;
@@ -35,6 +37,9 @@ public class RealmUtils {
                         TripModelDto modelDto = new TripModelDto(trip);
                         String base64GzippedTrip = java.util.Base64.getEncoder().encodeToString(Gzip.compress(mapper.writeValueAsString(modelDto)));
                         realm.copyToRealmOrUpdate(new QueueTripUpload(trip.tripId, userId, base64GzippedTrip, modelDto.startTimestamp));
+
+                        // TEST adapter
+                        realm.copyToRealmOrUpdate(new TripHeaders((long)new Random().nextInt(), "Saronno", "Saronno", "10.30", "12.30", "04-03-2020", "12Km", 0L));
                         trip.isFinished = true;
                         Log.i("Realm", "Trip " + trip.tripId + " has been enqueued successfully");
                     } catch (IOException e) {
