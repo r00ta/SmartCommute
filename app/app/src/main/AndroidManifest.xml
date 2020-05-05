@@ -36,6 +36,7 @@
         <activity android:name=".LoginActivity" android:theme="@style/AppTheme" android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".SignupActivity" android:theme="@style/AppTheme" android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".RecordingTripActivity" android:theme="@style/AppTheme" android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".ui.trips.TripDetailsActivity" android:theme="@style/AppTheme" android:windowSoftInputMode="stateHidden|adjustResize" />
         <service
             android:name=".LocationUpdatesService"
             android:exported="false"/>

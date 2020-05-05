@@ -8,14 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -33,30 +30,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.r00ta.telematics.android.ClientConfig;
-import com.r00ta.telematics.android.LoginActivity;
 import com.r00ta.telematics.android.R;
 import com.r00ta.telematics.android.RecordingTripActivity;
 import com.r00ta.telematics.android.network.AuthManager;
 import com.r00ta.telematics.android.network.HttpRequestProvider;
-import com.r00ta.telematics.android.network.NetworkUpload;
 import com.r00ta.telematics.android.network.models.EnrichedTripHeader;
 import com.r00ta.telematics.android.network.models.EnrichedTripHeadersResponse;
-import com.r00ta.telematics.android.network.queue.QueueTripUpload;
 import com.r00ta.telematics.android.persistence.retrieved.TripHeaders;
-import com.r00ta.telematics.android.responses.AuthenticationResponse;
 import com.r00ta.telematics.android.utils.DateUtils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
 import io.realm.Sort;
 
 public class TripsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -169,6 +157,11 @@ public class TripsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     private void setUpRecyclerView() {
         RecyclerViewClickListener listener = (view, position) -> { // open view on the trip! TODO
+            Intent intent = new Intent(getActivity(), TripDetailsActivity.class);
+            Bundle b = new Bundle();
+            b.putString("tripId", adapter.getItem(position).tripId); //Your id
+            intent.putExtras(b); //Put your id to your next Intent
+            startActivity(intent);
             Toast.makeText(getContext(), adapter.getItem(position).tripId, Toast.LENGTH_SHORT).show();
         };
 

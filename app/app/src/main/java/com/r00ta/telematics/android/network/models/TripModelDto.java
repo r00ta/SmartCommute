@@ -1,5 +1,6 @@
 package com.r00ta.telematics.android.network.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.r00ta.telematics.android.network.models.GpsLocationDto;
 import com.r00ta.telematics.android.persistence.models.ObdEngineRpmSample;
@@ -8,6 +9,7 @@ import com.r00ta.telematics.android.persistence.models.TripModel;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TripModelDto {
 
     @JsonProperty("routeId")

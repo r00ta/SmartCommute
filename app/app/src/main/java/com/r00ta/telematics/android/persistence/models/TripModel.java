@@ -18,9 +18,9 @@ public class TripModel extends RealmObject {
 
     public boolean isFinished;
 
-    public RealmList<GpsLocation> positions;
+    public RealmList<GpsLocation> positions = new RealmList<>();
 
-    public RealmList<ObdEngineRpmSample> engineRpmSamples;
+    public RealmList<ObdEngineRpmSample> engineRpmSamples = new RealmList<>();
 
     public int transformationFailures;
 
