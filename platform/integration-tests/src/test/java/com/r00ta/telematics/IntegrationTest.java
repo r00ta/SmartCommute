@@ -169,7 +169,7 @@ public class IntegrationTest {
         retryUntilSuccess(
                 () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=3")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).chunks.size() == 0);
-        LOGGER.info("Equals is not live");
+        LOGGER.info("Equals 3");
         retryUntilSuccess(
                 () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=0")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).isLive == false);

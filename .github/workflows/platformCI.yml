@@ -21,7 +21,9 @@ jobs:
       run: ./pipelines/build-docker-images.sh
     - name: Run docker compose
       run: docker-compose -f deploy/docker-compose/docker-compose.yml up -d
-    - name: wait until elasticsearch is responsive
-      run: timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:9200)" != "200" ]]; do sleep 5; done' || false 
+    - name: wait until mongodb is responsive
+      run: timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:27017)" != "200" ]]; do sleep 5; done' || false
+    - name: add test user to mongodb
+      run: mongo admin -u root -p password --host localhost:27017 < ./pipelines/add-mongo-user.js
     - name: Run integration tests
       run: mvn -f platform/pom.xml test
