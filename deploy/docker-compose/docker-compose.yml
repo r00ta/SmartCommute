@@ -44,7 +44,7 @@ services:
     ports:
       - 9200:9200
       - 9201:9201
-  
+
   kibana:
     image: docker.elastic.co/kibana/kibana:7.0.0
     ports:
