@@ -93,6 +93,7 @@ public class LiveApi {
     })
     @Operation(summary = "Gets chunks of a live session.", description = "Gets chunks of a live session.")
     public Response getLiveSession(@PathParam("userId") String userId, @PathParam("sessionId") String sessionId, @QueryParam("lastChunk") Long lastChunk) {
+        String message = null;
         try {
             List<LiveChunkModel> liveSessionChunks = liveService.getLiveSessionChunks(userId, sessionId, lastChunk);
             LiveChunksResponse response = new LiveChunksResponse();
@@ -112,8 +113,8 @@ public class LiveApi {
             return Response.ok(response).build();
         }
         catch (Exception e){
-            e.printStackTrace();
+            message =e.getMessage();
         }
-        return Response.status(500, "something bad").build();
+        return Response.status(500, "{\"message\" : message}").build();
     }
 }
