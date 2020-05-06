@@ -12,6 +12,7 @@ import com.r00ta.telematics.platform.elastic.ElasticQueryFactory;
 import com.r00ta.telematics.platform.model.ElasticSearchResponse;
 import com.r00ta.telematics.platform.model.Hit;
 import com.r00ta.telematics.platform.utils.HttpHelper;
+import org.jboss.resteasy.spi.NotImplementedYetException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +56,11 @@ public class ElasticSearchStorageManager implements IStorageManager {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public <T> boolean update(SmartQuery query, T request, String index) {
+        throw new NotImplementedYetException("No update available atm");
     }
 }
 

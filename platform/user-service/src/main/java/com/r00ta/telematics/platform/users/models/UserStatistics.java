@@ -1,8 +1,11 @@
 package com.r00ta.telematics.platform.users.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.r00ta.telematics.platform.SmartDocument;
 
-public class UserStatistics {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class UserStatistics extends SmartDocument {
 
     @JsonProperty("userId")
     public String userId;

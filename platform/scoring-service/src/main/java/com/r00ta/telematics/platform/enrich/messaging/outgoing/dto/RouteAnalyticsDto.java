@@ -2,11 +2,13 @@ package com.r00ta.telematics.platform.enrich.messaging.outgoing.dto;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.r00ta.telematics.platform.enrich.models.EnrichedGpsLocation;
 import com.r00ta.telematics.platform.enrich.models.EnrichedTrip;
 import com.r00ta.telematics.platform.messaging.model.CloudEventDto;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RouteAnalyticsDto implements CloudEventDto {
 
     @JsonProperty("userId")

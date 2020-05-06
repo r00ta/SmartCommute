@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.r00ta.telematics.platform.SmartDocument;
 import com.r00ta.telematics.platform.users.requests.NewUserRequest;
 
-public class User {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class User extends SmartDocument {
 
     @JsonProperty("userId")
     public String userId;

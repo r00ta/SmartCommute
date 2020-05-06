@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.r00ta.telematics.platform.SmartDocument;
 import com.r00ta.telematics.platform.here.models.routing.RouteMatchModel;
 import com.r00ta.telematics.platform.here.models.routing.attributes.Attributes;
 import com.r00ta.telematics.platform.here.models.routing.routelinks.RouteLink;
@@ -13,7 +15,8 @@ import io.jenetics.jpx.Point;
 import io.jenetics.jpx.WayPoint;
 import io.jenetics.jpx.geom.Geoid;
 
-public class EnrichedTrip {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class EnrichedTrip extends SmartDocument {
 
     @JsonProperty("userId")
     public String userId;

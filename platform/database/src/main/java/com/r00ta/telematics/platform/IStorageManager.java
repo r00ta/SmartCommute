@@ -7,4 +7,6 @@ public interface IStorageManager {
     <T> boolean create(String key, T request, String index);
 
     <T> List<T> search(SmartQuery query, String index, Class<T> type);
+
+    <T> boolean update(SmartQuery query, T request, String index);
 }

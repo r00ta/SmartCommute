@@ -46,4 +46,9 @@ public class RoutesStorageExtension implements IRoutesStorageExtension {
         storageManager.create(route.routeId, route, ROUTES_INDEX);
         return true;
     }
+
+    @Override
+    public boolean updateRoute(Route route) {
+        return storageManager.update(new SmartQuery().where("routeId", StringOperator.EQUALS, route.routeId), route, ROUTES_INDEX);
+    }
 }

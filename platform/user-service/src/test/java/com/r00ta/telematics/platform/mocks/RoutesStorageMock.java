@@ -32,4 +32,9 @@ public class RoutesStorageMock implements IRoutesStorageExtension {
         storage.put(route.routeId, route);
         return true;
     }
+
+    @Override
+    public boolean updateRoute(Route route) {
+        return storeRoute(route);
+    }
 }

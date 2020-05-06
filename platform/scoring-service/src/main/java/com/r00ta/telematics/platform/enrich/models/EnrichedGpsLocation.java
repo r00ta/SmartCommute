@@ -1,10 +1,12 @@
 package com.r00ta.telematics.platform.enrich.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.r00ta.telematics.platform.here.models.routing.attributes.Attributes;
 import com.r00ta.telematics.platform.here.models.routing.attributes.SpeedLimitAttribute;
 import com.r00ta.telematics.platform.here.models.routing.tracepoints.Tracepoint;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EnrichedGpsLocation {
 
     @JsonProperty("longitude")

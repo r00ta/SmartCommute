@@ -153,18 +153,23 @@ public class IntegrationTest {
         given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(chunk1).when().put(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId).then().statusCode(200);
         given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(chunk2).when().put(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId).then().statusCode(200);
 
+        LOGGER.info("Equals 3");
         retryUntilSuccess(
                 () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=0")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).chunks.size() == 3);
+        LOGGER.info("Equals 2");
         retryUntilSuccess(
                 () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=1")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).chunks.size() == 2);
+        LOGGER.info("Equals 1");
         retryUntilSuccess(
                 () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=2")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).chunks.size() == 1);
+        LOGGER.info("Equals 0");
         retryUntilSuccess(
                 () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=3")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).chunks.size() == 0);
+        LOGGER.info("Equals is not live");
         retryUntilSuccess(
                 () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=0")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).isLive == false);

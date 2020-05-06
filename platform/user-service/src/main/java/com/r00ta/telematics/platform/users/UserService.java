@@ -89,7 +89,7 @@ public class UserService implements IUserService {
         UserStatistics userStatistics = userStatisticsOpt.get();
         userStatistics.updateStatistics(enrichedTripSummary);
         LOGGER.info(String.format("User statistic document for user %s has been fetched and locally updated.", enrichedTripSummary.userId));
-        boolean success = storageExtension.storeUserStatisticsDocument(enrichedTripSummary.userId, userStatistics);
+        boolean success = storageExtension.updateUserStatisticsDocument(enrichedTripSummary.userId, userStatistics);
         LOGGER.info(String.format("Score processed with success: %s, for user %s", String.valueOf(success), enrichedTripSummary.userId));
         return success;
     }

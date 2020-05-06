@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
 import com.r00ta.telematics.platform.SmartQuery;
+import com.r00ta.telematics.platform.elastic.OperatorQueryFactory;
 import com.r00ta.telematics.platform.operators.StringOperator;
 import com.r00ta.telematics.platform.users.models.User;
 import com.r00ta.telematics.platform.users.models.UserStatistics;
@@ -56,6 +57,11 @@ public class UsersStorageExtension implements IUsersStorageExtension {
     public boolean storeUserStatisticsDocument(String userId, UserStatistics userStatistics) {
         storageManager.create(userId, userStatistics, USER_STATISTICS_INDEX);
         return true;
+    }
+
+    @Override
+    public boolean updateUserStatisticsDocument(String userId, UserStatistics userStatistics) {
+        return storageManager.update(new SmartQuery().where("userId", StringOperator.EQUALS, userId), userStatistics, USER_STATISTICS_INDEX);
     }
 
     @Override

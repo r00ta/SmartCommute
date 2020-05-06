@@ -16,6 +16,8 @@ public interface IUsersStorageExtension {
 
     boolean storeUserStatisticsDocument(String userId, UserStatistics userStatistics);
 
+    boolean updateUserStatisticsDocument(String userId, UserStatistics userStatistics);
+
     Optional<UserStatistics> getUserOverview(String userId);
 
     List<String> getUserNews(String userId);

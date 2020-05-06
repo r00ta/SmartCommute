@@ -5,8 +5,11 @@
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/live/responses/AvailableLiveSessionsResponse.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/live/messaging/LiveTripKafkaProducer.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/models/TripSummaryModel.java
+/vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/live/storage/codecs/LiveSessionSummaryCodecs.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/models/TripModel.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/utils/Gzip.java
+/vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/live/storage/codecs/LiveSessionCodecsProvider.java
+/vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/storage/codecs/TripsCodecsProvider.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/TripService.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/live/models/GpsLocation.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/responses/TripsHeadersByTimeRangeResponse.java
@@ -15,12 +18,15 @@
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/requests/CompressedNewTripRequest.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/live/responses/LiveChunkResponse.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/requests/NewTripRequest.java
+/vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/storage/codecs/TripSummaryModelCodecs.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/live/models/LiveSessionSummary.java
+/vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/storage/codecs/TripModelCodecs.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/database/StorageManager.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/responses/TripsByTimeRangeResponse.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/storage/ITripStorageExtension.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/live/requests/LiveChunkUpdateRequest.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/ITripService.java
+/vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/live/storage/codecs/LiveChunkModelCodecs.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/live/messaging/dto/LiveModelDto.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/storage/TripStorageExtension.java
 /vagrant/SmartCommute/platform/live-trip-service/src/main/java/com/r00ta/telematics/platform/trips/messaging/dto/TripModelDto.java

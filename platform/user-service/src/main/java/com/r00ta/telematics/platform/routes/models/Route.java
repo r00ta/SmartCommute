@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.r00ta.telematics.platform.SmartDocument;
 import com.r00ta.telematics.platform.routes.requests.NewRouteRequest;
 
-public class Route {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Route extends SmartDocument {
 
     @JsonProperty("routeId")
     public String routeId;

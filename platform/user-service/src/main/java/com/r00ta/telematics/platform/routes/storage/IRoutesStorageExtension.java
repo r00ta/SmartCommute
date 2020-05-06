@@ -13,6 +13,8 @@ public interface IRoutesStorageExtension {
 
     boolean storeRoute(Route route);
 
+    boolean updateRoute(Route route);
+
     //    boolean storeEnrichedTrip(EnrichedTrip trip);
 //
 //    EnrichedTrip getTripById(String tripId);

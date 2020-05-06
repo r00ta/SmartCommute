@@ -76,8 +76,8 @@ public class RouteService implements IRouteService {
 
         removeDriverFromPassengerRoute(passengerRoute, userRoute.userId, days); // delete from all days
 
-        boolean driverSuccess = storeRoute(userRoute);
-        boolean passengerSuccess = storeRoute(passengerRoute);
+        boolean driverSuccess = storageExtension.updateRoute(userRoute);
+        boolean passengerSuccess = storageExtension.updateRoute(passengerRoute);
 
         if (!driverSuccess || !passengerSuccess) {
             LOGGER.error("something went wrong when trying to update driver and passenger relation - delete passenger");
@@ -115,9 +115,9 @@ public class RouteService implements IRouteService {
 
         removePassengerFromDriverRoute(driverRoute, userId, days); // delete from all days
 
-        boolean passengerSuccess = storeRoute(passengerRoute);
+        boolean passengerSuccess = storageExtension.updateRoute(passengerRoute);
 
-        boolean driverSuccess = storeRoute(driverRoute);
+        boolean driverSuccess = storageExtension.updateRoute(driverRoute);
 
         if (!driverSuccess || !passengerSuccess) {
             LOGGER.error("something went wrong when trying to update driver and passenger relation - delete passenger");

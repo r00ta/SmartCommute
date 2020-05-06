@@ -1,6 +1,8 @@
+com/r00ta/telematics/platform/trips/storage/codecs/TripModelCodecs.class
 com/r00ta/telematics/platform/trips/models/TripModel.class
 com/r00ta/telematics/platform/live/responses/LiveChunkResponse.class
 com/r00ta/telematics/platform/trips/messaging/dto/TripModelDto.class
+com/r00ta/telematics/platform/trips/storage/codecs/TripsCodecsProvider.class
 com/r00ta/telematics/platform/trips/storage/ITripStorageExtension.class
 com/r00ta/telematics/platform/trips/requests/NewTripRequest.class
 com/r00ta/telematics/platform/trips/responses/TripsHeadersByTimeRangeResponse.class
@@ -20,11 +22,15 @@ com/r00ta/telematics/platform/live/models/MetaInformationModel.class
 com/r00ta/telematics/platform/live/storage/LiveStorageExtension.class
 com/r00ta/telematics/platform/live/requests/LiveChunkUpdateRequest.class
 com/r00ta/telematics/platform/live/responses/AvailableLiveSessionsResponse.class
+com/r00ta/telematics/platform/live/storage/codecs/LiveSessionCodecsProvider.class
 com/r00ta/telematics/platform/live/responses/LiveChunksResponse.class
 com/r00ta/telematics/platform/trips/TripService.class
+com/r00ta/telematics/platform/trips/storage/codecs/TripSummaryModelCodecs.class
 com/r00ta/telematics/platform/trips/models/TripSummaryModel.class
+com/r00ta/telematics/platform/live/storage/codecs/LiveSessionSummaryCodecs.class
 com/r00ta/telematics/platform/live/api/LiveApi.class
 com/r00ta/telematics/platform/live/ILiveService.class
+com/r00ta/telematics/platform/live/storage/codecs/LiveChunkModelCodecs.class
 com/r00ta/telematics/platform/trips/models/ObdEngineRpmSample.class
 com/r00ta/telematics/platform/live/storage/ILiveStorageExtension.class
 com/r00ta/telematics/platform/trips/requests/CompressedNewTripRequest.class
