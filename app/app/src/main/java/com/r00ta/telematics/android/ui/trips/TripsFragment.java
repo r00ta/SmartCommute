@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -22,6 +21,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -34,6 +34,7 @@ import com.r00ta.telematics.android.R;
 import com.r00ta.telematics.android.RecordingTripActivity;
 import com.r00ta.telematics.android.network.AuthManager;
 import com.r00ta.telematics.android.network.HttpRequestProvider;
+import com.r00ta.telematics.android.network.NetworkUpload;
 import com.r00ta.telematics.android.network.models.EnrichedTripHeader;
 import com.r00ta.telematics.android.network.models.EnrichedTripHeadersResponse;
 import com.r00ta.telematics.android.persistence.retrieved.TripHeaders;
@@ -60,7 +61,7 @@ public class TripsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         realm = Realm.getDefaultInstance();
         tripsViewModel =
                 ViewModelProviders.of(this).get(TripsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_trips, container, false);
+        View root = inflater.inflate(R.layout.fragment_routes, container, false);
         final FloatingActionButton recordTripBtn = (FloatingActionButton) root.findViewById(R.id.recordOccasionalTrip);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipeToRefresh4Maps);
@@ -91,6 +92,7 @@ public class TripsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onRefresh() {
+        NetworkUpload.getInstance(getContext()).uploadAll();
         fetchTripsAndUpdateUI();
         //        Toast.makeText(getContext(), "Refresh", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {

@@ -4,20 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.android.network.NetworkUpload;
 import com.r00ta.telematics.android.network.models.TripModelDto;
 import com.r00ta.telematics.android.network.queue.QueueTripUpload;
 import com.r00ta.telematics.android.persistence.models.TripModel;
-import com.r00ta.telematics.android.persistence.retrieved.TripHeaders;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Random;
-import java.util.zip.GZIPOutputStream;
 
 import io.realm.Realm;
 import io.realm.RealmResults;

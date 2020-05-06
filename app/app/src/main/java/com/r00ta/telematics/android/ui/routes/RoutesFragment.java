@@ -4,12 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.r00ta.telematics.android.R;
@@ -22,7 +19,7 @@ public class RoutesFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         routesViewModel =
                 ViewModelProviders.of(this).get(RoutesViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_routes, container, false);
+        View root = inflater.inflate(R.layout.fragment_trips, container, false);
 //        final TextView textView = root.findViewById(R.id.text_routes);
 //        routesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
 //            @Override

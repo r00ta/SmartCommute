@@ -1,9 +1,5 @@
 package com.r00ta.telematics.android.persistence.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;

@@ -1,5 +1,6 @@
 package com.r00ta.telematics.android;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -32,11 +33,11 @@ import io.realm.Realm;
 /**
  * A bound and started service that is promoted to a foreground service when location updates have
  * been requested and all clients unbind.
- *
+ * <p>
  * For apps running in the background on "O" devices, location is computed only once every 10
  * minutes and delivered batched every 30 minutes. This restriction applies even to apps
  * targeting "N" or lower which are run on "O" devices.
- *
+ * <p>
  * This sample show how to use a long-running service for location updates. When an activity is
  * bound to this service, frequent location updates are permitted. When the activity is removed
  * from the foreground, the service promotes itself to a foreground service, and location updates
@@ -148,7 +149,7 @@ public class LocationUpdatesService extends Service {
             // Create the channel for the notification
             NotificationChannel mChannel =
                     new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
-
+            startForeground(NOTIFICATION_ID, new Notification());
             // Set the Notification Channel for the Notification Manager.
             mNotificationManager.createNotificationChannel(mChannel);
         }
@@ -215,6 +216,9 @@ public class LocationUpdatesService extends Service {
     @Override
     public void onDestroy() {
         Log.i(TAG, "On destroy");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            stopForeground(true); //true will remove notification
+        }
         mServiceHandler.removeCallbacksAndMessages(null);
     }
 
@@ -235,7 +239,12 @@ public class LocationUpdatesService extends Service {
         });
 
         Utils.setRequestingLocationUpdates(this, true);
-        startService(new Intent(getApplicationContext(), LocationUpdatesService.class));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            startService(new Intent(getApplicationContext(), LocationUpdatesService.class));
+        }else{
+            startForegroundService(new Intent(getApplicationContext(), LocationUpdatesService.class));
+        }
+
         try {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest,
                     mLocationCallback, Looper.myLooper());
@@ -304,7 +313,6 @@ public class LocationUpdatesService extends Service {
         });
 
         // persist.
-
 
 
         // Notify anyone listening for broadcasts about the new location.

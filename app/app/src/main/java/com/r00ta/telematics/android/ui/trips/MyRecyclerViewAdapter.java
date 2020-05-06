@@ -1,23 +1,18 @@
 package com.r00ta.telematics.android.ui.trips;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.r00ta.telematics.android.R;
-import com.r00ta.telematics.android.RecordingTripActivity;
 import com.r00ta.telematics.android.persistence.retrieved.TripHeaders;
 import com.r00ta.telematics.android.utils.RealmRecyclerViewAdapter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import io.realm.OrderedRealmCollection;
 

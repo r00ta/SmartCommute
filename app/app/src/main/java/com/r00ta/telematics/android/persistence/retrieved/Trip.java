@@ -1,11 +1,7 @@
 package com.r00ta.telematics.android.persistence.retrieved;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.r00ta.telematics.android.network.models.EnrichedGpsLocation;
 import com.r00ta.telematics.android.network.models.EnrichedTripResponse;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
