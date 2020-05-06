@@ -154,6 +154,7 @@ public class IntegrationTest {
         given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(chunk2).when().put(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId).then().statusCode(200);
 
         LOGGER.info("Equals 3");
+        given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=0").prettyPrint();
         retryUntilSuccess(
                 () -> given().header("Authorization", "Bearer " + jwtToken).when().get(liveTripEndpoint + "/users/" + userId + "/liveSessions/" + sessionId + "?lastChunk=0")
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", LiveChunksResponse.class).chunks.size() == 3);
