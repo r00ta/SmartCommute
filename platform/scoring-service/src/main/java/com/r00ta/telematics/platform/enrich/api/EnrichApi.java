@@ -75,7 +75,7 @@ public class EnrichApi {
     })
     @Operation(summary = "Stores a new enriched trip (testing).", description = "Stores a new enriched trip (testing).")
     public Response storeNewTrip(@PathParam("userId") String userId, TripModel trip) {
-        EnrichedTrip enrichedTrip = enrichService.storeTrip(userId, trip);
+        EnrichedTrip enrichedTrip = enrichService.processTrip(trip);
         return Response.ok(enrichedTrip).build();
     }
 }

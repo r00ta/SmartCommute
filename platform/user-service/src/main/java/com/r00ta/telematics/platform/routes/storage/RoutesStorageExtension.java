@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
 import com.r00ta.telematics.platform.SmartQuery;
@@ -44,12 +43,7 @@ public class RoutesStorageExtension implements IRoutesStorageExtension {
 
     @Override
     public boolean storeRoute(Route route) {
-        try {
-            storageManager.create(route.routeId, objectMapper.writeValueAsString(route), ROUTES_INDEX);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return false;
-        }
+        storageManager.create(route.routeId, route, ROUTES_INDEX);
         return true;
     }
 }

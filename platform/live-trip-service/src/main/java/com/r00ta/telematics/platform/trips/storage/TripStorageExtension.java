@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
 import com.r00ta.telematics.platform.SmartQuery;
@@ -34,13 +33,7 @@ public class TripStorageExtension implements ITripStorageExtension {
 
     @Override
     public boolean storeTripHeader(String userId, TripSummaryModel summary) {
-        try {
-            storageManager.create(summary.tripId, objectMapper.writeValueAsString(summary), TRIPHEADERSINDEX);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        return storageManager.create(summary.tripId, summary, TRIPHEADERSINDEX);
     }
 
     @Override
@@ -58,13 +51,7 @@ public class TripStorageExtension implements ITripStorageExtension {
 
     @Override
     public boolean storeTrip(String userId, TripModel model) {
-        try {
-            storageManager.create(model.tripId, objectMapper.writeValueAsString(model), TRIPINDEX);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        return storageManager.create(model.tripId, model, TRIPINDEX);
     }
 
     @Override

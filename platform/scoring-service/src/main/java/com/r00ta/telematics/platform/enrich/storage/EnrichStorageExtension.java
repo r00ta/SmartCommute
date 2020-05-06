@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
 import com.r00ta.telematics.platform.SmartQuery;
@@ -33,13 +32,7 @@ public class EnrichStorageExtension implements IEnrichStorageExtension {
 
     @Override
     public boolean storeEnrichedTrip(EnrichedTrip trip) {
-        try {
-            storageManager.create(trip.tripId, objectMapper.writeValueAsString(trip), ENRICHED_TRIP_INDEX);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        return storageManager.create(trip.tripId, trip, ENRICHED_TRIP_INDEX);
     }
 
     @Override

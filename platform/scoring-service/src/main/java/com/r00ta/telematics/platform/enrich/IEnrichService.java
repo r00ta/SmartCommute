@@ -11,8 +11,6 @@ public interface IEnrichService {
 
     EnrichedTrip processTrip(TripModel trip);
 
-    EnrichedTrip storeTrip(String userId, TripModel trip);
-
     Optional<EnrichedTrip> getTrip(String userId, String tripId);
 
     List<EnrichedTripHeader> getTripsHeadersByTimeRange(String userId, Long from, Long to);

@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
 import com.r00ta.telematics.platform.SmartQuery;
@@ -35,12 +34,7 @@ public class UsersStorageExtension implements IUsersStorageExtension {
 
     @Override
     public boolean createUser(User user) {
-        try {
-            storageManager.create(user.userId, objectMapper.writeValueAsString(user), USER_INDEX);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return false;
-        }
+        storageManager.create(user.userId, user, USER_INDEX);
         return true;
     }
 
@@ -60,12 +54,7 @@ public class UsersStorageExtension implements IUsersStorageExtension {
 
     @Override
     public boolean storeUserStatisticsDocument(String userId, UserStatistics userStatistics) {
-        try {
-            storageManager.create(userId, objectMapper.writeValueAsString(userStatistics), USER_STATISTICS_INDEX);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return false;
-        }
+        storageManager.create(userId, userStatistics, USER_STATISTICS_INDEX);
         return true;
     }
 
@@ -84,12 +73,6 @@ public class UsersStorageExtension implements IUsersStorageExtension {
 
     @Override
     public boolean storeNews(String userId, String news) {
-        try {
-            storageManager.create(userId, objectMapper.writeValueAsString(news), USER_NEWS_INDEX);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        return storageManager.create(userId, news, USER_NEWS_INDEX);
     }
 }

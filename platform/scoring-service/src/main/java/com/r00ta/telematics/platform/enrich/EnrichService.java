@@ -43,9 +43,13 @@ public class EnrichService implements IEnrichService {
 
     @Override
     public EnrichedTrip processTrip(TripModel trip) {
+        if (trip.positions == null || trip.positions.isEmpty()){
+            throw new IllegalArgumentException("Trip can't have empty gps positions.");
+        }
+
         RouteMatchModel routeMatch = routeMatching.calculateRouteMatching(trip);
         LOGGER.info("Route match calculated");
-        if (routeMatch.routeLinks.size() == 0) {
+        if (routeMatch.routeLinks.size() == 0 || routeMatch.tracePoints == null || routeMatch.tracePoints.isEmpty()) {
             LOGGER.warn("Routematch without any match, the trip is discarded.");
             return null;
         }
@@ -76,12 +80,6 @@ public class EnrichService implements IEnrichService {
         routeAnalyticsKafkaProducer.sendEventAsync(new RouteAnalyticsDto(matchedTrip));
 
         return matchedTrip;
-    }
-
-    @Override
-    public EnrichedTrip storeTrip(String userId, TripModel trip) {
-        EnrichedTrip enrichedTrip = processTrip(trip);
-        return enrichedTrip;
     }
 
     @Override

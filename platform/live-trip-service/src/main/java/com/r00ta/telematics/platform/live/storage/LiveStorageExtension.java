@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
 import com.r00ta.telematics.platform.SmartQuery;
@@ -34,21 +33,11 @@ public class LiveStorageExtension implements ILiveStorageExtension {
 
     @Override
     public boolean createNewLiveSession(LiveSessionSummary sessionSummary) {
-        try {
-            storageManager.create(sessionSummary.sessionId, objectMapper.writeValueAsString(sessionSummary), LIVESUMMARYINDEX);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return true;
+        return storageManager.create(sessionSummary.sessionId, sessionSummary, LIVESUMMARYINDEX);
     }
 
     @Override
     public Optional<LiveSessionSummary> getLiveSessionSummary(String sessionId) {
-        String request = "{ \n" +
-                "    \"query\": {\n" +
-                "        \"match\": { \"sessionId\" : \"" + sessionId + "\"}\n" +
-                "    }\n" +
-                "}\n";
         SmartQuery query = new SmartQuery().where("sessionId", StringOperator.EQUALS, sessionId);
         List<LiveSessionSummary> summary = storageManager.search(query, LIVESUMMARYINDEX, LiveSessionSummary.class);
         return summary.isEmpty() ? null : Optional.of(summary.get(0));
@@ -64,13 +53,7 @@ public class LiveStorageExtension implements ILiveStorageExtension {
         LiveSessionSummary summary = summaryOpt.get();
         summary.isLive = isLive;
 
-        try {
-            storageManager.create(sessionId, objectMapper.writeValueAsString(summary), LIVESUMMARYINDEX);
-            return true;
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return false;
+        return storageManager.create(sessionId, summary, LIVESUMMARYINDEX);
     }
 
     @Override
@@ -87,12 +70,7 @@ public class LiveStorageExtension implements ILiveStorageExtension {
 
     @Override
     public boolean updateLiveSession(String sessionId, LiveChunkModel chunk) {
-        try {
-            String request = objectMapper.writeValueAsString(chunk);
-            storageManager.create(sessionId + "-" + chunk.chunkSeqNumber, request, LIVECHUNKSINDEX);
-        } catch (JsonProcessingException ex) {
-            ex.printStackTrace();
-        }
+        storageManager.create(sessionId + "-" + chunk.chunkSeqNumber, chunk, LIVECHUNKSINDEX);
         return true;
     }
 }
