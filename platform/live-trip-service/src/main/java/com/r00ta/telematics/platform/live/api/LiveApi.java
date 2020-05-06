@@ -93,21 +93,27 @@ public class LiveApi {
     })
     @Operation(summary = "Gets chunks of a live session.", description = "Gets chunks of a live session.")
     public Response getLiveSession(@PathParam("userId") String userId, @PathParam("sessionId") String sessionId, @QueryParam("lastChunk") Long lastChunk) {
-        List<LiveChunkModel> liveSessionChunks = liveService.getLiveSessionChunks(userId, sessionId, lastChunk);
-        LiveChunksResponse response = new LiveChunksResponse();
-        response.sessionId = sessionId;
-        response.userId = userId;
-        if (liveSessionChunks != null && liveSessionChunks.size() != 0) {
-            response.isLive = !liveSessionChunks.stream().anyMatch(x -> x.isLastChunk);
-            response.chunks = liveSessionChunks.stream().map(x -> new LiveChunkResponse(x.chunkSeqNumber, x.positions)).collect(Collectors.toList());
-        } else {
-            Optional<LiveSessionSummary> summary = liveService.getLiveSessionSummary(sessionId);
-            if (!summary.isPresent()) {
-                return Response.status(400, "Live session summary not found.").build();
+        try {
+            List<LiveChunkModel> liveSessionChunks = liveService.getLiveSessionChunks(userId, sessionId, lastChunk);
+            LiveChunksResponse response = new LiveChunksResponse();
+            response.sessionId = sessionId;
+            response.userId = userId;
+            if (liveSessionChunks != null && liveSessionChunks.size() != 0) {
+                response.isLive = !liveSessionChunks.stream().anyMatch(x -> x.isLastChunk);
+                response.chunks = liveSessionChunks.stream().map(x -> new LiveChunkResponse(x.chunkSeqNumber, x.positions)).collect(Collectors.toList());
+            } else {
+                Optional<LiveSessionSummary> summary = liveService.getLiveSessionSummary(sessionId);
+                if (!summary.isPresent()) {
+                    return Response.status(400, "Live session summary not found.").build();
+                }
+                response.isLive = summary.get().isLive;
+                response.chunks = new ArrayList<>();
             }
-            response.isLive = summary.get().isLive;
-            response.chunks = new ArrayList<>();
+            return Response.ok(response).build();
         }
-        return Response.ok(response).build();
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return Response.status(500, "something bad").build();
     }
 }
