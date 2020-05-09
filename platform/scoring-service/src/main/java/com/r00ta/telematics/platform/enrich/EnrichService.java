@@ -78,7 +78,7 @@ public class EnrichService implements IEnrichService {
 
         LOGGER.info(String.format("New trip %s going to be stored", trip.tripId));
         boolean success = storageExtension.storeEnrichedTrip(matchedTrip);
-        LOGGER.info(String.format("New trip %s stored: ", trip.tripId, String.valueOf(success)));
+        LOGGER.info(String.format("New trip %s stored: %s", trip.tripId, success));
 
         kafkaScoringProducer.sendEventAsync(new EnrichedTripSummaryDto(matchedTrip));
         LOGGER.info(String.format("New trip %s sent to user service for statistics.", trip.tripId));
