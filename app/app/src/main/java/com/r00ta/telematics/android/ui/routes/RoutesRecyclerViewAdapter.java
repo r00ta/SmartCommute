@@ -1,5 +1,6 @@
 package com.r00ta.telematics.android.ui.routes;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,6 @@ class RoutesRecyclerViewAdapter extends RealmRecyclerViewAdapter<RouteHeader, Ro
         holder.routeStartLabel.setText(obj.startPositionUserLabel);
         holder.routeToLabel.setText(obj.endPositionUserLabel);
         holder.routeDaysLabel.setText(String.join(", ", obj.days.stream().map(x -> x.toString()).collect(Collectors.toList())));
-
 //        if (inDeletionMode) {
 //            holder.subTitle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //                @Override
