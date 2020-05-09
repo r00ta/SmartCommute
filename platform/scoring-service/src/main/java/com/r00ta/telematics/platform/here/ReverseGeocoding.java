@@ -24,7 +24,6 @@ public class ReverseGeocoding {
     public Optional<HereGeoAddress> getAddressFromLocation(GpsLocation location) {
         String response = httpHelper.doGet(String.format("reversegeocode.json?apiKey=%s&prox=%s,%s,%s&maxresults=1&mode=retrieveAddress", configuration.apiKey, location.latitude, location.longitude, 250));
         try {
-            System.out.println(response);
             ReverseGeocodeTopResponse topResponse = MAPPER.readValue(response, ReverseGeocodeTopResponse.class);
             if (topResponse.response.views.isEmpty() || topResponse.response.views.get(0).results.isEmpty()){
                 return null;

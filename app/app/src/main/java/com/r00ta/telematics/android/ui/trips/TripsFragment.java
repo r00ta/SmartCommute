@@ -111,7 +111,7 @@ public class TripsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     private void retrieveTrips(Long from, Long to){
-        String url = String.format( ClientConfig.BASE_HOST + ":1338/users/%s/enrichedTrips", AuthManager.getInstance(getContext()).getUserId());
+        String url = String.format( ClientConfig.BASE_HOST + ":1338/users/%s/enrichedTrips?from=%d&to=%d", AuthManager.getInstance(getContext()).getUserId(), from, to);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -131,11 +131,10 @@ public class TripsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        Log.i("Retrieve trip error", error.getMessage());
+                        Log.i("Retrieve trip ", "FAILED");
                         if (error.networkResponse != null){
                             Log.i("Retrieve trip ", String.valueOf(error.networkResponse.statusCode));
                         }
-                        Log.i("Retrieve trip ", "FAILED");
                     }
                 }) {
             @Override

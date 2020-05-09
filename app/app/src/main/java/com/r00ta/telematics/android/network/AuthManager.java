@@ -125,7 +125,7 @@ public class AuthManager {
 
     private void updateInternalJwtToken(){
         SharedPreferences smartCommutePreferences = ctx.getSharedPreferences("smartCommutePreferences", Context.MODE_PRIVATE);
-        jwtToken = smartCommutePreferences.getString("jwtToken", "0");
+        jwtToken = smartCommutePreferences.getString("jwtBearer", "0");
         userId = smartCommutePreferences.getString("userId", "0");
     }
 }
