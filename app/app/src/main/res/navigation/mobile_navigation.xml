@@ -15,7 +15,7 @@
         android:id="@+id/navigation_routes"
         android:name="com.r00ta.telematics.android.ui.routes.RoutesFragment"
         android:label="@string/title_routes"
-        tools:layout="@layout/fragment_trips" />
+        tools:layout="@layout/fragment_routes" />
 
     <fragment
         android:id="@+id/navigation_trips"

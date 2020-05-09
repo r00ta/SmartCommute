@@ -1,4 +1,4 @@
-package com.r00ta.telematics.android.ui.trips;
+package com.r00ta.telematics.android.ui;
 
 
 import android.view.View;

@@ -25,6 +25,7 @@ import com.r00ta.telematics.platform.routes.models.RouteHeader;
 import com.r00ta.telematics.platform.routes.requests.NewRouteRequest;
 import com.r00ta.telematics.platform.routes.responses.DayRidePassengersResponse;
 import com.r00ta.telematics.platform.routes.responses.NewRouteResponse;
+import com.r00ta.telematics.platform.routes.responses.RouteHeadersResponse;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
@@ -46,7 +47,7 @@ public class RouteApi {
     @Produces(MediaType.APPLICATION_JSON)
     // TODO REPLACE WITH PROPER RESPONSE
     @APIResponses(value = {
-            @APIResponse(description = "Gets user's routes.", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = RouteHeader.class))),
+            @APIResponse(description = "Gets user's routes.", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = RouteHeadersResponse.class))),
             @APIResponse(description = "Bad request.", responseCode = "500", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     })
     @RolesAllowed({"Admin", "Tester", "User"})
@@ -59,7 +60,7 @@ public class RouteApi {
 
         List<Route> userRoutes = routeService.getUserRoutes(userId);
         List<RouteHeader> userRoutesHeaders = userRoutes.stream().map(x -> new RouteHeader(x)).collect(Collectors.toList());
-        return Response.ok(userRoutesHeaders).build();
+        return Response.ok(new RouteHeadersResponse(userRoutesHeaders)).build();
     }
 
     @POST

@@ -1,9 +1,9 @@
-package com.r00ta.telematics.android.persistence.retrieved;
+package com.r00ta.telematics.android.persistence.retrieved.trips;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class TripHeaders extends RealmObject {
+public class TripHeader extends RealmObject {
     @PrimaryKey
     public Long id;
 
@@ -16,9 +16,9 @@ public class TripHeaders extends RealmObject {
     public String tripId;
     public Long startTimestamp;
 
-    public TripHeaders(){}
+    public TripHeader(){}
 
-    public TripHeaders(Long id, String startLocation, String endLocation, String startDate, String endDate, String tripDate, String distance, String tripId, Long startTimestamp){
+    public TripHeader(Long id, String startLocation, String endLocation, String startDate, String endDate, String tripDate, String distance, String tripId, Long startTimestamp){
         this.id = id;
         this.startLocation = startLocation;
         this.endLocation = endLocation;

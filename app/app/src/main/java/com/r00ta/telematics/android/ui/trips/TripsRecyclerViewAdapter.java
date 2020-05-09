@@ -8,7 +8,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.r00ta.telematics.android.R;
-import com.r00ta.telematics.android.persistence.retrieved.TripHeaders;
+import com.r00ta.telematics.android.persistence.retrieved.trips.TripHeader;
+import com.r00ta.telematics.android.ui.RecyclerViewClickListener;
 import com.r00ta.telematics.android.utils.RealmRecyclerViewAdapter;
 
 import java.util.HashSet;
@@ -16,13 +17,13 @@ import java.util.Set;
 
 import io.realm.OrderedRealmCollection;
 
-class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<TripHeaders, MyRecyclerViewAdapter.MyViewHolder> {
+class TripsRecyclerViewAdapter extends RealmRecyclerViewAdapter<TripHeader, TripsRecyclerViewAdapter.MyViewHolder> {
 
     private boolean inDeletionMode = false;
     private Set<Integer> countersToDelete = new HashSet<>();
     private RecyclerViewClickListener mListener;
 
-    MyRecyclerViewAdapter(OrderedRealmCollection<TripHeaders> data, RecyclerViewClickListener listener) {
+    TripsRecyclerViewAdapter(OrderedRealmCollection<TripHeader> data, RecyclerViewClickListener listener) {
         super(data, true);
         mListener = listener;
         // Only set this if the model class has a primary key that is also a integer or long.
@@ -52,7 +53,7 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<TripHeaders, MyRecy
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        final TripHeaders obj = getItem(position);
+        final TripHeader obj = getItem(position);
         holder.data = obj;
         final long itemId = obj.id;
         //noinspection ConstantConditions
@@ -98,7 +99,7 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<TripHeaders, MyRecy
         TextView tripDate;
         TextView distance;
 
-        public TripHeaders data;
+        public TripHeader data;
 
         MyViewHolder(View view, RecyclerViewClickListener listener) {
             super(view);
@@ -109,7 +110,7 @@ class MyRecyclerViewAdapter extends RealmRecyclerViewAdapter<TripHeaders, MyRecy
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
 
-            startDate = view.findViewById(R.id.startDate);
+            startDate = view.findViewById(R.id.routeStartLabel);
             startLocation = view.findViewById(R.id.startCity);
 
             endDate = view.findViewById(R.id.endDate);

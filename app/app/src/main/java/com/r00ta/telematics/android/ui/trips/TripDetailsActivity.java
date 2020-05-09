@@ -28,10 +28,10 @@ import com.r00ta.telematics.android.ClientConfig;
 import com.r00ta.telematics.android.R;
 import com.r00ta.telematics.android.network.AuthManager;
 import com.r00ta.telematics.android.network.HttpRequestProvider;
-import com.r00ta.telematics.android.network.models.EnrichedGpsLocation;
-import com.r00ta.telematics.android.network.models.EnrichedTripResponse;
-import com.r00ta.telematics.android.persistence.retrieved.EnrichedGpsPosition;
-import com.r00ta.telematics.android.persistence.retrieved.Trip;
+import com.r00ta.telematics.android.network.models.trips.EnrichedGpsLocation;
+import com.r00ta.telematics.android.network.models.trips.EnrichedTripResponse;
+import com.r00ta.telematics.android.persistence.retrieved.trips.EnrichedGpsPosition;
+import com.r00ta.telematics.android.persistence.retrieved.trips.Trip;
 
 import org.json.JSONObject;
 

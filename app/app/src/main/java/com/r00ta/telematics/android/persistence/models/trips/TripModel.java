@@ -1,4 +1,4 @@
-package com.r00ta.telematics.android.persistence.models;
+package com.r00ta.telematics.android.persistence.models.trips;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;

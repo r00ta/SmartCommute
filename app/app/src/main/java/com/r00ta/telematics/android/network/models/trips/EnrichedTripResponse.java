@@ -1,12 +1,24 @@
-package com.r00ta.telematics.android.network.models;
+package com.r00ta.telematics.android.network.models.trips;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EnrichedTripHeader {
+public class EnrichedTripResponse {
+
+    @JsonProperty("userId")
+    public String userId;
+
     @JsonProperty("tripId")
     public String tripId;
+
+    @JsonProperty("routeId")
+    public String routeId;
+
+    @JsonProperty("positions")
+    public List<EnrichedGpsLocation> positions;
 
     @JsonProperty("startTimestamp")
     public Long startTimestamp;

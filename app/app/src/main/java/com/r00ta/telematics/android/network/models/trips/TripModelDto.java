@@ -1,9 +1,9 @@
-package com.r00ta.telematics.android.network.models;
+package com.r00ta.telematics.android.network.models.trips;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.r00ta.telematics.android.persistence.models.ObdEngineRpmSample;
-import com.r00ta.telematics.android.persistence.models.TripModel;
+import com.r00ta.telematics.android.persistence.models.trips.ObdEngineRpmSample;
+import com.r00ta.telematics.android.persistence.models.trips.TripModel;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -18,4 +18,8 @@
 
     <string name="location_updated">Location Updated: %1$s</string>
     <string name="title">Title</string>
+    <string name="days">Days: </string>
+    <string name="from">From: </string>
+    <string name="to">To: </string>
+
 </resources>

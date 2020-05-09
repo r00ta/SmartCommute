@@ -6,9 +6,9 @@ import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.android.network.NetworkUpload;
-import com.r00ta.telematics.android.network.models.TripModelDto;
+import com.r00ta.telematics.android.network.models.trips.TripModelDto;
 import com.r00ta.telematics.android.network.queue.QueueTripUpload;
-import com.r00ta.telematics.android.persistence.models.TripModel;
+import com.r00ta.telematics.android.persistence.models.trips.TripModel;
 
 import java.io.IOException;
 
