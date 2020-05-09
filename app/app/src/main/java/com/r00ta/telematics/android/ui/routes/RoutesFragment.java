@@ -59,7 +59,7 @@ public class RoutesFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
+        realm = Realm.getDefaultInstance();
         View root = inflater.inflate(R.layout.fragment_routes, container, false);
         final FloatingActionButton recordTripBtn = (FloatingActionButton) root.findViewById(R.id.addNewRouteBtn);
 
@@ -68,7 +68,7 @@ public class RoutesFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
         recyclerView = (RecyclerView) root.findViewById(R.id.routes_recycle_view);
 
-//        setUpRecyclerView();
+        setUpRecyclerView();
 
 //        recordTripBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -86,7 +86,6 @@ public class RoutesFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     @Override
     public void onRefresh() {
-        NetworkUpload.getInstance(getContext()).uploadAll();
         fetchRoutesAndUpdateUI();
         //        Toast.makeText(getContext(), "Refresh", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
@@ -111,6 +110,7 @@ public class RoutesFragment extends Fragment implements SwipeRefreshLayout.OnRef
                         Log.i("Fetched routes", "ok");
                         try {
                             RouteHeadersResponse headers = new ObjectMapper().readValue(response.toString(), RouteHeadersResponse.class);
+                            Log.i("Fetched routes", String.valueOf(headers.routeHeaders.size()));
                             new UpdateRoutesHeaderCollection(headers).execute();
                         } catch (JsonProcessingException e) {
                             e.printStackTrace();
@@ -133,7 +133,7 @@ public class RoutesFragment extends Fragment implements SwipeRefreshLayout.OnRef
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json");
-                //headers.put("Authorization", "Bearer " + AuthManager.getInstance(ctx).getJwtToken());
+                headers.put("Authorization", "Bearer " + AuthManager.getInstance(getContext()).getJwtToken());
                 return headers;
             }
         };
@@ -147,21 +147,22 @@ public class RoutesFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     private void setUpRecyclerView() {
         RecyclerViewClickListener listener = (view, position) -> { // open view on the trip! TODO
-            Intent intent = new Intent(getActivity(), TripDetailsActivity.class);
-            Bundle b = new Bundle();
-            b.putString("routeId", adapter.getItem(position).routeId); //Your id
-            intent.putExtras(b); //Put your id to your next Intent
-            startActivity(intent);
-            Toast.makeText(getContext(), adapter.getItem(position).routeId, Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(getActivity(), TripDetailsActivity.class);
+//            Bundle b = new Bundle();
+//            b.putString("routeId", adapter.getItem(position).routeId); //Your id
+//            intent.putExtras(b); //Put your id to your next Intent
+//            startActivity(intent);
+//            Toast.makeText(getContext(), adapter.getItem(position).routeId, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "ITEM", Toast.LENGTH_SHORT).show();
         };
 
         RecordRouteTripBtnListener btnListener = (view, routeId) -> { // open view on the trip! TODO
-            Intent intent = new Intent(getActivity(), TripDetailsActivity.class);
-            Bundle b = new Bundle();
-            b.putString("routeId", routeId); //Your id
-            intent.putExtras(b); //Put your id to your next Intent
-            startActivity(intent);
-            Toast.makeText(getContext(), routeId, Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(getActivity(), TripDetailsActivity.class);
+//            Bundle b = new Bundle();
+//            b.putString("routeId", routeId); //Your id
+//            intent.putExtras(b); //Put your id to your next Intent
+//            startActivity(intent);
+            Toast.makeText(getContext(), "BTN", Toast.LENGTH_SHORT).show();
         };
 
 
@@ -221,6 +222,7 @@ public class RoutesFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     }
                 });
             } catch (Exception e) {
+                e.printStackTrace();
             } finally {
                 realm.close();
             }
