@@ -98,15 +98,10 @@ public class RoutesFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     private void fetchRoutesAndUpdateUI() {
-        Number trips = realm.where(TripHeader.class).max("startTimestamp");
-        if (trips == null) { //empty db
-            retrieveTrips(0L, 2535197367000L);
-        } else {
-            retrieveTrips(trips.longValue() - 604800 * 1000, 2535197367000L); // 1 week before the last available trip in the db
-        }
+        retrieveTrips(); // 1 week before the last available trip in the db
     }
 
-    private void retrieveTrips(Long from, Long to) {
+    private void retrieveTrips() {
         String url = String.format(ClientConfig.BASE_HOST + ":1339/users/%s/routes", AuthManager.getInstance(getContext()).getUserId());
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -127,7 +122,7 @@ public class RoutesFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        Log.i("Retrieve routes error", error.getMessage());
+                        //Log.i("Retrieve routes error", error.getMessage());
                         if (error.networkResponse != null) {
                             Log.i("Retrieve routes ", String.valueOf(error.networkResponse.statusCode));
                         }

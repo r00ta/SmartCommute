@@ -43,14 +43,16 @@ public class EnrichService implements IEnrichService {
 
     @Override
     public EnrichedTrip processTrip(TripModel trip) {
+        LOGGER.info(String.format("New trip %s going to be processed.", trip.tripId));
         if (trip.positions == null || trip.positions.isEmpty()){
+            LOGGER.warn(String.format("New trip %s discarded 'cause it can not have empty gps positions.", trip.tripId));
             throw new IllegalArgumentException("Trip can't have empty gps positions.");
         }
 
         RouteMatchModel routeMatch = routeMatching.calculateRouteMatching(trip);
-        LOGGER.info("Route match calculated");
+        LOGGER.info(String.format("New trip %s route matching successfully calculated.", trip.tripId));
         if (routeMatch.routeLinks.size() == 0 || routeMatch.tracePoints == null || routeMatch.tracePoints.isEmpty()) {
-            LOGGER.warn("Routematch without any match, the trip is discarded.");
+            LOGGER.warn(String.format("New trip %s route match empty", trip.tripId));
             return null;
         }
 
@@ -59,25 +61,30 @@ public class EnrichService implements IEnrichService {
 
         Optional<HereGeoAddress> startAddress = reverseGeocoding.getAddressFromLocation(trip.positions.get(0));
         if (startAddress.isPresent()){
+            LOGGER.info(String.format("New trip %s start location present.", trip.tripId));
             matchedTrip.startLocation = startAddress.get().city;
         }
 
         Optional<HereGeoAddress> endAddress = reverseGeocoding.getAddressFromLocation(trip.positions.get(trip.positions.size()-1));
         if (endAddress.isPresent()){
+            LOGGER.info(String.format("New trip %s end location present", trip.tripId));
             matchedTrip.endLocation = endAddress.get().city;
         }
 
-        LOGGER.info("Enriched trip created");
         DriverScoring.setPointScores(matchedTrip);
+        LOGGER.info(String.format("New trip %s points calculated: %f", trip.tripId, matchedTrip.score));
 
         // calculate eco score if obd info is available; EcoScoring.score()
 
-        storageExtension.storeEnrichedTrip(matchedTrip);
-        LOGGER.info("Enrichedtrip stored");
+        LOGGER.info(String.format("New trip %s going to be stored", trip.tripId));
+        boolean success = storageExtension.storeEnrichedTrip(matchedTrip);
+        LOGGER.info(String.format("New trip %s stored: ", trip.tripId, String.valueOf(success)));
 
         kafkaScoringProducer.sendEventAsync(new EnrichedTripSummaryDto(matchedTrip));
+        LOGGER.info(String.format("New trip %s sent to user service for statistics.", trip.tripId));
 
         routeAnalyticsKafkaProducer.sendEventAsync(new RouteAnalyticsDto(matchedTrip));
+        LOGGER.info(String.format("New trip %s going to route analytics service.", trip.tripId));
 
         return matchedTrip;
     }
