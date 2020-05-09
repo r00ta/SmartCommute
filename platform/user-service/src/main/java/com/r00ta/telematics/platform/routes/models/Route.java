@@ -46,6 +46,8 @@ public class Route extends SmartDocument {
         this.days = routeRequest.days;
         this.availableAsPassenger = routeRequest.availableAsPassenger;
         this.driverPreferences = routeRequest.driverPreferences;
+        this.startPositionUserLabel = routeRequest.startPositionUserLabel;
+        this.endPositionUserLabel = routeRequest.endPositionUserLabel;
         this.dayRides = new HashMap<>();
         this.days.stream().forEach(x -> this.dayRides.put(x, DayRouteDrive.createDefault()));
     }

@@ -1,5 +1,7 @@
 package com.r00ta.telematics.android.persistence.retrieved.routes;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.r00ta.telematics.android.network.models.routes.RouteHeaderResponse;
