@@ -64,7 +64,7 @@ class RoutesRecyclerViewAdapter extends RealmRecyclerViewAdapter<RouteHeader, Ro
         //noinspection ConstantConditions
         holder.routeStartLabel.setText(obj.startPositionUserLabel);
         holder.routeToLabel.setText(obj.endPositionUserLabel);
-        holder.routeDaysLabel.setText(String.join(", ", obj.days.stream().map(x -> x.toString()).collect(Collectors.toList())));
+        holder.routeDaysLabel.setText(String.join(", ", obj.days.stream().map(x -> x.substring(0, 3)).collect(Collectors.toList())));
 //        if (inDeletionMode) {
 //            holder.subTitle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //                @Override

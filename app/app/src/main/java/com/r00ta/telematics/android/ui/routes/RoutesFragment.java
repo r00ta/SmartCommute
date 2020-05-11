@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.r00ta.telematics.android.ClientConfig;
 import com.r00ta.telematics.android.R;
+import com.r00ta.telematics.android.RecordingTripActivity;
 import com.r00ta.telematics.android.network.AuthManager;
 import com.r00ta.telematics.android.network.HttpRequestProvider;
 import com.r00ta.telematics.android.network.NetworkUpload;
@@ -61,7 +62,7 @@ public class RoutesFragment extends Fragment implements SwipeRefreshLayout.OnRef
                              ViewGroup container, Bundle savedInstanceState) {
         realm = Realm.getDefaultInstance();
         View root = inflater.inflate(R.layout.fragment_routes, container, false);
-        final FloatingActionButton recordTripBtn = (FloatingActionButton) root.findViewById(R.id.addNewRouteBtn);
+        final FloatingActionButton createRouteBtn = (FloatingActionButton) root.findViewById(R.id.addNewRouteBtn);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipeToRefreshRoutes);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -70,13 +71,13 @@ public class RoutesFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
         setUpRecyclerView();
 
-//        recordTripBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), RecordingTripActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        createRouteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CreateRouteActivity.class);
+                startActivity(intent);
+            }
+        });
 
         onRefresh();
 
@@ -157,11 +158,11 @@ public class RoutesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         };
 
         RecordRouteTripBtnListener btnListener = (view, routeId) -> { // open view on the trip! TODO
-//            Intent intent = new Intent(getActivity(), TripDetailsActivity.class);
-//            Bundle b = new Bundle();
-//            b.putString("routeId", routeId); //Your id
-//            intent.putExtras(b); //Put your id to your next Intent
-//            startActivity(intent);
+            Intent intent = new Intent(getActivity(), RecordingTripActivity.class);
+            Bundle b = new Bundle();
+            b.putString("routeId", routeId); //Your id
+            intent.putExtras(b); //Put your id to your next Intent
+            startActivity(intent);
             Toast.makeText(getContext(), "BTN", Toast.LENGTH_SHORT).show();
         };
 

@@ -54,6 +54,8 @@ public class RecordingTripActivity extends AppCompatActivity implements SharedPr
     // Tracks the bound state of the service.
     private boolean mBound = false;
 
+    private String routeId = null;
+
     // UI elements.
     private Button mRequestLocationUpdatesButton;
     private Button mRemoveLocationUpdatesButton;
@@ -84,6 +86,10 @@ public class RecordingTripActivity extends AppCompatActivity implements SharedPr
         myReceiver = new MyReceiver();
         realmInstance = Realm.getDefaultInstance();
 
+        Bundle b = getIntent().getExtras();
+        if (b != null)
+            routeId = b.getString("routeId");
+
         setContentView(R.layout.activity_recording);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapView);
@@ -112,7 +118,7 @@ public class RecordingTripActivity extends AppCompatActivity implements SharedPr
                 if (!checkPermissions()) {
                     requestPermissions();
                 } else {
-                    mService.requestLocationUpdates(UUID.randomUUID().toString());
+                    mService.requestLocationUpdates(UUID.randomUUID().toString(), routeId);
                 }
             }
         });
@@ -223,7 +229,7 @@ public class RecordingTripActivity extends AppCompatActivity implements SharedPr
                 Log.i(TAG, "User interaction was cancelled.");
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission was granted.
-                mService.requestLocationUpdates(UUID.randomUUID().toString());
+                mService.requestLocationUpdates(UUID.randomUUID().toString(), routeId);
             } else {
                 // Permission denied.
                 setButtonsState(false);

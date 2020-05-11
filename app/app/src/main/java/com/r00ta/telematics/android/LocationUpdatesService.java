@@ -226,11 +226,11 @@ public class LocationUpdatesService extends Service {
      * Makes a request for location updates. Note that in this sample we merely log the
      * {@link SecurityException}.
      */
-    public void requestLocationUpdates(String tripId) {
+    public void requestLocationUpdates(String tripId, String routeId) {
         Log.i(TAG, "Requesting location updates");
         this.currentTripId = tripId;
         // Use them like regular java objects
-        final TripModel trip = new TripModel(tripId, null, System.currentTimeMillis());
+        final TripModel trip = new TripModel(tripId, routeId, System.currentTimeMillis());
         realmInstance.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

@@ -86,12 +86,10 @@
                 android:layout_height="16dp"
                 android:layout_alignStart="@+id/routeToLabel"
                 android:layout_alignTop="@+id/startDate3"
-                android:layout_alignBottom="@+id/startDate3"
                 android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="0dp"
+                android:layout_marginTop="2dp"
                 android:text="@string/title"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:textStyle="normal" />
 
             <TextView
