@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
 import com.r00ta.telematics.platform.SmartQuery;
-import com.r00ta.telematics.platform.elastic.OperatorQueryFactory;
 import com.r00ta.telematics.platform.operators.StringOperator;
 import com.r00ta.telematics.platform.users.models.User;
 import com.r00ta.telematics.platform.users.models.UserStatistics;

@@ -11,7 +11,9 @@ public class HereConfiguration {
     }
 
     public HereConfiguration() {
+        // replace with env variable
         this.appKey = "4Sh8NBaNAIDGOsNB6qBX";
+        // replace with env variable
         this.apiKey = "DMrPgLqpQLOiwVrcq2q0LeBPImeVoow4Q9EnNxUvtUU";
     }
 }

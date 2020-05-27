@@ -15,7 +15,7 @@ public class TripsCodecsProvider implements CodecProvider {
         if (clazz == TripSummaryModel.class) {
             return (Codec<T>) new TripSummaryModelCodecs(TripSummaryModel.class);
         }
-        if (clazz == LiveChunkModel.class){
+        if (clazz == TripModel.class){
             return (Codec<T>) new TripModelCodecs(TripModel.class);
         }
         return null;

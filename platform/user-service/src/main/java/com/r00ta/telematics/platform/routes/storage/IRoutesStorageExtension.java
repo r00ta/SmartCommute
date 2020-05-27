@@ -3,6 +3,7 @@ package com.r00ta.telematics.platform.routes.storage;
 import java.util.List;
 import java.util.Optional;
 
+import com.r00ta.telematics.platform.routes.models.PendingMatching;
 import com.r00ta.telematics.platform.routes.models.Route;
 
 public interface IRoutesStorageExtension {
@@ -15,9 +16,15 @@ public interface IRoutesStorageExtension {
 
     boolean updateRoute(Route route);
 
-    //    boolean storeEnrichedTrip(EnrichedTrip trip);
-//
-//    EnrichedTrip getTripById(String tripId);
-//
-//    List<EnrichedTrip> getTripsByTimeRange(String userId, Long from, Long to);
+    List<PendingMatching> getPendingMatchings(String userId);
+
+    boolean storePendingMatching(PendingMatching matching);
+
+    boolean updatePendingMatching(PendingMatching matching);
+
+    Optional<PendingMatching> getPendingMatching(String userId, String matchingId);
+
+    List<PendingMatching> getPendingMatchingsById(String matchingId);
+
+    boolean deleteMatchings(String matchingId);
 }

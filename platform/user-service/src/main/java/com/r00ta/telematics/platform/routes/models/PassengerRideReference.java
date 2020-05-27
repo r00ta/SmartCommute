@@ -2,7 +2,6 @@ package com.r00ta.telematics.platform.routes.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.r00ta.telematics.platform.SmartDocument;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PassengerRideReference {

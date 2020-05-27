@@ -3,14 +3,18 @@ package com.r00ta.telematics.platform.routes;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
 
 import com.r00ta.telematics.platform.routes.models.DayRouteDrive;
+import com.r00ta.telematics.platform.routes.models.MatchingPendingStatus;
 import com.r00ta.telematics.platform.routes.models.PassengerRideReference;
+import com.r00ta.telematics.platform.routes.models.PendingMatching;
 import com.r00ta.telematics.platform.routes.models.Route;
+import com.r00ta.telematics.platform.routes.models.RouteMatching;
 import com.r00ta.telematics.platform.routes.storage.IRoutesStorageExtension;
 import com.r00ta.telematics.platform.users.IUserService;
 import com.r00ta.telematics.platform.users.models.User;
@@ -43,6 +47,85 @@ public class RouteService implements IRouteService {
         return storageExtension.storeRoute(route);
     }
 
+    @Override
+    public List<PendingMatching> getPendingMatchings(String userId) {
+        return storageExtension.getPendingMatchings(userId);
+    }
+
+    /**
+     * This function will retrieve the two maching documents: the one of the user and the one of the matched user. If the user would like
+     * to decline the matching, it will delete both document (the matched user will simply don't see it anymore).
+     * If the user would like to accept it, the document is updated and it checks if the matched user has already accepted it. If so, the routes of both users are updated.
+     *
+     * @param userId:     the user id
+     * @param matchingId: the matching id
+     * @param status:     the new status
+     * @return
+     */
+    @Override
+    public boolean updatePendingMatching(String userId, String matchingId, MatchingPendingStatus status) {
+
+        List<PendingMatching> matchings = storageExtension.getPendingMatchingsById(matchingId);
+
+        Optional<PendingMatching> userMatchingOpt = matchings.stream().filter(x -> x.userId.equals(userId)).findFirst();
+        if (!userMatchingOpt.isPresent()) {
+            LOGGER.warn(String.format("Could not find pending matching with ID %s during the update."), matchingId);
+            return false;
+        }
+
+        PendingMatching userMatching = userMatchingOpt.get();
+
+        Optional<PendingMatching> pairedMatchingOpt = matchings.stream().filter(x -> x.userId.equals(userMatching.matchedUserId)).findFirst();
+        if (!pairedMatchingOpt.isPresent()) {
+            LOGGER.warn(String.format("Could not find paired pending matching with ID %s during the update."), matchingId);
+            return false;
+        }
+
+        PendingMatching pairedMatching = pairedMatchingOpt.get();
+
+        if (status == MatchingPendingStatus.DECLINED || pairedMatching.status == MatchingPendingStatus.DECLINED) {
+            storageExtension.deleteMatchings(matchingId);
+            return true;
+        }
+
+        if (status == MatchingPendingStatus.ACCEPTED) {
+            if (pairedMatching.status == MatchingPendingStatus.ACCEPTED) {
+                userService.storeNews(userId, "You have been successfully paired with the user.");
+                userService.storeNews(pairedMatching.matchedUserId, "The user X has been paired with you for your route");
+
+                Route userRoute = getRouteById(userMatching.routeId).get();
+                Route matchedRoute = getRouteById(userMatching.matchedRouteId).get();
+
+                DayRouteDrive userRouteDrive = userRoute.dayRides.get(userMatching.day);
+                DayRouteDrive matchedRouteDrive = matchedRoute.dayRides.get(userMatching.day);
+
+                userRouteDrive.isADriverRide = userMatching.asDriver;
+                userRouteDrive.isAPassengerRoute = userMatching.asPassenger;
+                matchedRouteDrive.isADriverRide = pairedMatching.asDriver;
+                matchedRouteDrive.isAPassengerRoute = pairedMatching.asPassenger;
+                if (userMatching.asDriver) {
+                    userRouteDrive.passengerReferences.add(new PassengerRideReference(userMatching.matchedUserId, userMatching.matchedRouteId, userMatching.matchedUserId)); // TODO: CHANGE INTO NAME
+                    matchedRouteDrive.driverReference.driverRouteId = userMatching.routeId;
+                    matchedRouteDrive.driverReference.driverUserId = userMatching.userId;
+                    matchedRouteDrive.driverReference.driverName = userMatching.userId; // TODO: CHANGE INTO NAME
+                } else {
+                    matchedRouteDrive.passengerReferences.add(new PassengerRideReference(userMatching.userId, userMatching.routeId, userMatching.userId)); // TODO: CHANGE INTO NAME
+                    userRouteDrive.driverReference.driverRouteId = userMatching.matchedRouteId;
+                    userRouteDrive.driverReference.driverUserId = userMatching.matchedUserId;
+                    userRouteDrive.driverReference.driverName = userMatching.matchedUserId; // TODO: CHANGE INTO NAME
+                }
+                storageExtension.updateRoute(userRoute);
+                storageExtension.updateRoute(matchedRoute);
+            } else {
+                userMatching.status = status;
+                storageExtension.updatePendingMatching(userMatching);
+            }
+        }
+
+        return true;
+    }
+
+    @Override
     public List<PassengerRideReference> getPassengers(String userId, String routeId, DayOfWeek day) {
         Optional<Route> userRoute = getRouteById(routeId);
         if (!userRoute.isPresent()) {
@@ -133,6 +216,15 @@ public class RouteService implements IRouteService {
         userService.storeNews(driverId, String.format("%s has just removed you from his routes. Your routes have been adjusted accordingly.", userOpt.get().name));
 
         return true;
+    }
+
+    @Override
+    public void processMatching(RouteMatching matching) {
+        String matchingId = UUID.randomUUID().toString();
+        PendingMatching driverPendingMatching = new PendingMatching(matchingId, matching.driverUserId, matching.driverRouteId, matching.day, false, MatchingPendingStatus.PENDING, matching.startLocationPickUp, matching.endLocationDropOff, matching.passengerUserId, matching.passengerRouteId);
+        PendingMatching passengerPendingMatching = new PendingMatching(matchingId, matching.passengerUserId, matching.passengerRouteId, matching.day, true, MatchingPendingStatus.PENDING, matching.startLocationPickUp, matching.endLocationDropOff, matching.driverUserId, matching.driverRouteId);
+        storageExtension.storePendingMatching(driverPendingMatching);
+        storageExtension.storePendingMatching(passengerPendingMatching);
     }
 
     private void removePassengerFromDriverRoute(Route route, String passengerId, DayOfWeek[] days) {

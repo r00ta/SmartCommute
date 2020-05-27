@@ -202,7 +202,9 @@ public class IbmCloudProvider implements IDataLakeProvider {
     void setup() {
         // Constants for IBM COS values
         SDKGlobalConfiguration.IAM_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token";
+        // replace with env variable
         api_key = "-PmwZ-01v_cGsKUWqCdm8ZGLMr1ntgX9yc3jKfI4Xfxt"; // example: xxxd12V2QHXbjaM99G9tWyYDgF_0gYdlQ8aWALIQxXx4
+        // replace with env variable
         service_instance_id = "crn:v1:bluemix:public:cloud-object-storage:global:a/4e12949933064a189d5149a9687c3e0d:489a4b86-a9d8-43ab-ab18-5c65b5c21793::"; // example: crn:v1:bluemix:public:cloud-object-storage:global:a/xx999cd94a0dda86fd8eff3191349999:9999b05b-x999-4917-xxxx-9d5b326a1111::
         endpoint_url = "https://s3.us-south.cloud-object-storage.appdomain.cloud"; // example: https://s3.us-south.cloud-object-storage.appdomain.cloud
         location = "us-south-standard"; // example: us-south-standard

@@ -12,8 +12,8 @@ com/r00ta/telematics/platform/mongo/DocumentCodec.class
 com/r00ta/telematics/platform/mongo/MongoQueryFactory$1.class
 com/r00ta/telematics/platform/ElasticSearchStorageManager.class
 com/r00ta/telematics/platform/SmartDocument.class
-com/r00ta/telematics/platform/elastic/OperatorQueryFactory.class
 com/r00ta/telematics/platform/SmartQuery.class
+com/r00ta/telematics/platform/elastic/OperatorQueryFactory.class
 com/r00ta/telematics/platform/model/ElasticHits.class
 com/r00ta/telematics/platform/MongoStorageManager.class
 com/r00ta/telematics/platform/IStorageManager.class

@@ -26,16 +26,20 @@ import com.r00ta.telematics.platform.live.requests.LiveChunkUpdateRequest;
 import com.r00ta.telematics.platform.live.responses.AvailableLiveSessionsResponse;
 import com.r00ta.telematics.platform.live.responses.LiveChunkResponse;
 import com.r00ta.telematics.platform.live.responses.LiveChunksResponse;
+import com.r00ta.telematics.platform.utils.HttpHelper;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("/users/{userId}/liveSessions")
 @RequestScoped
 public class LiveApi {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LiveApi.class);
 
     @Inject
     ILiveService liveService;

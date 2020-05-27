@@ -10,9 +10,10 @@ public class RouteHeadersResponse {
     @JsonProperty("routeHeaders")
     public List<RouteHeader> routeHeaders;
 
-    public RouteHeadersResponse(){}
+    public RouteHeadersResponse() {
+    }
 
-    public RouteHeadersResponse(List<RouteHeader> headers){
+    public RouteHeadersResponse(List<RouteHeader> headers) {
         this.routeHeaders = headers;
     }
 }

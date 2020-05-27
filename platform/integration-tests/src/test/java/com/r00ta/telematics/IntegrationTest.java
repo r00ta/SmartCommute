@@ -1,25 +1,25 @@
 package com.r00ta.telematics;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
+import java.time.DayOfWeek;
 import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.zip.GZIPOutputStream;
 
 import javax.ws.rs.NotFoundException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.models.livetrip.AvailableLiveSessionsResponse;
 import com.r00ta.telematics.models.livetrip.LiveChunksResponse;
 import com.r00ta.telematics.models.livetrip.LiveSessionSummary;
 import com.r00ta.telematics.models.livetrip.TripModel;
+import com.r00ta.telematics.models.routes.RouteMatching;
 import com.r00ta.telematics.models.scoring.EnrichedTrip;
 import com.r00ta.telematics.models.scoring.EnrichedTripsByTimeRangeResponse;
 import com.r00ta.telematics.models.user.AuthenticationResponse;
@@ -56,18 +56,21 @@ public class IntegrationTest {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    private static String email = UUID.randomUUID().toString();
+    private static String driverEmail = UUID.randomUUID().toString();
+    private static String passengerEmail = UUID.randomUUID().toString();
     private static String jwtToken;
     private static String userId;
     private static String routeId;
     private static String sessionId;
     private static String tripId;
+    private static String passengerUserId;
+    private static String passengerRouteId;
 
     @Test
     @Order(1)
     public void createUser() {
         LOGGER.info("Creating user test.");
-        String body = new JsonObject().put("birthDay", "2020-04-22").put("email", email).put("name", "pippo").put("passwordHash", "pass").put("surename", "ciccio").toString();
+        String body = new JsonObject().put("birthDay", "2020-04-22").put("email", driverEmail).put("name", "pippo").put("passwordHash", "pass").put("surename", "ciccio").toString();
 
         given().contentType(ContentType.JSON).body(body)
                 .when().post(userEndpoint + "/users")
@@ -79,7 +82,7 @@ public class IntegrationTest {
     @Order(2)
     public void authenticateUser() throws InterruptedException {
         LOGGER.info("Auth user test.");
-        String body = new JsonObject().put("email", email).put("password", "pass").toString();
+        String body = new JsonObject().put("email", driverEmail).put("password", "pass").toString();
 
         AuthenticationResponse response = executeUntilSuccess(() -> given().contentType(ContentType.JSON).body(body).when().post(userEndpoint + "/users/auth"))
                 .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", AuthenticationResponse.class);
@@ -218,6 +221,58 @@ public class IntegrationTest {
         retryUntilSuccess(
                 () -> given().header("Authorization", "Bearer " + jwtToken).when().get(userEndpoint + "/users/" + userId)
                         .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", UserStatistics.class).totalDistanceDrivenInM >= 20);
+    }
+
+    @Test
+    @Order(12)
+    public void createPassengerUserAndRoute() throws InterruptedException {
+        LOGGER.info("Create passenger user and route user.");
+
+        String body = new JsonObject().put("birthDay", "2020-04-22").put("email", passengerEmail).put("name", "passenger").put("passwordHash", "pass").put("surename", "pasticcio").toString();
+
+        given().contentType(ContentType.JSON).body(body)
+                .when().post(userEndpoint + "/users")
+                .then()
+                .statusCode(200);
+
+        LOGGER.info("Passenger created");
+        String authBody = new JsonObject().put("email", passengerEmail).put("password", "pass").toString();
+
+        AuthenticationResponse response = executeUntilSuccess(() -> given().contentType(ContentType.JSON).body(authBody).when().post(userEndpoint + "/users/auth"))
+                .then().contentType(ContentType.JSON).extract().response().jsonPath().getObject("$", AuthenticationResponse.class);
+
+        Assertions.assertNotNull(response.userId);
+        Assertions.assertNotNull(response.jwtBearer);
+        LOGGER.info("Passenger authenticated");
+
+        passengerUserId = response.userId;
+        String passengerJwtToken = response.jwtBearer;
+
+        String routeBody = new JsonObject()
+                .put("availableAsPassenger", true)
+                .put("days", new JsonArray().add("FRIDAY"))
+                .put("endPositionUserLabel", "office")
+                .put("startPositionUserLabel", "home")
+                .put("driverPreferences", new JsonObject().put("availableAsDriver", true).put("flexibility", 500).put("onTheRouteOption", true).put("radiusStartPoint", 500))
+                .toString();
+
+        String routeId = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + passengerJwtToken).body(routeBody)
+                .when().post(userEndpoint + "/users/" + passengerUserId + "/routes").then().extract().jsonPath().getString("routeId");
+        LOGGER.info("Passenger route created");
+
+        Assertions.assertNotNull(routeId);
+        passengerRouteId = routeId;
+    }
+
+    @Test
+    @Order(13)
+    public void createANewRouteMatching() throws InterruptedException, JsonProcessingException {
+        LOGGER.info("Create new Route Matching.");
+
+        RouteMatching routeMatching = new RouteMatching(userId, routeId, passengerUserId, passengerRouteId, null, null, DayOfWeek.FRIDAY);
+        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(mapper.writeValueAsString(routeMatching))
+                .when().post(userEndpoint + "/users/" + userId + "/matchings")
+                .then().statusCode(200);
     }
 
     private String getResourceAsString(String path) throws IOException {

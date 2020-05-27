@@ -13,7 +13,7 @@ public class UserCodecsProvider implements CodecProvider {
         if (clazz == User.class) {
             return (Codec<T>) new UserCodecs(User.class);
         }
-        if (clazz == UserStatistics.class){
+        if (clazz == UserStatistics.class) {
             return (Codec<T>) new UserStatisticsCodecs(UserStatistics.class);
         }
         return null;

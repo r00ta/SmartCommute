@@ -62,6 +62,11 @@ public class ElasticSearchStorageManager implements IStorageManager {
     public <T> boolean update(SmartQuery query, T request, String index) {
         throw new NotImplementedYetException("No update available atm");
     }
+
+    @Override
+    public <T> boolean delete(SmartQuery query, String index, Class<T> type) {
+        throw new NotImplementedYetException("not implemented yet");
+    }
 }
 
 //@ApplicationScoped

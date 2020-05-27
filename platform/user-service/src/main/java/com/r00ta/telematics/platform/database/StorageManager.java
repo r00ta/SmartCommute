@@ -5,7 +5,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import com.mongodb.client.MongoClient;
-import com.r00ta.telematics.platform.ElasticSearchStorageManager;
 import com.r00ta.telematics.platform.MongoStorageManager;
 
 @ApplicationScoped

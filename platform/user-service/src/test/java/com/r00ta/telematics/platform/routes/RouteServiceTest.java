@@ -8,8 +8,12 @@ import com.r00ta.telematics.platform.mocks.UserServiceMock;
 import com.r00ta.telematics.platform.routes.models.DayRouteDrive;
 import com.r00ta.telematics.platform.routes.models.DriverPreferences;
 import com.r00ta.telematics.platform.routes.models.DriverRideReference;
+import com.r00ta.telematics.platform.routes.models.GpsLocation;
+import com.r00ta.telematics.platform.routes.models.MatchingPendingStatus;
 import com.r00ta.telematics.platform.routes.models.PassengerRideReference;
+import com.r00ta.telematics.platform.routes.models.PendingMatching;
 import com.r00ta.telematics.platform.routes.models.Route;
+import com.r00ta.telematics.platform.routes.models.RouteMatching;
 import com.r00ta.telematics.platform.routes.requests.NewRouteRequest;
 import com.r00ta.telematics.platform.users.models.User;
 import org.junit.jupiter.api.Assertions;
@@ -108,6 +112,37 @@ public class RouteServiceTest {
         Route retrievedPassengerRoute = routeService.getRouteById(passengerRoute.routeId).get();
         Assertions.assertEquals(true, retrievedPassengerRoute.dayRides.get(DayOfWeek.FRIDAY).isADriverRide);
         Assertions.assertEquals(0, retrievedPassengerRoute.dayRides.get(DayOfWeek.FRIDAY).passengerReferences.size());
+    }
+
+    @Test
+    public void GivenANewMatching_WhenATheMatchingIsProcessed_ThenThePendingMatchingDocumentIsStoredAndAvailable() {
+        NewRouteRequest driverRouteRequest = createNewDriverRouteRequest();
+        String userId = "driver";
+        Route driverRoute = new Route(userId, driverRouteRequest, "MyRouteIdDriver");
+
+        NewRouteRequest passengerRouteRequest = createNewPassengerRouteRequest();
+        userId = "passenger";
+        Route passengerRoute = new Route(userId, passengerRouteRequest, "MyRouteIdPassenger");
+        RouteMatching routeMatching = new RouteMatching("driver", "MyRouteIdDriver", "passenger", "MyRouteIdPassenger", null, null, DayOfWeek.FRIDAY);
+        routeService.processMatching(routeMatching);
+
+        List<PendingMatching> driverPendingMatchings = routeService.getPendingMatchings("driver");
+        Assertions.assertEquals(1, driverPendingMatchings.size());
+        Assertions.assertEquals(MatchingPendingStatus.PENDING, driverPendingMatchings.get(0).status);
+        Assertions.assertEquals("driver", driverPendingMatchings.get(0).userId);
+        Assertions.assertEquals("passenger", driverPendingMatchings.get(0).matchedUserId);
+        Assertions.assertEquals("MyRouteIdDriver", driverPendingMatchings.get(0).routeId);
+        Assertions.assertEquals("MyRouteIdPassenger", driverPendingMatchings.get(0).matchedRouteId);
+
+        List<PendingMatching> passengerPendingMatchings = routeService.getPendingMatchings("passenger");
+        Assertions.assertEquals(1, passengerPendingMatchings.size());
+        Assertions.assertEquals(MatchingPendingStatus.PENDING, passengerPendingMatchings.get(0).status);
+        Assertions.assertEquals("passenger", passengerPendingMatchings.get(0).userId);
+        Assertions.assertEquals("driver", passengerPendingMatchings.get(0).matchedUserId);
+        Assertions.assertEquals("MyRouteIdPassenger", passengerPendingMatchings.get(0).routeId);
+        Assertions.assertEquals("MyRouteIdDriver", passengerPendingMatchings.get(0).matchedRouteId);
+
+        Assertions.assertEquals(driverPendingMatchings.get(0).matchingId, passengerPendingMatchings.get(0).matchingId);
     }
 
     private NewRouteRequest createNewPassengerRouteRequest() {

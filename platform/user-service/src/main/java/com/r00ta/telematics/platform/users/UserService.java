@@ -42,7 +42,7 @@ public class UserService implements IUserService {
         LOGGER.info("New create user process started: userId = " + user.userId);
         UserStatistics userStatisticsDocument = new UserStatistics(user.userId);
         boolean success = storeUserStatisticsDocument(user.userId, userStatisticsDocument) && storageExtension.createUser(user);
-        LOGGER.info("User statistics document and user document have been created: " + String.valueOf(success));
+        LOGGER.info("User statistics document and user document have been created: " + success);
         return success;
     }
 

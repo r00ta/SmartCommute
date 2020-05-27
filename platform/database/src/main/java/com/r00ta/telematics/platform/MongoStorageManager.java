@@ -47,6 +47,13 @@ public class MongoStorageManager implements IStorageManager {
         return true;
     }
 
+    @Override
+    public <T> boolean delete(SmartQuery query, String index, Class<T> type) {
+        MongoCollection<T> collection = getOrCreateCollection(index, type);
+        collection.deleteOne(MongoQueryFactory.build(query));
+        return true;
+    }
+
 //    @Override
 //    public boolean deleteIndex(String index) {
 //        MongoCollection collection = database.getCollection(index);

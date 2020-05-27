@@ -38,6 +38,9 @@ public class UserStatistics extends SmartDocument {
     @JsonProperty("co2Saved")
     public Double co2Saved;
 
+    @JsonProperty("ecoScore")
+    public Double ecoScore;
+
     public UserStatistics() {
     }
 
@@ -52,6 +55,7 @@ public class UserStatistics extends SmartDocument {
         this.communityScore = 0.0d;
         this.numberOfReviews = 0L;
         this.co2Saved = 0.0d;
+        this.ecoScore = 0.0d;
     }
 
     public void updateStatistics(EnrichedTripSummary tripSummary) {
