@@ -19,6 +19,7 @@ import com.r00ta.telematics.models.livetrip.AvailableLiveSessionsResponse;
 import com.r00ta.telematics.models.livetrip.LiveChunksResponse;
 import com.r00ta.telematics.models.livetrip.LiveSessionSummary;
 import com.r00ta.telematics.models.livetrip.TripModel;
+import com.r00ta.telematics.models.routes.AvailableMatchingsResponse;
 import com.r00ta.telematics.models.routes.RouteMatching;
 import com.r00ta.telematics.models.scoring.EnrichedTrip;
 import com.r00ta.telematics.models.scoring.EnrichedTripsByTimeRangeResponse;
@@ -273,6 +274,24 @@ public class IntegrationTest {
         RouteMatching routeMatching = new RouteMatching(userId, routeId, passengerUserId, passengerRouteId, null, null, DayOfWeek.FRIDAY);
         given().contentType(ContentType.JSON).header("Authorization", "Bearer " + adminJwt).body(mapper.writeValueAsString(routeMatching))
                 .when().post(userEndpoint + "/users/" + userId + "/matchings")
+                .then().statusCode(200);
+    }
+
+    @Test
+    @Order(14)
+    public void changePendingMatchingStatus() throws JsonProcessingException {
+        LOGGER.info("Change pending status");
+
+        AvailableMatchingsResponse response = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken)
+                .when().get(userEndpoint + "/users/" + userId + "/matchings/")
+                .as(AvailableMatchingsResponse.class);
+
+        String matchingId = response.matchings.get(0).matchingId;
+
+        String body = new JsonObject().put("status", "ACCEPTED").toString();
+
+        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(body)
+                .when().put(userEndpoint + "/users/" + userId + "/matchings/" + matchingId)
                 .then().statusCode(200);
     }
 
