@@ -68,7 +68,7 @@ public class MatchingsApi {
             @APIResponse(description = "Process a new Matching", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT))),
             @APIResponse(description = "Bad request.", responseCode = "500", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     })
-    @RolesAllowed({"Admin", "Tester", "User"})
+    @RolesAllowed({"Admin"})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @SecurityRequirement(name = "jwt", scopes = {})

@@ -56,6 +56,7 @@ public class IntegrationTest {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    private static final String adminJwt = "eyJraWQiOiIvcHJpdmF0ZUtleS5wZW0iLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJncm91cHMiOlsiQWRtaW4iXSwic3ViIjoiYWRtaW4iLCJpc3MiOiJodHRwczovL3F1YXJrdXMuaW8vdXNpbmctand0LXJiYWMiLCJpYXQiOjE1OTA2NzM4MjEsImF1dGhfdGltZSI6MTU5MDY3MzgyMSwiZXhwIjoxNzQwODcwMDQ1LCJqdGkiOiIyRUV5TzFiZWUwNXdSS1BwVGotUWhnIn0.Xpx6u8GOhHvj3KA6KPL3mdnNvDPZyGAov3adgU-qi0LVyJgaGrJJZgddEXeSKS3CXUBNPXPJ6PhSElRBqpP8zLdwoBbApo6VvP6d9tbW-FVb5hUnubCHSQRl01p9opF0GlHfcJrvFNaU6rgY_PmXuMyvye0Cw5jpNI8YnOh_Lt7TFwfUdlGt6HcyMkZy2M6q4XZiPS7xHsXHElDPLM0AV5ULGztlbiZzTy8eKcUn9VLnYDbeJGaH0rdYRUFaEJv0Rgd58pbm23wD9ekeK1MPdVaViZ3L3mZZKknEhek6w_2ppSKoyBK86oT-5XC1MOURn0N7TyZ95SsW0TADw4jrHA";
     private static String driverEmail = UUID.randomUUID().toString();
     private static String passengerEmail = UUID.randomUUID().toString();
     private static String jwtToken;
@@ -266,11 +267,11 @@ public class IntegrationTest {
 
     @Test
     @Order(13)
-    public void createANewRouteMatching() throws InterruptedException, JsonProcessingException {
+    public void createANewRouteMatching() throws JsonProcessingException {
         LOGGER.info("Create new Route Matching.");
 
         RouteMatching routeMatching = new RouteMatching(userId, routeId, passengerUserId, passengerRouteId, null, null, DayOfWeek.FRIDAY);
-        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(mapper.writeValueAsString(routeMatching))
+        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + adminJwt).body(mapper.writeValueAsString(routeMatching))
                 .when().post(userEndpoint + "/users/" + userId + "/matchings")
                 .then().statusCode(200);
     }
