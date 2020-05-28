@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.r00ta.telematics.platform.users.models.EnrichedTripSummary;
 import com.r00ta.telematics.platform.users.models.LiveTrip;
+import com.r00ta.telematics.platform.users.models.News;
 import com.r00ta.telematics.platform.users.models.User;
 import com.r00ta.telematics.platform.users.models.UserStatistics;
 
@@ -18,9 +19,9 @@ public interface IUserService {
 
     Optional<UserStatistics> getUserOverview(String userId);
 
-    List<String> getUserNews(String userId);
+    List<News> getUserNews(String userId);
 
-    boolean storeNews(String userId, String news);
+    boolean storeNews(String userId, News news);
 
     boolean processScore(EnrichedTripSummary enrichedTripSummary);
 

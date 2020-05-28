@@ -10,6 +10,7 @@ import com.r00ta.telematics.platform.routes.IRouteService;
 import com.r00ta.telematics.platform.routes.models.PassengerRideReference;
 import com.r00ta.telematics.platform.users.models.EnrichedTripSummary;
 import com.r00ta.telematics.platform.users.models.LiveTrip;
+import com.r00ta.telematics.platform.users.models.News;
 import com.r00ta.telematics.platform.users.models.User;
 import com.r00ta.telematics.platform.users.models.UserStatistics;
 import com.r00ta.telematics.platform.users.storage.IUsersStorageExtension;
@@ -52,12 +53,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<String> getUserNews(String userId) {
+    public List<News> getUserNews(String userId) {
         return storageExtension.getUserNews(userId);
     }
 
     @Override
-    public boolean storeNews(String userId, String news) {
+    public boolean storeNews(String userId, News news) {
         return storageExtension.storeNews(userId, news);
     }
 

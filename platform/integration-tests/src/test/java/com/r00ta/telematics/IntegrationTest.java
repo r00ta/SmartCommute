@@ -20,6 +20,7 @@ import com.r00ta.telematics.models.livetrip.LiveChunksResponse;
 import com.r00ta.telematics.models.livetrip.LiveSessionSummary;
 import com.r00ta.telematics.models.livetrip.TripModel;
 import com.r00ta.telematics.models.routes.AvailableMatchingsResponse;
+import com.r00ta.telematics.models.routes.Route;
 import com.r00ta.telematics.models.routes.RouteMatching;
 import com.r00ta.telematics.models.scoring.EnrichedTrip;
 import com.r00ta.telematics.models.scoring.EnrichedTripsByTimeRangeResponse;
@@ -283,7 +284,7 @@ public class IntegrationTest {
         LOGGER.info("Change pending status");
 
         AvailableMatchingsResponse response = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken)
-                .when().get(userEndpoint + "/users/" + userId + "/matchings/")
+                .when().get(userEndpoint + "/users/" + userId + "/matchings")
                 .as(AvailableMatchingsResponse.class);
 
         String matchingId = response.matchings.get(0).matchingId;
@@ -293,6 +294,66 @@ public class IntegrationTest {
         given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken).body(body)
                 .when().put(userEndpoint + "/users/" + userId + "/matchings/" + matchingId)
                 .then().statusCode(200);
+    }
+
+    @Test
+    @Order(15)
+    public void passengerAccepts() {
+        LOGGER.info("Passenger changes pending matching");
+
+        AvailableMatchingsResponse response = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken)
+                .when().get(userEndpoint + "/users/" + userId + "/matchings")
+                .as(AvailableMatchingsResponse.class);
+
+        String matchingId = response.matchings.get(0).matchingId;
+
+        String body = new JsonObject().put("status", "ACCEPTED").toString();
+
+        given().contentType(ContentType.JSON).header("Authorization", "Bearer " + adminJwt).body(body)
+                .when().put(userEndpoint + "/users/" + passengerUserId + "/matchings/" + matchingId)
+                .then().statusCode(200);
+    }
+
+    @Test
+    @Order(16)
+    public void matchingIsNotPendingAnymore() {
+        LOGGER.info("Matching is not pending anymore");
+
+        AvailableMatchingsResponse response = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken)
+                .when().get(userEndpoint + "/users/" + userId + "/matchings")
+                .as(AvailableMatchingsResponse.class);
+
+        Assertions.assertEquals(0, response.matchings.size());
+
+        response = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + adminJwt)
+                .when().get(userEndpoint + "/users/" + passengerUserId + "/matchings")
+                .as(AvailableMatchingsResponse.class);
+
+        Assertions.assertEquals(0, response.matchings.size());
+    }
+
+    @Test
+    @Order(17)
+    public void routesAreUpdated() {
+        LOGGER.info("Driver and passenger routes are updated.");
+
+        Route driverRoute = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + jwtToken)
+                .when().get(userEndpoint + "/users/" + userId + "/routes/" + routeId ).as(Route.class);
+
+        Assertions.assertTrue(driverRoute.dayRides.get(DayOfWeek.FRIDAY).isADriverRide);
+        Assertions.assertEquals(1, driverRoute.dayRides.get(DayOfWeek.FRIDAY).passengerReferences.size());
+        Assertions.assertEquals(passengerUserId, driverRoute.dayRides.get(DayOfWeek.FRIDAY).passengerReferences.get(0).passengerUserId);
+        Assertions.assertEquals(passengerRouteId, driverRoute.dayRides.get(DayOfWeek.FRIDAY).passengerReferences.get(0).passengerRouteId);
+        Assertions.assertFalse(driverRoute.dayRides.get(DayOfWeek.FRIDAY).isAPassengerRoute);
+
+        Route passengerRoute = given().contentType(ContentType.JSON).header("Authorization", "Bearer " + adminJwt)
+                .when().get(userEndpoint + "/users/" + passengerUserId + "/routes/" + passengerRouteId ).as(Route.class);
+
+        Assertions.assertFalse(passengerRoute.dayRides.get(DayOfWeek.FRIDAY).isADriverRide);
+        Assertions.assertEquals(0, passengerRoute.dayRides.get(DayOfWeek.FRIDAY).passengerReferences.size());
+        Assertions.assertEquals(userId, passengerRoute.dayRides.get(DayOfWeek.FRIDAY).driverReference.driverUserId);
+        Assertions.assertEquals(routeId, passengerRoute.dayRides.get(DayOfWeek.FRIDAY).driverReference.driverRouteId);
+        Assertions.assertTrue(passengerRoute.dayRides.get(DayOfWeek.FRIDAY).isAPassengerRoute);
     }
 
     private String getResourceAsString(String path) throws IOException {

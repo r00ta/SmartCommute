@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.r00ta.telematics.platform.IStorageManager;
 import com.r00ta.telematics.platform.SmartQuery;
 import com.r00ta.telematics.platform.operators.StringOperator;
+import com.r00ta.telematics.platform.users.models.News;
 import com.r00ta.telematics.platform.users.models.User;
 import com.r00ta.telematics.platform.users.models.UserStatistics;
 
@@ -71,13 +72,13 @@ public class UsersStorageExtension implements IUsersStorageExtension {
     }
 
     @Override
-    public List<String> getUserNews(String userId) {
+    public List<News> getUserNews(String userId) {
         SmartQuery query = new SmartQuery().where("userId", StringOperator.EQUALS, userId);
-        return storageManager.search(query, USER_NEWS_INDEX, String.class);
+        return storageManager.search(query, USER_NEWS_INDEX, News.class);
     }
 
     @Override
-    public boolean storeNews(String userId, String news) {
+    public boolean storeNews(String userId, News news) {
         return storageManager.create(userId, news, USER_NEWS_INDEX);
     }
 }

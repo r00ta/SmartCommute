@@ -54,7 +54,7 @@ public class MatchingsApi {
     @Operation(summary = "Gets the available matchings", description = "Gets the available matchings for a route")
     // TODO REPLACE WITH RESPONSE
     public Response getMatchings(@PathParam("userId") String userId, @PathParam("routeId") String routeId, @Context SecurityContext ctx) {
-        if (!isUserRequestingHisData(userId, ctx)) {
+        if (!isAdmin(ctx) && !isUserRequestingHisData(userId, ctx)) {
             return Response.ok().status(401, "User is requesting data of another user.").build();
         }
 
@@ -91,7 +91,7 @@ public class MatchingsApi {
     @Operation(summary = "Accepts or reject a matching", description = "Accepts or reject a matching")
     // TODO REPLACE WITH RESPONSE
     public Response updateMatching(@PathParam("userId") String userId, @PathParam("matchingId") String matchingId, UpdatePendingMatchingRequest request, @Context SecurityContext ctx) {
-        if (!isUserRequestingHisData(userId, ctx)) {
+        if (!isAdmin(ctx) && !isUserRequestingHisData(userId, ctx)) {
             return Response.ok().status(401, "User is requesting data of another user.").build();
         }
 
@@ -105,6 +105,9 @@ public class MatchingsApi {
     }
 
 
+    private boolean isAdmin(SecurityContext ctx){
+        return ctx.getUserPrincipal().getName().equals("admin");
+    }
 
     private boolean isUserRequestingHisData(String userId, SecurityContext ctx) {
         return userId.equals(ctx.getUserPrincipal().getName());

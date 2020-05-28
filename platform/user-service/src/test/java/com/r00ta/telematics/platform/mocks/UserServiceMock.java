@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.r00ta.telematics.platform.users.IUserService;
 import com.r00ta.telematics.platform.users.models.EnrichedTripSummary;
 import com.r00ta.telematics.platform.users.models.LiveTrip;
+import com.r00ta.telematics.platform.users.models.News;
 import com.r00ta.telematics.platform.users.models.User;
 import com.r00ta.telematics.platform.users.models.UserStatistics;
 
@@ -16,7 +17,7 @@ public class UserServiceMock implements IUserService {
 
     private Map<String, User> storage = new HashMap<>();
 
-    private Map<String, List<String>> newsStorage = new HashMap<>();
+    private Map<String, List<News>> newsStorage = new HashMap<>();
 
     @Override
     public Optional<User> getUserById(String user) {
@@ -40,7 +41,7 @@ public class UserServiceMock implements IUserService {
     }
 
     @Override
-    public List<String> getUserNews(String userId) {
+    public List<News> getUserNews(String userId) {
         if (newsStorage.containsKey(userId)) {
             return newsStorage.get(userId);
         }
@@ -48,7 +49,7 @@ public class UserServiceMock implements IUserService {
     }
 
     @Override
-    public boolean storeNews(String userId, String news) {
+    public boolean storeNews(String userId, News news) {
         if (newsStorage.containsKey(userId)) {
             return newsStorage.get(userId).add(news);
         }

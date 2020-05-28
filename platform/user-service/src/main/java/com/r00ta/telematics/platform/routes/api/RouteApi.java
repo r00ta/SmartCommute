@@ -2,6 +2,7 @@ package com.r00ta.telematics.platform.routes.api;
 
 import java.time.DayOfWeek;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
+import com.r00ta.telematics.platform.authentication.AuthService;
 import com.r00ta.telematics.platform.routes.IRouteService;
 import com.r00ta.telematics.platform.routes.models.Route;
 import com.r00ta.telematics.platform.routes.models.RouteHeader;
@@ -35,10 +37,13 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("/users/{userId}/routes")
 @SecurityScheme(securitySchemeName = "jwt", type = SecuritySchemeType.HTTP, scheme = "bearer", bearerFormat = "jwt")
 public class RouteApi {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RouteApi.class);
 
     @Inject
     IRouteService routeService;
@@ -54,7 +59,7 @@ public class RouteApi {
     @SecurityRequirement(name = "jwt", scopes = {})
     @Operation(summary = "Gets user's routes.", description = "Gets user's routes.")
     public Response getUserRoutes(@PathParam("userId") String userId, @Context SecurityContext ctx) {
-        if (!isUserRequestingHisData(userId, ctx)) {
+        if (!isAdmin(ctx) && !isUserRequestingHisData(userId, ctx)) {
             return Response.ok().status(401, "User is requesting data of another user.").build();
         }
 
@@ -74,7 +79,7 @@ public class RouteApi {
     @SecurityRequirement(name = "jwt", scopes = {})
     @Operation(summary = "Create a new route for a user.", description = "Create a new route for a user.")
     public Response createNewRoute(@PathParam("userId") String userId, NewRouteRequest routeRequest, @Context SecurityContext ctx) {
-        if (!isUserRequestingHisData(userId, ctx)) {
+        if (!isAdmin(ctx) && !isUserRequestingHisData(userId, ctx)) {
             return Response.ok().status(401, "User is requesting data of another user.").build();
         }
 
@@ -99,11 +104,17 @@ public class RouteApi {
     @SecurityRequirement(name = "jwt", scopes = {})
     @Operation(summary = "Gets route by id.", description = "Gets route by id.")
     public Response getRouteById(@PathParam("userId") String userId, @PathParam("routeId") String routeId, @Context SecurityContext ctx) {
-        if (!isUserRequestingHisData(userId, ctx)) {
+        if (!isAdmin(ctx) && !isUserRequestingHisData(userId, ctx)) {
             return Response.ok().status(401, "User is requesting data of another user.").build();
         }
 
-        return Response.ok(routeService.getRouteById(routeId)).build();
+        Optional<Route> route = routeService.getRouteById(routeId);
+
+        if (!route.isPresent()){
+            LOGGER.info(String.format("Route %s for user %s does not exist", routeId, userId));
+            return Response.status(400, "Route not found").build();
+        }
+        return Response.ok(route.get()).build();
     }
 
     @GET
@@ -118,7 +129,7 @@ public class RouteApi {
     @Operation(summary = "Gets passenger's names for a driver's route", description = "Gets passenger's names for a driver's route")
     // TODO REPLACE WITH RESPONSE
     public Response getPassengers(@PathParam("userId") String userId, @PathParam("routeId") String routeId, @PathParam("dayOfTheWeek") String dayOfTheWeek, @Context SecurityContext ctx) {
-        if (!isUserRequestingHisData(userId, ctx)) {
+        if (!isAdmin(ctx) && !isUserRequestingHisData(userId, ctx)) {
             return Response.ok().status(401, "User is requesting data of another user.").build();
         }
 
@@ -139,7 +150,7 @@ public class RouteApi {
     @Operation(summary = "Deletes a passenger from a driver's route.", description = "Deletes a passenger from a driver's route.")
     // TODO REPLACE WITH RESPONSE
     public Response deletePassenger(@PathParam("userId") String userId, @PathParam("routeId") String routeId, @PathParam("dayOfTheWeek") String dayOfTheWeek, @PathParam("passengerId") String passengerId, @Context SecurityContext ctx) {
-        if (!isUserRequestingHisData(userId, ctx)) {
+        if (!isAdmin(ctx) && !isUserRequestingHisData(userId, ctx)) {
             return Response.ok().status(401, "User is requesting data of another user.").build();
         }
 
@@ -162,7 +173,7 @@ public class RouteApi {
     @Operation(summary = "Deletes a driver from a passenger's route.", description = "Deletes a driver from a passenger's route.")
     // TODO REPLACE WITH RESPONSE
     public Response deleteDriver(@PathParam("userId") String userId, @PathParam("routeId") String routeId, @PathParam("dayOfTheWeek") String dayOfTheWeek, @PathParam("driverId") String driverId, @Context SecurityContext ctx) {
-        if (!isUserRequestingHisData(userId, ctx)) {
+        if (!isAdmin(ctx) && !isUserRequestingHisData(userId, ctx)) {
             return Response.ok().status(401, "User is requesting data of another user.").build();
         }
 
@@ -171,6 +182,10 @@ public class RouteApi {
             return Response.status(400, "Something went wrong.").build();
         }
         return Response.ok().build();
+    }
+
+    private boolean isAdmin(SecurityContext ctx){
+        return ctx.getUserPrincipal().getName().equals("admin");
     }
 
     private boolean isUserRequestingHisData(String userId, SecurityContext ctx) {

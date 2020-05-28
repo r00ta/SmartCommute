@@ -1,5 +1,6 @@
 package com.r00ta.telematics.platform.users.storage.codecs;
 
+import com.r00ta.telematics.platform.users.models.News;
 import com.r00ta.telematics.platform.users.models.User;
 import com.r00ta.telematics.platform.users.models.UserStatistics;
 import org.bson.codecs.Codec;
@@ -15,6 +16,9 @@ public class UserCodecsProvider implements CodecProvider {
         }
         if (clazz == UserStatistics.class) {
             return (Codec<T>) new UserStatisticsCodecs(UserStatistics.class);
+        }
+        if (clazz == News.class) {
+            return (Codec<T>) new NewsCodecs(News.class);
         }
         return null;
     }

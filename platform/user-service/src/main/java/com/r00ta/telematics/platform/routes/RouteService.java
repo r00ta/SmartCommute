@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
 
 import com.r00ta.telematics.platform.routes.models.DayRouteDrive;
+import com.r00ta.telematics.platform.routes.models.DriverRideReference;
 import com.r00ta.telematics.platform.routes.models.MatchingPendingStatus;
 import com.r00ta.telematics.platform.routes.models.PassengerRideReference;
 import com.r00ta.telematics.platform.routes.models.PendingMatching;
@@ -17,6 +18,7 @@ import com.r00ta.telematics.platform.routes.models.Route;
 import com.r00ta.telematics.platform.routes.models.RouteMatching;
 import com.r00ta.telematics.platform.routes.storage.IRoutesStorageExtension;
 import com.r00ta.telematics.platform.users.IUserService;
+import com.r00ta.telematics.platform.users.models.News;
 import com.r00ta.telematics.platform.users.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,8 +92,8 @@ public class RouteService implements IRouteService {
 
         if (status == MatchingPendingStatus.ACCEPTED) {
             if (pairedMatching.status == MatchingPendingStatus.ACCEPTED) {
-                userService.storeNews(userId, "You have been successfully paired with the user.");
-                userService.storeNews(pairedMatching.matchedUserId, "The user X has been paired with you for your route");
+                userService.storeNews(userId, new News("You have been successfully paired with the user."));
+                userService.storeNews(pairedMatching.matchedUserId, new News("The user X has been paired with you for your route"));
 
                 Route userRoute = getRouteById(userMatching.routeId).get();
                 Route matchedRoute = getRouteById(userMatching.matchedRouteId).get();
@@ -105,17 +107,20 @@ public class RouteService implements IRouteService {
                 matchedRouteDrive.isAPassengerRoute = pairedMatching.asPassenger;
                 if (userMatching.asDriver) {
                     userRouteDrive.passengerReferences.add(new PassengerRideReference(userMatching.matchedUserId, userMatching.matchedRouteId, userMatching.matchedUserId)); // TODO: CHANGE INTO NAME
+                    matchedRouteDrive.driverReference = new DriverRideReference();
                     matchedRouteDrive.driverReference.driverRouteId = userMatching.routeId;
                     matchedRouteDrive.driverReference.driverUserId = userMatching.userId;
                     matchedRouteDrive.driverReference.driverName = userMatching.userId; // TODO: CHANGE INTO NAME
                 } else {
                     matchedRouteDrive.passengerReferences.add(new PassengerRideReference(userMatching.userId, userMatching.routeId, userMatching.userId)); // TODO: CHANGE INTO NAME
+                    userRouteDrive.driverReference = new DriverRideReference();
                     userRouteDrive.driverReference.driverRouteId = userMatching.matchedRouteId;
                     userRouteDrive.driverReference.driverUserId = userMatching.matchedUserId;
                     userRouteDrive.driverReference.driverName = userMatching.matchedUserId; // TODO: CHANGE INTO NAME
                 }
                 storageExtension.updateRoute(userRoute);
                 storageExtension.updateRoute(matchedRoute);
+                storageExtension.deleteMatchings(matchingId);
             } else {
                 userMatching.status = status;
                 storageExtension.updatePendingMatching(userMatching);
@@ -173,7 +178,7 @@ public class RouteService implements IRouteService {
             return false;
         }
 
-        return userService.storeNews(passengerId, String.format("%s has just removed you from his routes. Your routes have been adjusted accordingly.", userOpt.get().name));
+        return userService.storeNews(passengerId, new News(String.format("%s has just removed you from his routes. Your routes have been adjusted accordingly.", userOpt.get().name)));
     }
 
     @Override
@@ -213,7 +218,7 @@ public class RouteService implements IRouteService {
             return false;
         }
 
-        userService.storeNews(driverId, String.format("%s has just removed you from his routes. Your routes have been adjusted accordingly.", userOpt.get().name));
+        userService.storeNews(driverId, new News(String.format("%s has just removed you from his routes. Your routes have been adjusted accordingly.", userOpt.get().name)));
 
         return true;
     }

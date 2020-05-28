@@ -2,9 +2,11 @@ package com.r00ta.telematics.models.routes;
 
 import java.time.DayOfWeek;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.r00ta.telematics.models.livetrip.GpsLocation;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RouteMatching {
 
     @JsonProperty("driverUserId")
