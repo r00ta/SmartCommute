@@ -9,6 +9,9 @@ import com.r00ta.telematics.platform.routes.models.GpsLocation;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MatchingModelDto {
 
+    @JsonProperty("matchingId")
+    public String matchingId;
+
     @JsonProperty("driverUserId")
     public String driverUserId;
 

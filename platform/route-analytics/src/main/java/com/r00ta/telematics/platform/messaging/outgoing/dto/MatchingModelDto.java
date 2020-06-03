@@ -1,16 +1,17 @@
-package com.r00ta.telematics.models.routes;
+package com.r00ta.telematics.platform.messaging.outgoing.dto;
 
 import java.time.DayOfWeek;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.r00ta.telematics.models.livetrip.GpsLocation;
+import com.r00ta.telematics.platform.messaging.model.CloudEventDto;
+import com.r00ta.telematics.platform.models.GpsLocation;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RouteMatching {
+public class MatchingModelDto implements CloudEventDto {
     @JsonProperty("matchingId")
     public String matchingId;
-    
+
     @JsonProperty("driverUserId")
     public String driverUserId;
 
@@ -32,15 +33,16 @@ public class RouteMatching {
     @JsonProperty("day")
     public DayOfWeek day;
 
-    public RouteMatching(String matchingId, String driverUserId, String driverRouteId, String passengerUserId, String passengerRouteId, GpsLocation start, GpsLocation end, DayOfWeek day){
-        this.matchingId = matchingId;
-        this.driverUserId = driverUserId;
-        this.driverRouteId = driverRouteId;
-        this.passengerUserId = passengerUserId;
-        this.passengerRouteId  = passengerRouteId;
-        this.startLocationPickUp = start;
-        this.endLocationDropOff = end;
-        this.day = day;
+    @JsonProperty("documentVersion")
+    public String documentVersion = "1.0";
+
+    @Override
+    public String getEventId() {
+        return matchingId;
+    }
+
+    @Override
+    public String getEventProducer() {
+        return "RouteAnalyticsService";
     }
 }
-

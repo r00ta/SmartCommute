@@ -7,6 +7,9 @@ import com.r00ta.telematics.platform.routes.messaging.dto.MatchingModelDto;
 
 public class RouteMatching {
 
+    @JsonProperty("matchingId")
+    public String matchingId;
+
     @JsonProperty("driverUserId")
     public String driverUserId;
 
@@ -29,10 +32,11 @@ public class RouteMatching {
     public DayOfWeek day;
 
     public static RouteMatching fromEvent(MatchingModelDto event) {
-        return new RouteMatching(event.driverUserId, event.driverRouteId, event.passengerUserId, event.passengerRouteId, event.startLocationPickUp, event.endLocationDropOff, event.day);
+        return new RouteMatching(event.matchingId, event.driverUserId, event.driverRouteId, event.passengerUserId, event.passengerRouteId, event.startLocationPickUp, event.endLocationDropOff, event.day);
     }
 
-    public RouteMatching(String driverUserId, String driverRouteId, String passengerUserId, String passengerRouteId, GpsLocation start, GpsLocation end, DayOfWeek day){
+    public RouteMatching(String matchingId, String driverUserId, String driverRouteId, String passengerUserId, String passengerRouteId, GpsLocation start, GpsLocation end, DayOfWeek day){
+        this.matchingId = matchingId;
         this.driverUserId = driverUserId;
         this.driverRouteId = driverRouteId;
         this.passengerUserId = passengerUserId;

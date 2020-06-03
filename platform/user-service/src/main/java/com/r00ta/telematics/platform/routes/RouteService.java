@@ -225,9 +225,8 @@ public class RouteService implements IRouteService {
 
     @Override
     public void processMatching(RouteMatching matching) {
-        String matchingId = UUID.randomUUID().toString();
-        PendingMatching driverPendingMatching = new PendingMatching(matchingId, matching.driverUserId, matching.driverRouteId, matching.day, false, MatchingPendingStatus.PENDING, matching.startLocationPickUp, matching.endLocationDropOff, matching.passengerUserId, matching.passengerRouteId);
-        PendingMatching passengerPendingMatching = new PendingMatching(matchingId, matching.passengerUserId, matching.passengerRouteId, matching.day, true, MatchingPendingStatus.PENDING, matching.startLocationPickUp, matching.endLocationDropOff, matching.driverUserId, matching.driverRouteId);
+        PendingMatching driverPendingMatching = new PendingMatching(matching.matchingId, matching.driverUserId, matching.driverRouteId, matching.day, false, MatchingPendingStatus.PENDING, matching.startLocationPickUp, matching.endLocationDropOff, matching.passengerUserId, matching.passengerRouteId);
+        PendingMatching passengerPendingMatching = new PendingMatching(matching.matchingId, matching.passengerUserId, matching.passengerRouteId, matching.day, true, MatchingPendingStatus.PENDING, matching.startLocationPickUp, matching.endLocationDropOff, matching.driverUserId, matching.driverRouteId);
         storageExtension.storePendingMatching(driverPendingMatching);
         storageExtension.storePendingMatching(passengerPendingMatching);
     }

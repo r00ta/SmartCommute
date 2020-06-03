@@ -1,4 +1,5 @@
 /vagrant/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/messaging/incoming/dto/RouteCloudEvent.java
+/vagrant/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/messaging/outgoing/dto/MatchingModelDto.java
 /vagrant/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/messaging/incoming/dto/CloudEvent.java
 /vagrant/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/messaging/incoming/RouteKafkaConsumer.java
 /vagrant/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/IbmCloudProvider.java
@@ -7,6 +8,7 @@
 /vagrant/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/models/UserMatching.java
 /vagrant/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/api/AnalyticsApi.java
 /vagrant/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/models/EnrichedMetadata.java
+/vagrant/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/models/GpsLocation.java
 /vagrant/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/utils/DocumentKeyBuilder.java
 /vagrant/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/models/EnrichedGpsLocation.java
 /vagrant/SmartCommute/platform/route-analytics/src/main/java/com/r00ta/telematics/platform/IDataLakeProvider.java

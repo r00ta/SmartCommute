@@ -272,7 +272,7 @@ public class IntegrationTest {
     public void createANewRouteMatching() throws JsonProcessingException {
         LOGGER.info("Create new Route Matching.");
 
-        RouteMatching routeMatching = new RouteMatching(userId, routeId, passengerUserId, passengerRouteId, null, null, DayOfWeek.FRIDAY);
+        RouteMatching routeMatching = new RouteMatching(UUID.randomUUID().toString(), userId, routeId, passengerUserId, passengerRouteId, null, null, DayOfWeek.FRIDAY);
         given().contentType(ContentType.JSON).header("Authorization", "Bearer " + adminJwt).body(mapper.writeValueAsString(routeMatching))
                 .when().post(userEndpoint + "/users/" + userId + "/matchings")
                 .then().statusCode(200);

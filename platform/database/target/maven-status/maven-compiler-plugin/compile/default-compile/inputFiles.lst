@@ -1,6 +1,6 @@
 /vagrant/SmartCommute/platform/database/src/main/java/com/r00ta/telematics/platform/model/ElasticHits.java
-/vagrant/SmartCommute/platform/database/src/main/java/com/r00ta/telematics/platform/SmartQuery.java
 /vagrant/SmartCommute/platform/database/src/main/java/com/r00ta/telematics/platform/SmartDocument.java
+/vagrant/SmartCommute/platform/database/src/main/java/com/r00ta/telematics/platform/SmartQuery.java
 /vagrant/SmartCommute/platform/database/src/main/java/com/r00ta/telematics/platform/model/ElasticSearchResponse.java
 /vagrant/SmartCommute/platform/database/src/main/java/com/r00ta/telematics/platform/elastic/ElasticQueryFactory.java
 /vagrant/SmartCommute/platform/database/src/main/java/com/r00ta/telematics/platform/operators/DateOperator.java

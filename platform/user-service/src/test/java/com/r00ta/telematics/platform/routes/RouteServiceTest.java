@@ -123,7 +123,7 @@ public class RouteServiceTest {
         NewRouteRequest passengerRouteRequest = createNewPassengerRouteRequest();
         userId = "passenger";
         Route passengerRoute = new Route(userId, passengerRouteRequest, "MyRouteIdPassenger");
-        RouteMatching routeMatching = new RouteMatching("driver", "MyRouteIdDriver", "passenger", "MyRouteIdPassenger", null, null, DayOfWeek.FRIDAY);
+        RouteMatching routeMatching = new RouteMatching("matchingId", "driver", "MyRouteIdDriver", "passenger", "MyRouteIdPassenger", null, null, DayOfWeek.FRIDAY);
         routeService.processMatching(routeMatching);
 
         List<PendingMatching> driverPendingMatchings = routeService.getPendingMatchings("driver");

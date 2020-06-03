@@ -1,4 +1,4 @@
 /vagrant/SmartCommute/platform/messaging/src/main/java/com/r00ta/telematics/platform/messaging/model/CloudEventDto.java
 /vagrant/SmartCommute/platform/messaging/src/main/java/com/r00ta/telematics/platform/messaging/utils/JsonUtils.java
-/vagrant/SmartCommute/platform/messaging/src/main/java/com/r00ta/telematics/platform/messaging/AbstractKafkaProducer.java
 /vagrant/SmartCommute/platform/messaging/src/main/java/com/r00ta/telematics/platform/messaging/AbstractCloudEventDeserializer.java
+/vagrant/SmartCommute/platform/messaging/src/main/java/com/r00ta/telematics/platform/messaging/AbstractKafkaProducer.java

@@ -10,12 +10,12 @@ import com.r00ta.telematics.platform.models.AnalyticsRoute;
 public class AnalyticsService implements IAnalyticsService {
 
     @Inject
-    IDataLakeProvider dataLakeUploader;
+    IDataLakeProvider dataLakeProvider;
 
     @Override
     public void processRoute(AnalyticsRoute route) {
         try {
-            dataLakeUploader.uploadRoute(route);
+            dataLakeProvider.uploadRoute(route);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -24,7 +24,7 @@ public class AnalyticsService implements IAnalyticsService {
 
     @Override
     public void processAnalysisResults(String itemName) {
-        dataLakeUploader.readAnalysisResults(itemName);
+        dataLakeProvider.readAnalysisResults(itemName);
         // do stuff, push to user service.
     }
 }
