@@ -71,7 +71,10 @@ services:
     image: r00ta/scoring-service-jvm:latest
     depends_on:
       - kafka-cluster
-
+    environment:
+      HERE_API_KEY: ${HERE_API_KEY}
+      HERE_APP_KEY: ${HERE_APP_KEY}
+      BOOTSTRAP_SERVERS: ${BOOTSTRAP_SERVERS}
     ports:
       - 1338:1338
 

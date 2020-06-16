@@ -1,9 +1,10 @@
 package com.r00ta.telematics.platform.here;
 
-public class HereConfiguration {
-    public final String appKey;
-    public final String apiKey;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+public class HereConfiguration {
+    public String appKey;
+    public String apiKey;
 
     public HereConfiguration(String appKey, String apiKey) {
         this.appKey = appKey;
@@ -11,9 +12,5 @@ public class HereConfiguration {
     }
 
     public HereConfiguration() {
-        // replace with env variable
-        this.appKey = "4Sh8NBaNAIDGOsNB6qBX";
-        // replace with env variable
-        this.apiKey = "DMrPgLqpQLOiwVrcq2q0LeBPImeVoow4Q9EnNxUvtUU";
     }
 }

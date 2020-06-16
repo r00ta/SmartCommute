@@ -3,6 +3,7 @@ package com.r00ta.telematics.platform.enrich;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -21,16 +22,20 @@ import com.r00ta.telematics.platform.here.ReverseGeocoding;
 import com.r00ta.telematics.platform.here.RouteMatching;
 import com.r00ta.telematics.platform.here.models.geoaddress.HereGeoAddress;
 import com.r00ta.telematics.platform.here.models.routing.RouteMatchModel;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class EnrichService implements IEnrichService {
+    @ConfigProperty(name = "here.appKey")
+    public String appKey;
+    @ConfigProperty(name = "here.apiKey")
+    public String apiKey;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TripKafkaConsumer.class);
-    private static final RouteMatching routeMatching = new RouteMatching(new HereConfiguration());
-    private static final ReverseGeocoding reverseGeocoding = new ReverseGeocoding(new HereConfiguration());
-
+    private static RouteMatching routeMatching;
+    private static ReverseGeocoding reverseGeocoding;
 
     @Inject
     IEnrichStorageExtension storageExtension;
@@ -40,6 +45,12 @@ public class EnrichService implements IEnrichService {
 
     @Inject
     RouteAnalyticsKafkaProducer routeAnalyticsKafkaProducer;
+
+    @PostConstruct
+    void setup(){
+        routeMatching = new RouteMatching(new HereConfiguration(appKey, apiKey));
+        reverseGeocoding = new ReverseGeocoding(new HereConfiguration(appKey, apiKey));
+    }
 
     @Override
     public EnrichedTrip processTrip(TripModel trip) {

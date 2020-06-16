@@ -10,7 +10,7 @@ import com.r00ta.telematics.models.livetrip.GpsLocation;
 public class RouteMatching {
     @JsonProperty("matchingId")
     public String matchingId;
-    
+
     @JsonProperty("driverUserId")
     public String driverUserId;
 
