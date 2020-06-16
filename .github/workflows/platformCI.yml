@@ -30,4 +30,8 @@ jobs:
     - name: add test user to mongodb
       run: mongo admin -u root -p password --host localhost:27017 < ./pipelines/add-mongo-user.js
     - name: Run integration tests
+      env: 
+        HERE_APP_KEY: ${{ secrets.HERE_APP_KEY }}
+        HERE_API_KEY: ${{ secrets.HERE_API_KEY }}
+        BOOTSTRAP_SERVERS: "localhost:9092"
       run: mvn -f platform/pom.xml test
