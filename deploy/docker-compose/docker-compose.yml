@@ -64,6 +64,8 @@ services:
     image: r00ta/live-trip-service-jvm:latest 
     depends_on:
       - kafka-cluster
+    environment:
+      BOOTSTRAP_SERVERS: ${BOOTSTRAP_SERVERS}
     ports:
       - 1337:1337
 
@@ -82,7 +84,9 @@ services:
     image: r00ta/user-service-jvm:latest 
     depends_on:
       - kafka-cluster
-    ports:
+    environment:
+      BOOTSTRAP_SERVERS: ${BOOTSTRAP_SERVERS}
+ ports:
       - 1339:1339
 
 volumes:
