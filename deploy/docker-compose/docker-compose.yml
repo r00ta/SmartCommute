@@ -86,7 +86,7 @@ services:
       - kafka-cluster
     environment:
       BOOTSTRAP_SERVERS: ${BOOTSTRAP_SERVERS}
- ports:
+    ports:
       - 1339:1339
 
 volumes:
