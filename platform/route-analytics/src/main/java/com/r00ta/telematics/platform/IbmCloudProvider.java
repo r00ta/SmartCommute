@@ -36,11 +36,17 @@ import com.ibm.cloud.objectstorage.services.s3.transfer.Upload;
 import com.r00ta.telematics.platform.models.AnalysisResults;
 import com.r00ta.telematics.platform.models.AnalyticsRoute;
 import com.r00ta.telematics.platform.utils.DocumentKeyBuilder;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class IbmCloudProvider implements IDataLakeProvider {
+
+    @ConfigProperty(name = "ibm.datalake.service_instance_id")
+    private String serviceInstanceId;
+    @ConfigProperty(name = "ibm.datalake.api_key")
+    private String apiKey;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IbmCloudProvider.class);
     private final static ObjectMapper mapper = new ObjectMapper();
@@ -51,6 +57,24 @@ public class IbmCloudProvider implements IDataLakeProvider {
     private static String location;
     private static String bucketName;
     private static String resultBucketName;
+
+
+    @PostConstruct
+    void setup() {
+        // Constants for IBM COS values
+        SDKGlobalConfiguration.IAM_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token";
+        // replace with env variable
+        api_key = apiKey; // example: xxxd12V2QHXbjaM99G9tWyYDgF_0gYdlQ8aWALIQxXx4
+        // replace with env variable
+        service_instance_id = serviceInstanceId; // example: crn:v1:bluemix:public:cloud-object-storage:global:a/xx999cd94a0dda86fd8eff3191349999:9999b05b-x999-4917-xxxx-9d5b326a1111::
+        endpoint_url = "https://s3.us-south.cloud-object-storage.appdomain.cloud"; // example: https://s3.us-south.cloud-object-storage.appdomain.cloud
+        location = "us-south-standard"; // example: us-south-standard
+        // Create client connection details
+        _cosClient = createClient(api_key, service_instance_id, endpoint_url, location);
+
+        bucketName = "routes";
+        resultBucketName = "resultAnalysis";
+    }
 
     private static String getItem(String bucketName, String itemName) {
         System.out.printf("Retrieving item from bucket: %s, key: %s\n", bucketName, itemName);
@@ -196,23 +220,6 @@ public class IbmCloudProvider implements IDataLakeProvider {
         } finally {
             transferManager.shutdownNow();
         }
-    }
-
-    @PostConstruct
-    void setup() {
-        // Constants for IBM COS values
-        SDKGlobalConfiguration.IAM_ENDPOINT = "https://iam.cloud.ibm.com/oidc/token";
-        // replace with env variable
-        api_key = "-PmwZ-01v_cGsKUWqCdm8ZGLMr1ntgX9yc3jKfI4Xfxt"; // example: xxxd12V2QHXbjaM99G9tWyYDgF_0gYdlQ8aWALIQxXx4
-        // replace with env variable
-        service_instance_id = "crn:v1:bluemix:public:cloud-object-storage:global:a/4e12949933064a189d5149a9687c3e0d:489a4b86-a9d8-43ab-ab18-5c65b5c21793::"; // example: crn:v1:bluemix:public:cloud-object-storage:global:a/xx999cd94a0dda86fd8eff3191349999:9999b05b-x999-4917-xxxx-9d5b326a1111::
-        endpoint_url = "https://s3.us-south.cloud-object-storage.appdomain.cloud"; // example: https://s3.us-south.cloud-object-storage.appdomain.cloud
-        location = "us-south-standard"; // example: us-south-standard
-        // Create client connection details
-        _cosClient = createClient(api_key, service_instance_id, endpoint_url, location);
-
-        bucketName = "routes";
-        resultBucketName = "resultAnalysis";
     }
 
     @Override

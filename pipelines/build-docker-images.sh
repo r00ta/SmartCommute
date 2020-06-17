@@ -11,3 +11,7 @@ docker build -f src/main/docker/Dockerfile.jvm -t r00ta/scoring-service-jvm:late
 cd ..
 cd user-service
 docker build -f src/main/docker/Dockerfile.jvm -t r00ta/user-service-jvm:latest .
+
+cd ..
+cd route-analytics
+docker build -f src/main/docker/Dockerfile.jvm -t r00ta/route-analytics-service-jvm:latest .

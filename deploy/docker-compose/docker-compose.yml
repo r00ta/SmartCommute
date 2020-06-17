@@ -89,5 +89,17 @@ services:
     ports:
       - 1339:1339
 
+  route-analytics-service:
+    image: r00ta/route-analytics-service-jvm:latest 
+    depends_on:
+      - kafka-cluster
+    environment:
+      BOOTSTRAP_SERVERS: ${BOOTSTRAP_SERVERS}
+      DATA_LAKE_API_KEY: ${DATA_LAKE_API_KEY}
+      DATA_LAKE_SERVICE_INSTANCE_ID: ${DATA_LAKE_SERVICE_INSTANCE_ID}
+    ports:
+      - 1340:1340
+
+
 volumes:
   mongodb_data_container:
