@@ -1,7 +1,7 @@
 # Smart Commute
 ![Platform CI](https://github.com/r00ta/SmartCommute/workflows/Platform%20CI/badge.svg)
 ![Android App CI](https://github.com/r00ta/SmartCommute/workflows/Android%20App%20CI/badge.svg)
-
+[![Gitter](https://img.shields.io/badge/gitter-join%20chat-1dce73.svg)](https://gitter.im/SmartCommute/community)
 SmartCommute is an open-source project created by Jacopo Rota for the Call For Code 2020. 
 Since the transport is responsible for nearly 30% of the EU’s total CO2 emissions ([1]), the aim of this open source project is to provide a solution to reduce the total CO2 emictions. 
 
