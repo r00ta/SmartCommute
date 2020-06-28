@@ -5,6 +5,10 @@ This is the android app developed for the SmartCommute project.
 The main supported features are: 
 
 1) Sign up/Sign in
+
+![Screenshot from 2020-06-28 12-01-02](https://user-images.githubusercontent.com/18282531/85944449-1aab5f80-b937-11ea-8e43-83be0cf16785.png)
+![Screenshot from 2020-06-28 12-01-14](https://user-images.githubusercontent.com/18282531/85944450-1d0db980-b937-11ea-872a-f6a372627071.png)
+
 2) Visualize the scores in the homepage
 
 ![Screenshot from 2020-06-18 21-46-15](https://user-images.githubusercontent.com/18282531/85944370-7d502b80-b936-11ea-960f-f7ed8808f8d9.png)
