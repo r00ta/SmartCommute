@@ -23,6 +23,8 @@ jobs:
       env: 
         HERE_APP_KEY: ${{ secrets.HERE_APP_KEY }}
         HERE_API_KEY: ${{ secrets.HERE_API_KEY }}
+        DATA_LAKE_API_KEY: ${{ secrets.DATA_LAKE_API_KEY }}
+        DATA_LAKE_SERVICE_INSTANCE_ID: ${{ secrets.DATA_LAKE_SERVICE_INSTANCE_ID }}
         BOOTSTRAP_SERVERS: ${{ secrets.BOOTSTRAP_SERVERS }}
       run: docker-compose -f deploy/docker-compose/docker-compose.yml up -d
     - name: wait until mongodb is responsive
