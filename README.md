@@ -21,10 +21,6 @@ this project aims to provide a telematics platform and a mobile app that people 
 
 [Deployment documentation](deploy/README.md)
 
-## Architecture
-
-![openpooling](https://user-images.githubusercontent.com/18282531/79280365-7a55ab00-7eb0-11ea-81da-200223b2e157.png)
-
 ## Features
 
 1. Login and sign up of a user.
@@ -45,7 +41,7 @@ this project aims to provide a telematics platform and a mobile app that people 
 
 6. Record a recurrent trip, so that the system can analyze it and find the matchings between users.
 
-7. 
+7. Once a matching is accepted by the users, the passenger can monitor the live position of the driver when the common trip is started.
 
 1. real time streaming of data of the driver. People who have to be picked up can have a look at the current position of the driver. 
 2. the app should record trips (manually) of the drivers. 
