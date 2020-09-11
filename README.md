@@ -50,6 +50,9 @@ Imagine that a user commute from `A` to `D`, crossing the points `B` and `C` (fo
 
 10. Additional dongles (like OBDII dongles) might be supported to provide more detailed information about the driving style. 
 
+## Short live demonstration
+https://www.youtube.com/watch?v=PjVRMoJZg4E
+
 ## References
 [1] https://www.europarl.europa.eu/news/en/headlines/society/20190313STO31218/co2-emissions-from-cars-facts-and-figures-infographics
 
